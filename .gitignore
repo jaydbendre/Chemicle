@@ -107,7 +107,7 @@ celerybeat-schedule
 .mr.developer.cfg
 .project
 .pydevproject
-
+pipfile
 # mkdocs documentation
 /site
 
