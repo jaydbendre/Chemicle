@@ -7,6 +7,8 @@ import urllib
 import http.client as http
 import time
 import json
+
+
 def index (request):
     return HttpResponse('hi')
 
@@ -50,3 +52,6 @@ def send_data(request):
 #     channel.update(data=data)
 
 #     return HttpResponse(channel.get())
+
+def render_login(request):
+    return render(request,"login.html")
