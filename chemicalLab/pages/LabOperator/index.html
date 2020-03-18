@@ -1,4 +1,4 @@
-{% extends "boilerplate.html" %} {% block login %}
+{% extends "boilerplate.html" %} {% load static %} {% block login %}
 <body>
   <!--[if lt IE 8]>
     <p class="browserupgrade">
@@ -19,7 +19,7 @@
       <div class="sidebar-header">
         <div class="logo">
           <a href="index.html"
-            ><img src="assets/images/icon/logo.png" alt="logo"
+            ><img src="{% static 'logo_assets/logo.png' %}" alt="logo"
           /></a>
         </div>
       </div>
@@ -284,7 +284,7 @@
                     <a href="#" class="notify-item">
                       <div class="notify-thumb">
                         <img
-                          src="assets/images/author/author-img1.jpg"
+                          src="{% static 'images/author/author-img1.jpg'% }"
                           alt="image"
                         />
                       </div>
@@ -297,7 +297,7 @@
                     <a href="#" class="notify-item">
                       <div class="notify-thumb">
                         <img
-                          src="assets/images/author/author-img2.jpg"
+                          src="{% static 'images/author/author-img2.jpg' %}"
                           alt="image"
                         />
                       </div>
@@ -310,7 +310,7 @@
                     <a href="#" class="notify-item">
                       <div class="notify-thumb">
                         <img
-                          src="assets/images/author/author-img3.jpg"
+                          src="{% static 'images/author/author-img3.jpg' %}"
                           alt="image"
                         />
                       </div>
@@ -323,7 +323,7 @@
                     <a href="#" class="notify-item">
                       <div class="notify-thumb">
                         <img
-                          src="assets/images/author/author-img4.jpg"
+                          src="{% static 'images/author/author-img4.jpg' %}"
                           alt="image"
                         />
                       </div>
@@ -338,7 +338,7 @@
                     <a href="#" class="notify-item">
                       <div class="notify-thumb">
                         <img
-                          src="assets/images/author/author-img2.jpg"
+                          src="{% static 'images/author/author-img2.jpg' %}"
                           alt="image"
                         />
                       </div>
@@ -351,7 +351,7 @@
                     <a href="#" class="notify-item">
                       <div class="notify-thumb">
                         <img
-                          src="assets/images/author/author-img1.jpg"
+                          src="{% static 'images/author/author-img1.jpg' %}"
                           alt="image"
                         />
                       </div>
@@ -364,7 +364,7 @@
                     <a href="#" class="notify-item">
                       <div class="notify-thumb">
                         <img
-                          src="assets/images/author/author-img3.jpg"
+                          src="{% static 'images/author/author-img3.jpg' %}"
                           alt="image"
                         />
                       </div>
@@ -401,7 +401,7 @@
             <div class="user-profile pull-right">
               <img
                 class="avatar user-thumb"
-                src="assets/images/author/avatar.png"
+                src="{% static 'images/author/avatar.png' %}"
                 alt="avatar"
               />
               <h4 class="user-name dropdown-toggle" data-toggle="dropdown">
@@ -528,7 +528,7 @@
                       <tr>
                         <td class="mv-icon">
                           <img
-                            src="assets/images/icon/market-value/icon1.png"
+                            src="{% static 'images/icon/market-value/icon1.png' %}"
                             alt="icon"
                           />
                         </td>
@@ -536,20 +536,20 @@
                         <td class="buy">
                           30%
                           <img
-                            src="assets/images/icon/market-value/triangle-down.png"
+                            src="{% static 'images/icon/market-value/triangle-down.png' %}"
                             alt="icon"
                           />
                         </td>
                         <td class="sell">
                           20%
                           <img
-                            src="assets/images/icon/market-value/triangle-up.png"
+                            src="{% static 'images/icon/market-value/triangle-up.png' %}"
                             alt="icon"
                           />
                         </td>
                         <td class="trends">
                           <img
-                            src="assets/images/icon/market-value/trends-up-icon.png"
+                            src="{% static 'images/icon/market-value/trends-up-icon.png' %}"
                             alt="icon"
                           />
                         </td>
@@ -562,7 +562,7 @@
                         <td class="mv-icon">
                           <div class="mv-icon">
                             <img
-                              src="assets/images/icon/market-value/icon2.png"
+                              src="{% static 'images/icon/market-value/icon2.png' %}"
                               alt="icon"
                             />
                           </div>
@@ -571,20 +571,20 @@
                         <td class="buy">
                           30%
                           <img
-                            src="assets/images/icon/market-value/triangle-down.png"
+                            src="{% static 'images/icon/market-value/triangle-down.png' %}"
                             alt="icon"
                           />
                         </td>
                         <td class="sell">
                           20%
                           <img
-                            src="assets/images/icon/market-value/triangle-up.png"
+                            src="{% static 'images/icon/market-value/triangle-up.png' %}"
                             alt="icon"
                           />
                         </td>
                         <td class="trends">
                           <img
-                            src="assets/images/icon/market-value/trends-down-icon.png"
+                            src="{% static 'images/icon/market-value/trends-down-icon.png' %}"
                             alt="icon"
                           />
                         </td>
@@ -597,7 +597,7 @@
                         <td class="mv-icon">
                           <div class="mv-icon">
                             <img
-                              src="assets/images/icon/market-value/icon3.png"
+                              src="{% static 'images/icon/market-value/icon3.png' %}"
                               alt="icon"
                             />
                           </div>
@@ -606,20 +606,20 @@
                         <td class="buy">
                           30%
                           <img
-                            src="assets/images/icon/market-value/triangle-down.png"
+                            src="{% static 'images/icon/market-value/triangle-down.png' %}"
                             alt="icon"
                           />
                         </td>
                         <td class="sell">
                           20%
                           <img
-                            src="assets/images/icon/market-value/triangle-up.png"
+                            src="{% static 'images/icon/market-value/triangle-up.png' %}"
                             alt="icon"
                           />
                         </td>
                         <td class="trends">
                           <img
-                            src="assets/images/icon/market-value/trends-up-icon.png"
+                            src="{% static 'images/icon/market-value/trends-up-icon.png' %}"
                             alt="icon"
                           />
                         </td>
@@ -632,7 +632,7 @@
                         <td class="mv-icon">
                           <div class="mv-icon">
                             <img
-                              src="assets/images/icon/market-value/icon4.png"
+                              src="{% static 'images/icon/market-value/icon4.png' %}"
                               alt="icon"
                             />
                           </div>
@@ -641,20 +641,20 @@
                         <td class="buy">
                           30%
                           <img
-                            src="assets/images/icon/market-value/triangle-down.png"
+                            src="{% static 'images/icon/market-value/triangle-down.png' %}"
                             alt="icon"
                           />
                         </td>
                         <td class="sell">
                           20%
                           <img
-                            src="assets/images/icon/market-value/triangle-up.png"
+                            src="{% static 'images/icon/market-value/triangle-up.png' %}"
                             alt="icon"
                           />
                         </td>
                         <td class="trends">
                           <img
-                            src="assets/images/icon/market-value/trends-up-icon.png"
+                            src="{% static 'images/icon/market-value/trends-up-icon.png' %}"
                             alt="icon"
                           />
                         </td>
@@ -851,7 +851,7 @@
                   <div class="single-post mb-xs-40 mb-sm-40">
                     <div class="lts-thumb">
                       <img
-                        src="assets/images/blog/post-thumb1.jpg"
+                        src="{% static 'images/blog/post-thumb1.jpg' %}"
                         alt="post thumb"
                       />
                     </div>
@@ -872,7 +872,7 @@
                   <div class="single-post">
                     <div class="lts-thumb">
                       <img
-                        src="assets/images/blog/post-thumb2.jpg"
+                        src="{% static 'images/blog/post-thumb2.jpg' %}"
                         alt="post thumb"
                       />
                     </div>
@@ -1132,34 +1132,5 @@
   </div>
   <!-- offset area end -->
   <!-- jquery latest version -->
-  <script src="assets/js/vendor/jquery-2.2.4.min.js"></script>
-  <!-- bootstrap 4 js -->
-  <script src="assets/js/popper.min.js"></script>
-  <script src="assets/js/bootstrap.min.js"></script>
-  <script src="assets/js/owl.carousel.min.js"></script>
-  <script src="assets/js/metisMenu.min.js"></script>
-  <script src="assets/js/jquery.slimscroll.min.js"></script>
-  <script src="assets/js/jquery.slicknav.min.js"></script>
-
-  <!-- start chart js -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
-  <!-- start highcharts js -->
-  <script src="https://code.highcharts.com/highcharts.js"></script>
-  <!-- start zingchart js -->
-  <script src="https://cdn.zingchart.com/zingchart.min.js"></script>
-  <script>
-    zingchart.MODULESDIR = "https://cdn.zingchart.com/modules/";
-    ZC.LICENSE = [
-      "569d52cefae586f634c54f86dc99e6a9",
-      "ee6b7db5b51705a13dc2339db3edaf6d"
-    ];
-  </script>
-  <!-- all line chart activation -->
-  <script src="assets/js/line-chart.js"></script>
-  <!-- all pie chart -->
-  <script src="assets/js/pie-chart.js"></script>
-  <!-- others plugins -->
-  <script src="assets/js/plugins.js"></script>
-  <script src="assets/js/scripts.js"></script>
   {% endblock %}
 </body>
