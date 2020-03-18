@@ -20,7 +20,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '!q=xbhu@7e#0$n+n7$=8%h%i_nq5_^$wd6kk%bh2=!y1*%cn4t'
+SECRET_KEY = 'h*!5+yq7nw=^^q=^u9fc+(im9of!1uzbov&yq9qg(r0m495qa9'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -37,8 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'Lab',
-    'social_django'
+    'social_django',
+    'Lab'
 ]
 
 MIDDLEWARE = [
@@ -52,19 +52,12 @@ MIDDLEWARE = [
     'social_django.middleware.SocialAuthExceptionMiddleware', 
 ]
 
-AUTHENTICATION_BACKENDS = (
-    # 'social_core.backends.github.GithubOAuth2',
-    # 'social_core.backends.twitter.TwitterOAuth',
-    # 'social_core.backends.facebook.FacebookOAuth2',
-    'social_core.backends.google.GoogleOAuth2',
-    'django.contrib.auth.backends.ModelBackend',
-)
 ROOT_URLCONF = 'chemicalLab.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR,'pages')],
+        'DIRS': [os.path.join(BASE_DIR , "templates")],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -72,8 +65,6 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'social_django.context_processors.backends', 
-                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -81,14 +72,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'chemicalLab.wsgi.application'
 
-LOGIN_URL = '/auth/login/google-oauth2/'
 
-LOGIN_REDIRECT_URL = '/auth_user/'
-LOGOUT_REDIRECT_URL = '/'
-
-SOCIAL_AUTH_URL_NAMESPACE = 'social'
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = "1080243531740-c6gp8sj9olf95ja4t88o5d5me765hng4.apps.googleusercontent.com"
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = "FhELJs4D4ybMG3WDF5yHgmOZ"
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
@@ -139,9 +123,26 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
+STATIC_URL = '/static/'
+
 STATIC_URL = "/static/"
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.google.GoogleOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+
+LOGIN_URL = '/auth/login/google-oauth2/'
+
+LOGIN_REDIRECT_URL = '/auth_user/'
+LOGOUT_REDIRECT_URL = '/'
+
+SOCIAL_AUTH_URL_NAMESPACE = 'social'
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = "1080243531740-c6gp8sj9olf95ja4t88o5d5me765hng4.apps.googleusercontent.com"
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = "FhELJs4D4ybMG3WDF5yHgmOZ"

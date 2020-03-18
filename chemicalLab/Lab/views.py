@@ -7,11 +7,11 @@ from django.contrib.auth import logout
 To render the pages
 """
 def index (request):
-    return HttpResponse('hi')
+    return render(request , "landingpage/landingpage.html")
 
 def render_login(request):
     del request.user
-    return render(request,"login.html", {"error" : ""})
+    return render(request,"login/login.html", {"error" : ""})
 
 """
 To check for something in the database
@@ -54,7 +54,7 @@ def login(request):
             
             # if user_data["role"] == 0:
             #     pass
-            return render(request,"LabOperator/index.html",{"user_data" : user_data})
+            return render(request,"lab_operator/dashboard.html",{"user_data" : user_data})
     else:
         return render(request , "login.html",{"error" : "There has been error in processing your request"})
     
