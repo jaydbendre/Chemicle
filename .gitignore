@@ -110,7 +110,8 @@ celerybeat-schedule
 pipfile
 # mkdocs documentation
 /site
-
+migrations
+__pycache__
 # mypy
 .mypy_cache/
 .dmypy.json
