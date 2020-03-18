@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'Lab'
+    'Lab',
+    'social_django'
 ]
 
 MIDDLEWARE = [
@@ -48,8 +49,16 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware', 
 ]
 
+AUTHENTICATION_BACKENDS = (
+    # 'social_core.backends.github.GithubOAuth2',
+    # 'social_core.backends.twitter.TwitterOAuth',
+    # 'social_core.backends.facebook.FacebookOAuth2',
+    'social_core.backends.google.GoogleOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
 ROOT_URLCONF = 'chemicalLab.urls'
 
 TEMPLATES = [
@@ -63,6 +72,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends', 
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -70,7 +81,14 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'chemicalLab.wsgi.application'
 
+LOGIN_URL = '/auth/login/google-oauth2/'
 
+LOGIN_REDIRECT_URL = '/auth_user/'
+LOGOUT_REDIRECT_URL = '/'
+
+SOCIAL_AUTH_URL_NAMESPACE = 'social'
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = "1080243531740-c6gp8sj9olf95ja4t88o5d5me765hng4.apps.googleusercontent.com"
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = "FhELJs4D4ybMG3WDF5yHgmOZ"
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 

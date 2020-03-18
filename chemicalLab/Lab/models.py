@@ -17,7 +17,7 @@ class User(models.Model):
     password = models.CharField(max_length= 500)
     address = models.CharField(max_length= 100)
     role_id = models.ForeignKey(Role, on_delete = models.CASCADE, default = 2)
-    lab_id = models.ForeignKey(Lab, on_delete = models.CASCADE, default = None)
+    lab_id = models.ForeignKey(Lab , on_delete = models.CASCADE , default = None)
 
 class Request(models.Model):
     description = models.TextField(max_length = 1000)

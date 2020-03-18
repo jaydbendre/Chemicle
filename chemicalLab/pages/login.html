@@ -8,7 +8,8 @@
 <div class="login-area login-bg">
   <div class="container">
     <div class="login-box ptb--100">
-      <form>
+      <form action="{% url 'login' %}" method="POST">
+        {% csrf_token %}
         <div class="login-form-head">
           <h4>Login</h4>
           <p>Hello there, login to start monitoring your lab.</p>
@@ -16,13 +17,13 @@
         <div class="login-form-body">
           <div class="form-gp">
             <label for="exampleInputEmail1">Email address</label>
-            <input type="email" id="exampleInputEmail1" />
+            <input type="email" id="exampleInputEmail1" name="email" />
             <i class="ti-email"></i>
             <div class="text-danger"></div>
           </div>
           <div class="form-gp">
             <label for="exampleInputPassword1">Password</label>
-            <input type="password" id="exampleInputPassword1" />
+            <input type="password" id="exampleInputPassword1" name="password" />
             <i class="ti-lock"></i>
             <div class="text-danger"></div>
           </div>
@@ -49,6 +50,12 @@
             <button id="form_submit" type="submit">
               Login <i class="ti-arrow-right"></i>
             </button>
+            <br />
+            <br />
+            <div class="submit-btn-area">
+            <a class = "btn btn-primary rounded" style = "background-color: #8655FC" href = "{% url 'social:begin' 'google-oauth2' %}"><i class="fa fa-google"></i>
+              Login with google
+              </a>
           </div>
         </div>
       </form>
