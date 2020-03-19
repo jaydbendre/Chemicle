@@ -289,18 +289,32 @@
     <div class="main-content-inner">
       <!-- row area start-->
       <div class="row mt-3">
-        <div class="col-6">
+        <div class="col-12">
           <div class="card text-center">
             <div class="card-title">Temperature</div>
             <div class="card-body">
               {% include "lab_operator/charts/temperature1.html" %}
             </div>
           </div>
-          <div class="col-6">
+        </div>
+        </div>
+        <div class="row mt-3">
+          <div class="col-12">
             <div class="card text-center">
               <div class="card-title">Humidity</div>
               <div class="card-body">
-                {% include "lab_operator/charts/temperature1.html" %}
+                {% include "lab_operator/charts/humidity1.html" %}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mt-3">
+          <div class="col-12">
+            <div class="card text-center">
+              <div class="card-title">AQI</div>
+              <div class="card-body">
+                {% include "lab_operator/charts/aqi1.html" %}
+              </div>
               </div>
             </div>
           </div>

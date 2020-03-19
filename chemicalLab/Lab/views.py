@@ -41,7 +41,33 @@ def login(request):
         request.session["username"] = user_data["fname"]+ " "+ user_data["lname"]
         return render(request,"lab_operator/dashboard.html",{"user_data" : user_data})
     
-    elif request.session["email"] != None :
+    elif request.method == "POST":
+        email = request.POST["email"]
+        password = request.POST["password"]
+        if email != '' or password != '':
+            try:
+                user_data = m.User.objects.get(email = email ,password = password)
+            except m.User.DoesNotExist:
+                return render(request , "login.html" , {"error" : "Invalid Email or password"})
+            print("Hi")
+            user_data = user_data.__dict__
+            del user_data["_state"]
+            print(user_data.items())
+            
+            request.session["email"] = user_data["email"]
+            request.session["username"] = user_data["fname"]+ " "+ user_data["lname"]
+            
+            if user_data["role_id_id"] == 0:
+                pass
+            elif user_data["role_id_id"] == 1:
+                pass
+            else:
+                # data = requests.get("https://api.thingspeak.com/channels/1017900/feeds.json?api_key=CQ98H95JG2IBYHNH").text
+                # return HttpResponse(data.items())
+                return render(request,"lab_operator/dashboard.html",{"user_data" : user_data})
+    
+    elif "email" not in request.session.keys() :
+        return HttpResponse(request.session.items())
         try:
             user_data = m.User.objects.get(email = str(request.session["email"]))
         except m.User.DoesNotExist:
@@ -66,30 +92,6 @@ def login(request):
         request.session["username"] = user_data["fname"]+ " "+ user_data["lname"]
         return render(request,"lab_operator/dashboard.html",{"user_data" : user_data, "temperature" : temperature, "created_at":created_at })
     
-    elif request.method == "POST":
-        email = request.POST["email"]
-        password = request.POST["password"]
-        if email != '' or password != '':
-            try:
-                user_data = m.User.objects.get(email = email ,password = password)
-            except m.User.DoesNotExist:
-                return render(request , "login.html" , {"error" : "Invalid Email or password"})
-            print("Hi")
-            user_data = user_data.__dict__
-            del user_data["_state"]
-            print(user_data.items())
-            
-            request.session["email"] = user_data["email"]
-            request.session["username"] = user_data["fname"]+ " "+ user_data["lname"]
-            
-            if user_data["role_id_id"] == 0:
-                pass
-            elif user_data["role_id_id"] == 1:
-                pass
-            else:
-                data = requests.get("https://api.thingspeak.com/channels/1017900/feeds.json?api_key=CQ98H95JG2IBYHNH").text
-                return HttpResponse(data.items())
-                return render(request,"lab_operator/dashboard.html",{"user_data" : user_data})
     else:
         return render(request , "login/login.html",{"error" : "There has been error in processing your request"})
     
