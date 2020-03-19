@@ -1,5 +1,76 @@
 /*--------------  coin_sales1 start ------------*/
-// ś
+if ($("#coin_sales1").length > 0) {
+  var ctx = document.getElementById("coin_sales1").getContext("2d");
+  var chart = new Chart(ctx, {
+    // The type of chart we want to create
+    type: "line",
+    // The data for our dataset
+    data: {
+      labels: [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "January",
+        "February",
+        "March",
+        "April",
+        "May"
+      ],
+      datasets: [
+        {
+          label: "Sales",
+          backgroundColor: "rgba(117, 19, 246, 0.1)",
+          borderColor: "#0b76b6",
+          data: [100, 100, 100, 100, 20, 0, 100, 100, 100, 100, 100, 100]
+        }
+      ]
+    },
+    // Configuration options go here
+    options: {
+      legend: {
+        display: false
+      },
+      animation: {
+        easing: "easeInOutBack"
+      },
+      scales: {
+        yAxes: [
+          {
+            display: !1,
+            ticks: {
+              fontColor: "rgba(0,0,0,0.5)",
+              fontStyle: "bold",
+              beginAtZero: !0,
+              maxTicksLimit: 5,
+              padding: 0
+            },
+            gridLines: {
+              drawTicks: !1,
+              display: !1
+            }
+          }
+        ],
+        xAxes: [
+          {
+            display: !1,
+            gridLines: {
+              zeroLineColor: "transparent"
+            },
+            ticks: {
+              padding: 0,
+              fontColor: "rgba(0,0,0,0.5)",
+              fontStyle: "bold"
+            }
+          }
+        ]
+      }
+    }
+  });
+}
 /*--------------  coin_sales1 End ------------*/
 
 /*--------------  coin_sales2 start ------------*/
