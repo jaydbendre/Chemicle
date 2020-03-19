@@ -9,7 +9,7 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" ctype="text/javascript"></script>
-  <div class="ct-chart" height="600" id="temperature">
+  <div class="ct-chart" height="600" id="temperature1">
   <div class="spinner-grow text-secondary" role="status" id="loader">
   <span class="sr-only">Loading...</span>
 </div>
@@ -39,7 +39,7 @@
 
       console.log(data)
       console.log(created_at)
-      new Chartist.Line('.ct-chart', {
+      new Chartist.Line('#temperature1', {
         labels: created_at, 
         series: [data]
       }, {
