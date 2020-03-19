@@ -1,0 +1,35 @@
+<link
+  rel="stylesheet"
+  href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css"
+/>
+<script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+
+  <div class="ct-chart ct-square" id="temperature"></div>
+  <script>
+    new Chartist.Line('.ct-chart', {
+        labels: {{ created_at|safe }},
+        series: 
+          {{ temperature|safe }}
+      }, {
+        fullWidth: true,
+        chartPadding: {
+          right: 40
+        },
+        lineSmooth: true,
+        axisX: {
+          // We can disable the grid for this axis
+          showGrid: false,
+          // and also don't show the label
+        },
+        showArea:true,
+        axisY: {
+          // We can disable the grid for this axis
+          showGrid: false,
+          // and also don't show the label
+          labelInterpolationFnc: function (value) {
+            return  value + '°C';
+          }
+        },
+      });
+  </script>
+</div>

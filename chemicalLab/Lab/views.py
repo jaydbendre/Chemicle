@@ -5,6 +5,7 @@ from django.contrib.auth import logout
 import requests
 import json
 import datetime
+import random
 
 """
 To render the pages
@@ -52,43 +53,18 @@ def login(request):
         del user_data["_state"]
         print(user_data.items())
         
-        last_entry_data = requests.get("https://api.thingspeak.com/channels/1017900/feeds/last.json?api_key=CQ98H95JG2IBYHNH").text
-        # return HttpResponse(last_entry_data)
-        last_entry_data = json.loads(last_entry_data)        
-        # return HttpResponse(last_entry_data.items())
-        data = requests.get("https://thingspeak.com/channels/1017900/feeds.json?api_key=CQ98H95JG2IBYHNH&results={}".format(1000)).text
-
-        feed_data = json.loads(data)
-        feed_data = feed_data["feeds"]
-
-        for feed in feed_data:
-            for k,v in feed.items():
-                if v == None :
-                    feed[k] = 0 
-            
-            timestamp = feed["created_at"].split("T")
-            timestamp = timestamp[0] +" "+ timestamp[1][:-1]
-            timestamp = datetime.datetime.strptime(timestamp , "%Y-%m-%d %H:%M:%S")
-            feed["created_at"] = timestamp
-        
-        # return JsonResponse(feed_data , safe=False)
-        last_feed_data = feed_data[-12:]
-        last_data = dict()
-        i=0
         temperature = list()
         created_at = list()
-        for data in last_feed_data:
-            if data["field2"].endswith("."):
-                data["field2"] = data["field2"][:-1]
-            data["field2"] = int(float(data["field2"]))
-            temperature.append(data["field2"])
-            created_at.append(data["created_at"])
-            i+=1 
-        # return JsonResponse(last_data , safe = False)
-        #   return HttpResponse(user_data.items())
+        for i in range(3):
+            temp=list()
+            for j in range(5):
+                temp.append(random.randint(25,35))
+            temperature.append(temp)
+            
+        created_at = ["Monday" , "Tuesday" , "Wednesday" ,"Thursday" , "Friday"]
         request.session["email"] = user_data["email"]
         request.session["username"] = user_data["fname"]+ " "+ user_data["lname"]
-        return render(request,"lab_operator/dashboard.html",{"user_data" : user_data , "feed_data" : feed_data , "last_feed_data": last_data, "temperature" : temperature , "created_at" : created_at})
+        return render(request,"lab_operator/dashboard.html",{"user_data" : user_data, "temperature" : temperature, "created_at":created_at })
     
     elif request.method == "POST":
         email = request.POST["email"]
