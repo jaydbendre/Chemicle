@@ -18,6 +18,27 @@ def render_login(request):
     del request.session
     return render(request,"login/login.html", {"error" : ""})
 
+    
+def analysis(request):
+    sensor_data = m.Sensor_log.objects.all()
+    # sensor_data = sensor_data.__dict__
+    
+    
+    temperature = []
+    humidity = []
+    aqi = []
+
+    for o in sensor_data:
+        # return HttpResponse(o)
+        temperature.append(
+            {
+                "date" : str(o.timestamp),
+                "value" : o.temperature
+            }
+        )        
+    return render(request , "lab_operator/analysis.html" , {"temperature" : temperature})    
+
+
 """
 To check for something in the database
 """
@@ -96,9 +117,6 @@ def login(request):
     else:
         return render(request , "login/login.html",{"error" : "There has been error in processing your request"})
     
-    
-def analysis(request):
-    return render(request , "lab_operator/analysis.html")    
 
 def log_out(request):
     logout(request)
