@@ -1,68 +1,71 @@
-{% load static %}
-{% include "lab_operator/charts/boilerplate.html" %}
+{% load static %} {% include "lab_operator/charts/boilerplate.html" %}
 <div class="ct-chart" height="600" id="temperature1">
-<div class="spinner-grow text-secondary" role="status" id="loader">
-<span class="sr-only">Loading...</span>
-</div>
-</div>
-  <script src = "{% static 'js/chartist-plugin-threshold.js' %}"></script>
+  <div class="spinner-grow text-secondary" role="status" id="loader">
+    <span class="sr-only">Loading...</span>
+  </div>
+  <div id="avg_temp"></div>
+  <script src="{% static 'js/chartist-plugin-threshold.js' %}"></script>
   <script>
-  $(document).ready(function(){
-    $.getJSON("https://api.thingspeak.com/channels/1017900/feeds.json?api_key=CQ98H95JG2IBYHNH&results=20",function(result)
-    {
-      $("#loader").hide()
-      var series = result["feeds"]
-      var data = []
-      var created_at = []
-      var lab_id = {{ request.session.lab_id }}
-
-      console.log("lab id : "+ lab_id)
-      $.each(series , function(i ,s){
-        if(s["field4"] === lab_id.toString())
-        {
-          console.log(s)
-          data.push(s["field1"])
-
-          var time = s["created_at"].split("T")
-          time = time[1]
-          time = time.substring(0, time.length - 1)
-          created_at.push(time)
-        }
-        
-      })
+    $(document).ready(function(){
+      $.getJSON("https://api.thingspeak.com/channels/1017900/feeds.json?api_key=CQ98H95JG2IBYHNH&results=20",function(result)
+      {
+        $("#loader").hide()
+        var series = result["feeds"]
+        var data = []
+        var created_at = []
+        var sum = 0
+        var avg = 0
+        var lab_id = {{ request.session.lab_id }}
 
 
-      console.log(data)
-      console.log(created_at)
-      new Chartist.Line('#temperature1', {
-        labels: created_at, 
-        series: [data]
-      }, {
-        chartPadding: {
-          right: 40
-        },
-        
-        lineSmooth: true,
-        axisX: {
-          // We can disable the grid for this axis
-          showGrid: false,
-          // and also don't show the label
-          
-        },
-          
-        axisY: {
-          // We can disable the grid for this axis
-          showGrid: false,
-          // and also don't show the label
-          labelInterpolationFnc: function (value) {
-            return  value + '°C';
+        console.log("lab id : "+ lab_id)
+        $.each(series , function(i ,s){
+          if(s["field4"] === lab_id.toString())
+          {
+            console.log(s)
+            data.push(s["field1"])
+            sum = sum + parseFloat(s["field1"])
+            var time = s["created_at"].split("T")
+            time = time[1]
+            time = time.substring(0, time.length - 1)
+            created_at.push(time)
           }
-        },
-       
-      });
-    })
-  })
 
-    
+        })
+
+        avg = sum/10.0;
+        console.log(sum)
+        $("#avg_temp").html('<span class="badge badge-info">Average Temp :'+avg+'°C</span>' )
+        $("#avg_temp").show()
+        console.log(data)
+        console.log(created_at)
+        new Chartist.Line('#temperature1', {
+          labels: created_at,
+          series: [data]
+        }, {
+          chartPadding: {
+            right: 40
+          },
+
+          lineSmooth: true,
+          axisX: {
+            // We can disable the grid for this axis
+            showGrid: false,
+            // and also don't show the label
+
+          },
+
+          axisY: {
+            // We can disable the grid for this axis
+            showGrid: false,
+            // and also don't show the label
+            labelInterpolationFnc: function (value) {
+              return  value + '°C';
+            }
+          },
+
+        });
+      })
+    })
   </script>
 </div>
