@@ -28,15 +28,31 @@ def analysis(request):
     humidity = []
     aqi = []
 
+    lab_count = dict()
     for o in sensor_data:
         # return HttpResponse(o)
+        if o.lab_id.id not in lab_count.keys():
+            lab_count[o.lab_id.id] = 1
+        else:
+            lab_count[o.lab_id.id]+= 1
         temperature.append(
             {
                 "date" : str(o.timestamp),
                 "value" : o.temperature
             }
-        )        
-    return render(request , "lab_operator/analysis.html" , {"temperature" : temperature})    
+        )
+        
+    lab_labels = [ v for v in lab_count.keys() ]
+    lab_data = []
+    
+    for k,v in lab_count.items():
+        lab_data.append(
+            {
+                "Lab" : k,
+                "Count" : v
+            }
+        )           
+    return render(request , "lab_operator/analysis.html" , {"temperature" : temperature , "lab_labels" : lab_labels , "lab_data" : lab_data})    
 
 
 """

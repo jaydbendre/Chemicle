@@ -1,16 +1,19 @@
 {% extends "lab_operator/boilerplate.html" %}<!-- this is a test-->
 {%load static%} {% block LabOperator%}
+{% include "lab_operator/charts/boilerplate.html"%}
 <!-- start chart js -->
-<script src="{% static 'js/vendor/jquery-2.2.4.min.js' %}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
-<!-- start highcharts js -->
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+<!-- start highcharts js
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
-<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script> -->
 <script src="https://www.amcharts.com/lib/3/amcharts.js"></script>
 <script src="https://www.amcharts.com/lib/3/ammap.js"></script>
 <script src="https://www.amcharts.com/lib/3/maps/js/worldLow.js"></script>
 <script src="https://www.amcharts.com/lib/3/serial.js"></script>
+<script src="https://www.amcharts.com/lib/4/core.js"></script>
+<script src="https://www.amcharts.com/lib/4/charts.js"></script>
+<script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
 <script src="https://www.amcharts.com/lib/3/plugins/export/export.min.js"></script>
 <script src="https://www.amcharts.com/lib/3/themes/light.js"></script>
 <div class="page-title-area">
@@ -43,76 +46,118 @@
     </div>
   </div>
 </div>
+<div class="row mt-2 m-2">
+  <div class="col-lg-8 mt-5">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="header-title">Temperature till now</h4>
+        <div id="user-statistics"></div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4 mt-5">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="header-title">Lab Wise records </h4>
+        <div id = "lab_pie" height="233"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  <script>
+    if ($("#user-statistics").length > 0) {
+      var chart = AmCharts.makeChart("user-statistics", {
+        type: "serial",
+        theme: "light",
+        marginRight: 0,
+        marginLeft: 40,
+        autoMarginOffset: 20,
+        dataDateFormat: "YYYY-MM-DD HH:mm:SS",
+        valueAxes: [
+          {
+            id: "v1",
+            axisAlpha: 0,
+            position: "left",
+            ignoreAxisWidth: true
+          }
+        ],
+        balloon: {
+          borderThickness: 1,
+          shadowAlpha: 0
+        },
+        graphs: [
+          {
+            id: "g1",
+            balloon: {
+              drop: true,
+              adjustBorderColor: false,
+              color: "#ffffff",
+              type: "smoothedLine"
+            },
+            fillAlphas: 0.2,
+            bullet: "round",
+            bulletBorderAlpha: 1,
+            bulletColor: "#FFFFFF",
+            bulletSize: 5,
+            hideBulletsCount: 50,
+            lineThickness: 2,
+            title: "red line",
+            useLineColorForBulletBorder: true,
+            valueField: "value",
+            balloonText: "<span style='font-size:18px;'>[[value]]</span>"
+          }
+        ],
+        chartCursor: {
+          valueLineEnabled: true,
+          valueLineBalloonEnabled: true,
+          cursorAlpha: 0,
+          zoomable: false,
+          valueZoomable: true,
+          valueLineAlpha: 0.5
+        },
+        valueScrollbar: {
+          autoGridCount: true,
+          color: "#5E72F3",
+          scrollbarHeight: 30
+        },
+        categoryField: "date",
+        categoryAxis: {
+          parseDates: true,
+          dashLength: 1,
+          minorGridEnabled: true
+        },
+        export: {
+          enabled: false
+        },
+        dataProvider: {{ temperature| safe}}
+      });
+    }
 
-<div id="user-statistics"></div>
+   am4core.ready(function () {
 
-<script>
-  if ($("#user-statistics").length > 0) {
-    var chart = AmCharts.makeChart("user-statistics", {
-      type: "serial",
-      theme: "light",
-      marginRight: 0,
-      marginLeft: 40,
-      autoMarginOffset: 20,
-      dataDateFormat: "YYYY-MM-DD HH:mm:SS",
-      valueAxes: [
-        {
-          id: "v1",
-          axisAlpha: 0,
-          position: "left",
-          ignoreAxisWidth: true
-        }
-      ],
-      balloon: {
-        borderThickness: 1,
-        shadowAlpha: 0
-      },
-      graphs: [
-        {
-          id: "g1",
-          balloon: {
-            drop: true,
-            adjustBorderColor: false,
-            color: "#ffffff",
-            type: "smoothedLine"
-          },
-          fillAlphas: 0.2,
-          bullet: "round",
-          bulletBorderAlpha: 1,
-          bulletColor: "#FFFFFF",
-          bulletSize: 5,
-          hideBulletsCount: 50,
-          lineThickness: 2,
-          title: "red line",
-          useLineColorForBulletBorder: true,
-          valueField: "value",
-          balloonText: "<span style='font-size:18px;'>[[value]]</span>"
-        }
-      ],
-      chartCursor: {
-        valueLineEnabled: true,
-        valueLineBalloonEnabled: true,
-        cursorAlpha: 0,
-        zoomable: false,
-        valueZoomable: true,
-        valueLineAlpha: 0.5
-      },
-      valueScrollbar: {
-        autoGridCount: true,
-        color: "#5E72F3",
-        scrollbarHeight: 30
-      },
-      categoryField: "date",
-      categoryAxis: {
-        parseDates: true,
-        dashLength: 1,
-        minorGridEnabled: true
-      },
-      export: {
-        enabled: false
-      },
-      dataProvider: {{ temperature| safe}}
-    });
-  }
-</script>
-{% endblock %}
+      // Themes begin
+      am4core.useTheme(am4themes_animated);
+      // Themes end
+
+      // Create chart instance
+      var chart = am4core.create("lab_pie", am4charts.PieChart);
+
+      // Add data
+      chart.data = {{ lab_data| safe}}
+      // Add and configure Series
+      var pieSeries = chart.series.push(new am4charts.PieSeries());
+      pieSeries.dataFields.value = "Count";
+      pieSeries.dataFields.category = "Lab";
+      pieSeries.slices.template.stroke = am4core.color("#fff");
+      pieSeries.slices.template.strokeWidth = 2;
+      pieSeries.slices.template.strokeOpacity = 1;
+
+      // This creates initial animation
+      pieSeries.hiddenState.properties.opacity = 1;
+      pieSeries.hiddenState.properties.endAngle = -90;
+      pieSeries.hiddenState.properties.startAngle = -90;
+
+    }); // end am4core.ready()
+  </script> 
+  {% endblock %}
+</div>
