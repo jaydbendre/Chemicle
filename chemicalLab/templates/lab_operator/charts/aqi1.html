@@ -25,18 +25,22 @@
 <script src="{% static 'js/chartist-plugin-threshold.js' %}"></script>
 <script>
     $(document).ready(function () {
-        $.getJSON("https://api.thingspeak.com/channels/1017900/fields/3.json?api_key=CQ98H95JG2IBYHNH&results=10", function (result) {
+        $.getJSON("https://api.thingspeak.com/channels/1017900/feeds.json?api_key=CQ98H95JG2IBYHNH&results=20", function (result) {
             $("#loader2").hide()
             var series = result["feeds"]
             var data = []
             var created_at = []
-            
+            var lab_id = {{ request.session.lab_id }}
+
             $.each(series, function (i, s) {
-                data.push(s["field3"])
-                var time = s["created_at"].split("T")
-                time = time[1]
-                time = time.substring(0, time.length - 1)
-                created_at.push(time)
+                if(s["field4"] === lab_id.toString())
+                {
+                    data.push(s["field3"])
+                    var time = s["created_at"].split("T")
+                    time = time[1]
+                    time = time.substring(0, time.length - 1)
+                    created_at.push(time)
+                }
             })
 
             console.log(data)

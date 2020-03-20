@@ -36,7 +36,7 @@ def login(request):
         print(user_data.items())
         
         
-        return HttpResponse(user_data.items())
+        # return HttpResponse(user_data.items())
         request.session["email"] = user_data["email"]
         request.session["username"] = user_data["fname"]+ " "+ user_data["lname"]
         return render(request,"lab_operator/dashboard.html",{"user_data" : user_data})
@@ -48,7 +48,7 @@ def login(request):
             try:
                 user_data = m.User.objects.get(email = email ,password = password)
             except m.User.DoesNotExist:
-                return render(request , "login.html" , {"error" : "Invalid Email or password"})
+                return render(request , "login/login.html" , {"error" : "Invalid Email or password"})
             print("Hi")
             user_data = user_data.__dict__
             del user_data["_state"]
@@ -67,8 +67,8 @@ def login(request):
                 # return HttpResponse(data.items())
                 return render(request,"lab_operator/dashboard.html",{"user_data" : user_data})
     
-    elif "email" not in request.session.keys() :
-        return HttpResponse(request.session.items())
+    elif request.session["email"] !=None :
+        # return HttpResponse(request.session.items())
         try:
             user_data = m.User.objects.get(email = str(request.session["email"]))
         except m.User.DoesNotExist:
