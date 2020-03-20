@@ -1,18 +1,22 @@
 {% load static %}
-<link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css" />
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
-    crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-    crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-    crossorigin="anonymous"></script>
-<script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" ctype="text/javascript"></script>
+{% include "lab_operator/charts/boilerplate.html" %}
+
+<style>
+    #aqi1 .ct-series-a .ct-line {
+        /* Set the colour of this series line */
+        stroke: green;
+        /* Control the thikness of your lines */
+        stroke-width: 3px;
+        background-color: blue;
+        /* Create a dashed line with a pattern */
+    }
+
+    #aqi1 .ct-series-a .ct-point {
+        /* Colour of your points */
+        stroke: green;
+    }
+</style>
+
 <div class="ct-chart" height="600" id="aqi1">
     <div class="spinner-grow text-secondary" role="status" id="loader2">
         <span class="sr-only">Loading...</span>
@@ -26,19 +30,14 @@
             var series = result["feeds"]
             var data = []
             var created_at = []
-            var sum = 0
-            var length = 0
+            
             $.each(series, function (i, s) {
                 data.push(s["field3"])
-                sum = sum + s["field3"]
-                length = length + 1
                 var time = s["created_at"].split("T")
                 time = time[1]
                 time = time.substring(0, time.length - 1)
                 created_at.push(time)
             })
-
-            var avg = sum / length
 
             console.log(data)
             console.log(created_at)
@@ -57,14 +56,12 @@
                     // and also don't show the label
 
                 },
-                showArea: true,
+
+                
                 axisY: {
                     // We can disable the grid for this axis
                     showGrid: false,
                     // and also don't show the label
-                    labelInterpolationFnc: function (value) {
-                        return value + '%';
-                    }
                 },
 
             });

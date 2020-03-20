@@ -56,12 +56,13 @@ def login(request):
             
             request.session["email"] = user_data["email"]
             request.session["username"] = user_data["fname"]+ " "+ user_data["lname"]
-            
+            request.session["lab_id"] = user_data["lab_id_id"]
             if user_data["role_id_id"] == 0:
                 pass
             elif user_data["role_id_id"] == 1:
                 pass
             else:
+                request.session["role"] = "Lab Operator"
                 # data = requests.get("https://api.thingspeak.com/channels/1017900/feeds.json?api_key=CQ98H95JG2IBYHNH").text
                 # return HttpResponse(data.items())
                 return render(request,"lab_operator/dashboard.html",{"user_data" : user_data})
@@ -95,6 +96,10 @@ def login(request):
     else:
         return render(request , "login/login.html",{"error" : "There has been error in processing your request"})
     
+    
+def analysis(request):
+    return render(request , "lab_operator/analysis.html")    
+
 def log_out(request):
     logout(request)
     return redirect("/")

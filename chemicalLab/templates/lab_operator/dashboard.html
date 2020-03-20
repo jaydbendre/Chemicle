@@ -8,314 +8,50 @@
 <![endif]-->
 <!-- preloader area start -->
 {% block LabOperator %}
-<script></script>
-<div id="preloader">
-  <div class="loader"></div>
+<!-- page title area end -->
+<!-- row area start-->
+<div class="container container-fluid">
+  <div class="card text-center m-3 ">
+    <h5 class="card-text">
+      Welcome to data of Lab : {{request.session.lab_id}}
+    </h5>
+    <h6 class="card-text">
+      Role : {{request.session.role }}
+    </h6>
+  </div>
 </div>
-<!-- preloader area end -->
-<!-- page container area start -->
-<div class="page-container">
-  <!-- sidebar menu area start -->
-  <div class="sidebar-menu">
-    <div class="sidebar-header">
-      <div class="logo">
-        <a href="{% url 'login' %}"
-          ><img src="{% static 'logo_assets/logo.png' %}" alt="logo"
-        /></a>
-      </div>
-    </div>
-    <div class="main-menu">
-      <div class="menu-inner">
-        <nav>
-          <ul class="metismenu" id="menu">
-            <li class="active">
-              <a href="{% url 'login' %}" aria-expanded="true"
-                ><i class="ti-dashboard"></i><span>dashboard</span></a
-              >
-            </li>
-          </ul>
-        </nav>
+<div class="container container-fluid mt-3 mb-3">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card text-center">
+        <h5 class="card-title">Temperature</h5>
+        <h6 class="card-subtitle mb-2 text-muted">Last 10 records</h6>
+        <div class="card-body">
+          {% include "lab_operator/charts/temperature1.html" %}
+        </div>
       </div>
     </div>
   </div>
-  <!-- sidebar menu area end -->
-  <!-- main content area start -->
-  <div class="main-content">
-    <!-- header area start -->
-    <div class="header-area">
-      <div class="row align-items-center">
-        <!-- nav and search button -->
-        <div class="col-md-6 col-sm-8 clearfix">
-          <div class="nav-btn pull-left">
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
-          <div class="search-box pull-left">
-            <form action="#">
-              <input
-                type="text"
-                name="search"
-                placeholder="Search..."
-                required
-              />
-              <i class="ti-search"></i>
-            </form>
-          </div>
-        </div>
-        <!-- profile info & task notification -->
-        <div class="col-md-6 col-sm-4 clearfix">
-          <ul class="notification-area pull-right">
-            <li id="full-view"><i class="ti-fullscreen"></i></li>
-            <li id="full-view-exit"><i class="ti-zoom-out"></i></li>
-            <li class="dropdown">
-              <i class="ti-bell dropdown-toggle" data-toggle="dropdown">
-                <span>2</span>
-              </i>
-              <div class="dropdown-menu bell-notify-box notify-box">
-                <span class="notify-title"
-                  >You have 3 new notifications <a href="#">view all</a></span
-                >
-                <div class="nofity-list">
-                  <a href="#" class="notify-item">
-                    <div class="notify-thumb">
-                      <i class="ti-key btn-danger"></i>
-                    </div>
-                    <div class="notify-text">
-                      <p>You have Changed Your Password</p>
-                      <span>Just Now</span>
-                    </div>
-                  </a>
-                  <a href="#" class="notify-item">
-                    <div class="notify-thumb">
-                      <i class="ti-comments-smiley btn-info"></i>
-                    </div>
-                    <div class="notify-text">
-                      <p>New Commetns On Post</p>
-                      <span>30 Seconds ago</span>
-                    </div>
-                  </a>
-                  <a href="#" class="notify-item">
-                    <div class="notify-thumb">
-                      <i class="ti-key btn-primary"></i>
-                    </div>
-                    <div class="notify-text">
-                      <p>Some special like you</p>
-                      <span>Just Now</span>
-                    </div>
-                  </a>
-                  <a href="#" class="notify-item">
-                    <div class="notify-thumb">
-                      <i class="ti-comments-smiley btn-info"></i>
-                    </div>
-                    <div class="notify-text">
-                      <p>New Commetns On Post</p>
-                      <span>30 Seconds ago</span>
-                    </div>
-                  </a>
-                  <a href="#" class="notify-item">
-                    <div class="notify-thumb">
-                      <i class="ti-key btn-primary"></i>
-                    </div>
-                    <div class="notify-text">
-                      <p>Some special like you</p>
-                      <span>Just Now</span>
-                    </div>
-                  </a>
-                  <a href="#" class="notify-item">
-                    <div class="notify-thumb">
-                      <i class="ti-key btn-danger"></i>
-                    </div>
-                    <div class="notify-text">
-                      <p>You have Changed Your Password</p>
-                      <span>Just Now</span>
-                    </div>
-                  </a>
-                  <a href="#" class="notify-item">
-                    <div class="notify-thumb">
-                      <i class="ti-key btn-danger"></i>
-                    </div>
-                    <div class="notify-text">
-                      <p>You have Changed Your Password</p>
-                      <span>Just Now</span>
-                    </div>
-                  </a>
-                </div>
-              </div>
-            </li>
-            <li class="dropdown">
-              <i class="fa fa-envelope-o dropdown-toggle" data-toggle="dropdown"
-                ><span>3</span></i
-              >
-              <div class="dropdown-menu notify-box nt-enveloper-box">
-                <span class="notify-title"
-                  >You have 3 new notifications <a href="#">view all</a></span
-                >
-                <div class="nofity-list">
-                  <a href="#" class="notify-item">
-                    <div class="notify-thumb">
-                      <img
-                        src="{% static 'images/author/author-img1.jpg' %}"
-                        alt="image"
-                      />
-                    </div>
-                    <div class="notify-text">
-                      <p>Aglae Mayer</p>
-                      <span class="msg">Hey I am waiting for you...</span>
-                      <span>3:15 PM</span>
-                    </div>
-                  </a>
-                  <a href="#" class="notify-item">
-                    <div class="notify-thumb">
-                      <img
-                        src="{% static 'images/author/author-img2.jpg' %}"
-                        alt="image"
-                      />
-                    </div>
-                    <div class="notify-text">
-                      <p>Aglae Mayer</p>
-                      <span class="msg">When you can connect with me...</span>
-                      <span>3:15 PM</span>
-                    </div>
-                  </a>
-                  <a href="#" class="notify-item">
-                    <div class="notify-thumb">
-                      <img
-                        src="{% static 'images/author/author-img3.jpg' %}"
-                        alt="image"
-                      />
-                    </div>
-                    <div class="notify-text">
-                      <p>Aglae Mayer</p>
-                      <span class="msg">I missed you so much...</span>
-                      <span>3:15 PM</span>
-                    </div>
-                  </a>
-                  <a href="#" class="notify-item">
-                    <div class="notify-thumb">
-                      <img
-                        src="{% static 'images/author/author-img4.jpg' %}"
-                        alt="image"
-                      />
-                    </div>
-                    <div class="notify-text">
-                      <p>Aglae Mayer</p>
-                      <span class="msg"
-                        >Your product is completely Ready...</span
-                      >
-                      <span>3:15 PM</span>
-                    </div>
-                  </a>
-                  <a href="#" class="notify-item">
-                    <div class="notify-thumb">
-                      <img
-                        src="{% static 'images/author/author-img2.jpg' %}"
-                        alt="image"
-                      />
-                    </div>
-                    <div class="notify-text">
-                      <p>Aglae Mayer</p>
-                      <span class="msg">Hey I am waiting for you...</span>
-                      <span>3:15 PM</span>
-                    </div>
-                  </a>
-                  <a href="#" class="notify-item">
-                    <div class="notify-thumb">
-                      src="{% static 'images/author/author-img1.jpg' %}"
-                      alt="image" />
-                    </div>
-                    <div class="notify-text">
-                      <p>Aglae Mayer</p>
-                      <span class="msg">Hey I am waiting for you...</span>
-                      <span>3:15 PM</span>
-                    </div>
-                  </a>
-                  <a href="#" class="notify-item">
-                    <div class="notify-thumb">
-                      <img
-                        src="{% static 'images/author/author-img3.jpg' %}"
-                        alt="image"
-                      />
-                    </div>
-                    <div class="notify-text">
-                      <p>Aglae Mayer</p>
-                      <span class="msg">Hey I am waiting for you...</span>
-                      <span>3:15 PM</span>
-                    </div>
-                  </a>
-                </div>
-              </div>
-            </li>
-            <li class="settings-btn">
-              <i class="ti-settings"></i>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
-    <!-- header area end -->
-    <!-- page title area start -->
-    <div class="page-title-area">
-      <div class="row align-items-center">
-        <div class="col-sm-6">
-          <div class="breadcrumbs-area clearfix">
-            <h4 class="page-title pull-left">Dashboard</h4>
-            <ul class="breadcrumbs pull-left">
-              <li><a href="index.html">Home</a></li>
-              <li><span>Dashboard</span></li>
-            </ul>
-          </div>
-        </div>
-        <div class="col-sm-6 clearfix">
-          <div class="user-profile pull-right">
-            <img
-              class="avatar user-thumb"
-              src="{% static 'images/author/avatar.png' %}"
-              alt="avatar"
-            />
-            <h4 class="user-name dropdown-toggle" data-toggle="dropdown">
-              {{ request.session.username }} <i class="fa fa-angle-down"></i>
-            </h4>
-            <div class="dropdown-menu">
-              <a class="dropdown-item" href="#">Message</a>
-              <a class="dropdown-item" href="#">Settings</a>
-              <a class="dropdown-item" href="#">Log Out</a>
-            </div>
+  <div class="container container-fluid mt-3 mb-3">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card text-center">
+          <h5 class="card-title">Humidity</h5>
+          <h6 class="card-subtitle mb-2 text-muted">Last 10 records</h6>
+          <div class="card-body">
+            {% include "lab_operator/charts/humidity1.html" %}
           </div>
         </div>
       </div>
     </div>
-    <!-- page title area end -->
-    <div class="main-content-inner">
-      <!-- row area start-->
-      <div class="row mt-3">
-        <div class="col-12">
-          <div class="card text-center container">
-            <div class="card-title">Temperature</div>
+    <div class="container container-fluid mt-3 mb-3">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card text-center">
+            <h5 class="card-title">Air Quality Index</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Last 10 records</h6>
             <div class="card-body">
-              {% include "lab_operator/charts/temperature1.html" %}
-            </div>
-          </div>
-        </div>
-        </div>
-        <div class="row mt-3">
-          <div class="col-12">
-            <div class="card text-center container">
-              <div class="card-title">Humidity</div>
-              <div class="card-body p-3">
-                {% include "lab_operator/charts/humidity1.html" %}
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row mt-3">
-          <div class="col-12">
-            <div class="card text-center container">
-              <div class="card-title">AQI</div>
-              <div class="card-body">
-                {% include "lab_operator/charts/aqi1.html" %}
-              </div>
-              </div>
+              {% include "lab_operator/charts/aqi1.html" %}
             </div>
           </div>
         </div>
@@ -412,7 +148,9 @@
                 <h4>Ratul Hamba sent you an email</h4>
                 <span class="time"><i class="ti-time"></i>09:35</span>
               </div>
-              <p>Hello sir , where are you, i am egerly waiting for you.</p>
+              <p>
+                Hello sir , where are you, i am egerly waiting for you.
+              </p>
             </div>
             <div class="timeline-task">
               <div class="icon bg2">
@@ -476,7 +214,9 @@
                     <label for="switch1">Toggle</label>
                   </div>
                 </div>
-                <p>Keep it 'On' When you want to get all the notification.</p>
+                <p>
+                  Keep it 'On' When you want to get all the notification.
+                </p>
               </div>
               <div class="s-settings">
                 <div class="s-sw-title">
