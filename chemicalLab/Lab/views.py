@@ -55,6 +55,9 @@ def analysis(request):
     return render(request , "lab_operator/analysis.html" , {"temperature" : temperature , "lab_labels" : lab_labels , "lab_data" : lab_data})    
 
 
+def schedule(request):
+    return render(request , "lab_operator/schedule.html")
+
 """
 To check for something in the database
 """
