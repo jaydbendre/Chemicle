@@ -114,6 +114,12 @@ document.addEventListener(
       if (len !== 0) {
         selected[0].className = "";
       }
+      console.log(year, month, o.innerHTML)
+      var date_set = document.getElementById("timeline")
+      data_set_len = date_set.length;
+      if (data_set_len !== 0) {
+        date_set.innerHTML = o.innerHTML + " " + monthTag[month] + year
+      }
       o.className = "selected";
       selectedDay = new Date(year, month, o.innerHTML);
       this.drawHeader(o.innerHTML);

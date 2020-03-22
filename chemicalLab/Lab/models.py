@@ -1,5 +1,7 @@
 from django.db import models
 
+
+
 class Role(models.Model):
     post = models.CharField(max_length= 20)
 
@@ -39,3 +41,12 @@ class Sensor_log(models.Model):
     humidity = models.FloatField() 
     air_quality = models.FloatField()
     timestamp = models.DateField(auto_now_add = True)
+
+class Schedule(models.Model):
+    date = models.DateField(auto_now_add= True)
+    start_time = models.TimeField(auto_now_add=True)
+    end_time = models.TimeField(auto_now_add=True)
+    lab = models.ForeignKey(Lab , on_delete = models.CASCADE)
+    added_by = models.ForeignKey(User , on_delete = models.CASCADE)
+    description = models.TextField(default = None)    
+    event_type = models.IntegerField(default = 1)
