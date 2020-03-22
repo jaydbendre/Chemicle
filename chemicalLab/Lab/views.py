@@ -20,14 +20,14 @@ def render_login(request):
 
     
 def analysis(request):
-    sensor_data = m.Sensor_log.objects.all()
+    sensor_data = m.Sensor_log.objects.order_by("-timestamp").all()
     # sensor_data = sensor_data.__dict__
     
     
     temperature = []
     humidity = []
     aqi = []
-
+    created_at = []
     lab_count = dict()
     for o in sensor_data:
         # return HttpResponse(o)
@@ -35,15 +35,22 @@ def analysis(request):
             lab_count[o.lab_id.id] = 1
         else:
             lab_count[o.lab_id.id]+= 1
+        if len(humidity) == 20:
+            break
         temperature.append(
-            {
-                "date" : str(o.timestamp),
-                "value" : o.temperature
-            }
+            o.temperature
         )
+        
+        created_at.append(datetime.datetime.strftime(o.timestamp , "%d %B, %Y %I:%M %p"))
+        humidity.append(o.humidity)
+        aqi.append(o.air_quality)
         
     lab_labels = [ v for v in lab_count.keys() ]
     lab_data = []
+    
+    temp_table = zip(temperature , created_at)
+    hum_table = zip(humidity , created_at)
+    aqi_table = zip(aqi , created_at)
     
     for k,v in lab_count.items():
         lab_data.append(
@@ -52,7 +59,11 @@ def analysis(request):
                 "Count" : v
             }
         )           
-    return render(request , "lab_operator/analysis.html" , {"temperature" : temperature , "lab_labels" : lab_labels , "lab_data" : lab_data})    
+    return render(request , "lab_operator/analysis.html" , {"temperature" : temperature , "lab_labels" : lab_labels , "lab_data" : lab_data , "humidity" : humidity,"aqi" : aqi , "created_at": created_at ,
+    "temp_table" : temp_table,
+    "hum_table" : hum_table,
+    "aqi_table" : aqi_table
+    })    
 
 
 def schedule(request):
@@ -96,7 +107,10 @@ def login(request):
             
             request.session["email"] = user_data["email"]
             request.session["username"] = user_data["fname"]+ " "+ user_data["lname"]
+            Lab = m.Lab.objects.get(id = user_data["lab_id_id"])
+            
             request.session["lab_id"] = user_data["lab_id_id"]
+            request.session["lab"] = Lab.name
             if user_data["role_id_id"] == 0:
                 pass
             elif user_data["role_id_id"] == 1:
@@ -120,6 +134,13 @@ def login(request):
         del user_data["_state"]
         print(user_data.items())
         
+    
+        request.session["email"] = user_data["email"]
+        request.session["username"] = user_data["fname"]+ " "+ user_data["lname"]
+        Lab = m.Lab.objects.get(id = user_data["lab_id_id"])
+        
+        request.session["lab_id"] = user_data["lab_id_id"]
+        request.session["lab"] = Lab.name
         temperature = list()
         created_at = list()
         for i in range(3):
@@ -136,6 +157,37 @@ def login(request):
     else:
         return render(request , "login/login.html",{"error" : "There has been error in processing your request"})
     
+
+def get_historic_data(request,id):
+    sensor_data = m.Sensor_log.objects.all()
+    data = []
+    if id == 1:
+        for o in sensor_data:
+            data.append(
+                {
+                    "date" : str(o.timestamp),
+                    "value" : o.temperature
+                }
+            )
+    elif id ==2 :
+        for o in sensor_data:
+            data.append(
+                {
+                    "date" : str(o.timestamp),
+                    "value" : o.humidity
+                }
+            )
+    elif id == 3:
+        for o in sensor_data:
+            data.append(
+                {
+                    "date" : str(o.timestamp),
+                    "value" : o.air_quality
+                }
+            )
+    
+    return JsonResponse(data , safe=False)            
+
 
 def log_out(request):
     logout(request)

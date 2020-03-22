@@ -7,5 +7,6 @@ urlpatterns = [
     path('auth_user/',views.login, name = "login"),
     path("logout/",views.log_out , name = "logout"),
     path("analysis/" ,views.analysis , name="analysis"),
-    path("view_schedule/" ,views.schedule , name = "view_schedule")
+    path("view_schedule/" ,views.schedule , name = "view_schedule"),
+    path("get_historic_data/<int:id>",views.get_historic_data , name="historic_data")
 ]

@@ -3,7 +3,7 @@
 {% include "lab_operator/charts/boilerplate.html"%}
 <!-- start chart js -->
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
-<!-- start highcharts js
+start highcharts js
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
 <script src="https://code.highcharts.com/modules/export-data.js"></script> -->
@@ -46,118 +46,30 @@
     </div>
   </div>
 </div>
-<div class="row mt-2 m-2">
-  <div class="col-lg-8 mt-5">
-    <div class="card">
-      <div class="card-body">
-        <h4 class="header-title">Temperature till now</h4>
-        <div id="user-statistics"></div>
-      </div>
-    </div>
+<ul class="nav nav-tabs nav-justified md-tabs indigo" id="myTabJust" role="tablist">
+  <li class="nav-item">
+    <a class="nav-link active" id="home-tab-just" data-toggle="tab" href="#home-just" role="tab" aria-controls="home-just"
+      aria-selected="true">Last 20 Records</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" id="profile-tab-just" data-toggle="tab" href="#profile-just" role="tab" aria-controls="profile-just"
+      aria-selected="false">Lab Data</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" id="contact-tab-just" data-toggle="tab" href="#contact-just" role="tab" aria-controls="contact-just"
+      aria-selected="false">Tabular Data</a>
+  </li>
+</ul>
+<div class="tab-content card pt-5" id="myTabContentJust">
+  <div class="tab-pane fade show active" id="home-just" role="tabpanel" aria-labelledby="home-tab-just">
+    {% include "lab_operator/charts/analysis/historic_data.html" %}
   </div>
-  <div class="col-lg-4 mt-5">
-    <div class="card">
-      <div class="card-body">
-        <h4 class="header-title">Lab Wise records </h4>
-        <div id = "lab_pie" height="450"></div>
-      </div>
-    </div>
+  <div class="tab-pane fade" id="profile-just" role="tabpanel" aria-labelledby="profile-tab-just">
+    {% include "lab_operator/charts/analysis/lab_data.html" %}
   </div>
-</div>
-  <script>
-    if ($("#user-statistics").length > 0) {
-      var chart = AmCharts.makeChart("user-statistics", {
-        type: "serial",
-        theme: "light",
-        marginRight: 0,
-        marginLeft: 40,
-        autoMarginOffset: 20,
-        dataDateFormat: "YYYY-MM-DD HH:mm:SS",
-        valueAxes: [
-          {
-            id: "v1",
-            axisAlpha: 0,
-            position: "left",
-            ignoreAxisWidth: true
-          }
-        ],
-        balloon: {
-          borderThickness: 1,
-          shadowAlpha: 0
-        },
-        graphs: [
-          {
-            id: "g1",
-            balloon: {
-              drop: true,
-              adjustBorderColor: false,
-              color: "#ffffff",
-              type: "smoothedLine"
-            },
-            fillAlphas: 0.2,
-            bullet: "round",
-            bulletBorderAlpha: 1,
-            bulletColor: "#FFFFFF",
-            bulletSize: 5,
-            hideBulletsCount: 50,
-            lineThickness: 2,
-            title: "red line",
-            useLineColorForBulletBorder: true,
-            valueField: "value",
-            balloonText: "<span style='font-size:18px;'>[[value]]</span>"
-          }
-        ],
-        chartCursor: {
-          valueLineEnabled: true,
-          valueLineBalloonEnabled: true,
-          cursorAlpha: 0,
-          zoomable: false,
-          valueZoomable: true,
-          valueLineAlpha: 0.5
-        },
-        valueScrollbar: {
-          autoGridCount: true,
-          color: "#5E72F3",
-          scrollbarHeight: 30
-        },
-        categoryField: "date",
-        categoryAxis: {
-          parseDates: true,
-          dashLength: 1,
-          minorGridEnabled: true
-        },
-        export: {
-          enabled: false
-        },
-        dataProvider: {{ temperature| safe}}
-      });
-    }
-
-   am4core.ready(function () {
-
-      // Themes begin
-      am4core.useTheme(am4themes_animated);
-      // Themes end
-
-      // Create chart instance
-      var chart = am4core.create("lab_pie", am4charts.PieChart);
-
-      // Add data
-      chart.data = {{ lab_data| safe}}
-      // Add and configure Series
-      var pieSeries = chart.series.push(new am4charts.PieSeries());
-      pieSeries.dataFields.value = "Count";
-      pieSeries.dataFields.category = "Lab";
-      pieSeries.slices.template.stroke = am4core.color("#fff");
-      pieSeries.slices.template.strokeWidth = 2;
-      pieSeries.slices.template.strokeOpacity = 1;
-
-      // This creates initial animation
-      pieSeries.hiddenState.properties.opacity = 1;
-      pieSeries.hiddenState.properties.endAngle = -90;
-      pieSeries.hiddenState.properties.startAngle = -90;
-
-    }); // end am4core.ready()
-  </script> 
-  {% endblock %}
+  <div class="tab-pane fade" id="contact-just" role="tabpanel" aria-labelledby="contact-tab-just">
+    {% include "lab_operator/charts/analysis/tabular_data.html" %}
+  </div>
+</div>  
+{% endblock %}
 </div>
