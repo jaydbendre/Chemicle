@@ -114,16 +114,116 @@ document.addEventListener(
       if (len !== 0) {
         selected[0].className = "";
       }
-      console.log(year, month, o.innerHTML)
-      var date_set = document.getElementById("timeline")
-      data_set_len = date_set.length;
-      if (data_set_len !== 0) {
-        date_set.innerHTML = o.innerHTML + " " + monthTag[month] + year
-      }
+      console.log(year, month, o.innerHTML);
       o.className = "selected";
       selectedDay = new Date(year, month, o.innerHTML);
       this.drawHeader(o.innerHTML);
       this.setCookie("selected_day", 1);
+      var date_set = document.getElementById("timeline");
+      data_set_len = date_set.length;
+      if (data_set_len !== 0) {
+        date_set.innerHTML =
+          "<h4 class = 'text-dark'>Timeline of " +
+          o.innerHTML +
+          " " +
+          monthTag[month] +
+          year +
+          "</h4>";
+        jQuery(function($) {
+          $("#timeline-spinner").show();
+          $.post(
+            " http://127.0.0.1:8000/get_schedule_details",
+            {
+              date: year + "-" + (month + 1) + "-" + o.innerHTML
+            },
+            function(data, status) {
+              console.log(data);
+              $("#timeline-spinner").hide();
+              var html_data = "";
+              if (data["error"] != null) {
+                $("#timelineArea").html(
+                  "<div class = 'container text-center'><h6 class = 'text-dark text-center'> " +
+                    data["error"] +
+                    "</h6></div>"
+                );
+              } else {
+                $.each(data, function(i, d) {
+                  console.log(d["event_type"]);
+                  if (d["event_type"] === 0) {
+                    html_data +=
+                      '<div class="timeline-task">\
+                <div class="icon bg1">\
+                  <i class="fa fa-envelope"></i>\
+                </div>\
+                <div class="tm-title">\
+                  <h4>' +
+                      d["title"] +
+                      '</h4>\
+                  <span class="time"><i class="ti-time"></i>' +
+                      d["start_time"] +
+                      " - " +
+                      d["end_time"] +
+                      "</span>\
+                </div>\
+                <p>\
+                  " +
+                      d["description"] +
+                      "\
+                </p>\
+              </div> ";
+                  } else if (d["event_type"] === 1) {
+                    html_data +=
+                      '<div class="timeline-task">\
+                <div class="icon bg2">\
+                  <i class="fa fa-exclamation-triangle"></i>\
+                </div>\
+                <div class="tm-title">\
+                  <h4>' +
+                      d["title"] +
+                      '</h4>\
+                  <span class="time"><i class="ti-time"></i>' +
+                      d["start_time"] +
+                      " - " +
+                      d["end_time"] +
+                      "</span>\
+                </div>\
+                <p>\
+                  " +
+                      d["description"] +
+                      "\
+                </p>\
+              </div> ";
+                  } else {
+                    html_data +=
+                      '<div class="timeline-task">\
+                <div class="icon bg3">\
+                  <i class="fa fa-bomb"></i>\
+                </div>\
+                <div class="tm-title">\
+                  <h4>' +
+                      d["title"] +
+                      '</h4>\
+                  <span class="time"><i class="ti-time"></i>' +
+                      d["start_time"] +
+                      " - " +
+                      d["end_time"] +
+                      "</span>\
+                </div>\
+                <p>\
+                  " +
+                      d["description"] +
+                      "\
+                </p>\
+              </div> ";
+                  }
+                });
+
+                $("#timelineArea").html(html_data);
+              }
+            }
+          );
+        });
+      }
     };
 
     Calendar.prototype.preMonth = function() {

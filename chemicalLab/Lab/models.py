@@ -50,3 +50,4 @@ class Schedule(models.Model):
     added_by = models.ForeignKey(User , on_delete = models.CASCADE)
     description = models.TextField(default = None)    
     event_type = models.IntegerField(default = 1)
+    title = models.TextField(default = None)
