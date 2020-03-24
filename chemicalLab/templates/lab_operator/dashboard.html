@@ -51,43 +51,16 @@
     <div class="row">
       <div class="col-lg-12">
         <div class="card text-center">
-          <h5 class="card-title">Temperature</h5>
-          <h6 class="card-subtitle mb-2 text-muted">Last 10 records</h6>
+          <h5 class="card-title">Live Data</h5>
+          <h6 class="card-subtitle mb-2 text-muted">Fetched from Thingspeak</h6>
           <div class="card-body">
-            {% include "lab_operator/charts/temperature1.html" %}
+            {% include "lab_operator/charts/live_data.html" %}
           </div>
         </div>
       </div>
     </div>
   </div>
-    <div class="container container-fluid mt-3 mb-3">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="card text-center">
-            <h5 class="card-title">Humidity</h5>
-            <h6 class="card-subtitle mb-2 text-muted">Last 10 records</h6>
-            <div class="card-body">
-              {% include "lab_operator/charts/humidity1.html" %}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="container container-fluid mt-3 mb-3">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="card text-center">
-              <h5 class="card-title">Air Quality Index</h5>
-              <h6 class="card-subtitle mb-2 text-muted">Last 10 records</h6>
-              <div class="card-body">
-                {% include "lab_operator/charts/aqi1.html" %}
-              </div>
-            </div>
-          </div>
-        </div>
-    </div>
-  
-  
+    
 </div>
       <!-- main content area end -->
       <!-- footer area start-->

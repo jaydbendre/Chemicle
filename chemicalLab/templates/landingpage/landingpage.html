@@ -2,7 +2,12 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Chemicle &mdash;</title>
+    <title>Chemicle</title>
+    <link
+      rel="icon"
+      href="{% static 'logo_assets/logo.png'%}"
+      type="image/x-icon"
+    />
     <meta charset="utf-8" />
     <meta
       name="viewport"
@@ -59,7 +64,6 @@
 
     <link rel="stylesheet" href="{% static 'landing_page/css/style.css' %}" />
   </head>
-
   <body data-spy="scroll" data-target=".site-navbar-target" data-offset="300">
     <div id="overlayer"></div>
     <div class="loader">
@@ -85,7 +89,15 @@
         <div class="container-fluid">
           <div class="d-flex align-items-center">
             <div class="site-logo">
-              <a href="index.html" class="text-uppercase">Chemicle</a>
+              <a class="navbar-brand" href="{% url 'index' %}">
+                <img
+                  src="{% static 'logo_assets/logo_transparent1.png' %}"
+                  alt="Chemicle Logo"
+                  height="100px"
+                  width="100px"
+                  id="chemical-logo"
+                />
+              </a>
             </div>
             <div>
               <nav

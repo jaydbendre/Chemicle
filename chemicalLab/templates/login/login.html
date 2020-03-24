@@ -16,6 +16,13 @@
 
 <div class="login-area login-bg">
   <div class="container">
+    <div class="submit-btn-area mt-0">
+      <a href="{% url 'index' %}">
+        <button id="form_submit">
+          <i class="ti-arrow-left"></i>&nbsp;&nbsp;&nbsp;Back to landing page
+        </button>
+      </a>
+    </div>
     <div class="login-box ptb--100">
       <form action="{% url 'login' %}" method="POST">
         {% csrf_token %}
