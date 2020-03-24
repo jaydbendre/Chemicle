@@ -125,7 +125,8 @@ def login(request):
             request.session["lab_id"] = user_data["lab_id_id"]
             request.session["lab"] = Lab.name
             if user_data["role_id_id"] == 0:
-                pass
+                request.session["role"] = "Admin"
+                return render(request,"admin/dashboard.html",{"user_data" : user_data})
             elif user_data["role_id_id"] == 1:
                 pass
             else:
@@ -154,18 +155,19 @@ def login(request):
         
         request.session["lab_id"] = user_data["lab_id_id"]
         request.session["lab"] = Lab.name
-        temperature = list()
-        created_at = list()
-        for i in range(3):
-            temp=list()
-            for j in range(5):
-                temp.append(random.randint(25,35))
-            temperature.append(temp)
-            
-        created_at = ["Monday" , "Tuesday" , "Wednesday" ,"Thursday" , "Friday"]
         request.session["email"] = user_data["email"]
         request.session["username"] = user_data["fname"]+ " "+ user_data["lname"]
-        return render(request,"lab_operator/dashboard.html",{"user_data" : user_data, "temperature" : temperature, "created_at":created_at })
+        if user_data["role_id_id"] == 0:
+            request.session["role"] = "Admin"
+            return render(request,"admin/dashboard.html",{"user_data" : user_data})
+        elif user_data["role_id_id"] == 1:
+            pass
+        else:
+            request.session["role"] = "Lab Operator"
+            # data = requests.get("https://api.thingspeak.com/channels/1017900/feeds.json?api_key=CQ98H95JG2IBYHNH").text
+            # return HttpResponse(data.items())
+            return render(request,"lab_operator/dashboard.html",{"user_data" : user_data})
+
     
     else:
         return render(request , "login/login.html",{"error" : "There has been error in processing your request"})

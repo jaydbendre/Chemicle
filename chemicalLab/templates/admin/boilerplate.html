@@ -55,15 +55,7 @@
                 <li>
                   <a href="{% url 'login' %}" aria-expanded="true"><i class="ti-dashboard"></i><span>dashboard</span></a>
                 </li>
-                <li>
-                  <a href="{% url 'view_schedule' %}" aria-expanded="true"><i class="ti-calendar"></i><span>View Schedule</span></a>
-                </li>
-                <li>
-                  <a href="{% url 'analysis' %}" aria-expanded="true"><i class="fa fa-bar-chart-o"></i><span>Analysis</span></a>
-                </li>
-                <li>
-                  <a href="{% url 'profile' %}" aria-expanded="true"><i class="ti-user"></i><span>Edit Profile</span></a>
-                </li>
+                
               </ul>
             </nav>
           </div>
@@ -224,7 +216,7 @@
                       </a>
                       <a href="#" class="notify-item">
                         <div class="notify-thumb">
-                          src="{% static 'images/author/author-img1.jpg' %}"
+                          <img src="{% static 'images/author/author-img1.jpg' %}"
                           alt="image" />
                         </div>
                         <div class="notify-text">
@@ -255,7 +247,7 @@
         </div>
         <!-- header area end -->
         <!-- page title area start -->
-    {% block LabOperator %}{% endblock %}
+    {% block Admin %}{% endblock %}
     <!-- offset area end -->
     <!-- jquery latest version -->
     <script src="{% static 'js/vendor/jquery-2.2.4.min.js' %}"></script>
