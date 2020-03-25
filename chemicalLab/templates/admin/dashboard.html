@@ -41,4 +41,43 @@
   </div>
 </div>
 
+
+<div class="container container-fluid text-center mt-2">
+  Welcome back , {{ request.session.username }}
+  <br />
+  You are  : {{ request.session.role }} 
+</div>
+
+<div class="row mt-4">
+  <div class="col-md-3 height">
+      <div class="card dash-box">
+          <h2> {{ lab_operator }} </h2>
+          <h2>lab </h2>
+      </div>
+  </div>
+  <div class="col-md-3">
+      <div class="card dash-box">
+          <h2>  </h2>
+          <h2>Books </h2>
+      </div>
+  </div>
+  <div class="col-md-3">
+      <div class="card dash-box">
+          <h2> </h2>
+          <h2> Books Issued </h2>
+      </div>
+  </div>
+  <div class="col-md-3" style="padding-right: 15px !important;">
+      <div class="card dash-box">
+          <h2></h2>
+          <h2>Books Sold </h2>
+      </div>
+  </div>
+</div>
+
+
+
+
+
+
 {% endblock%}

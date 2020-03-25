@@ -126,7 +126,8 @@ def login(request):
             request.session["lab"] = Lab.name
             if user_data["role_id_id"] == 0:
                 request.session["role"] = "Admin"
-                return render(request,"admin/dashboard.html",{"user_data" : user_data})
+                return redirect('/admin')
+                # return render(request,"admin/dashboard.html",{"user_data" : user_data})
             elif user_data["role_id_id"] == 1:
                 pass
             else:
