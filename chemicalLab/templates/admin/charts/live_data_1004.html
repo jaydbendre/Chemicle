@@ -19,10 +19,10 @@
   <div id="aqi2" class="chart"></div>
   <script type="text/javascript">
     jQuery(function($) {
-      var temp = new Array();
-      var hum = new Array();
-      var aqi = new Array();
-      var lab = new Array();
+      var temp1 = new Array();
+      var hum1 = new Array();
+      var aqi1 = new Array();
+      var lab1 = new Array();
       $("#temp2").shieldChart({
         theme: "light",
         applyAnimation: false,
@@ -52,7 +52,7 @@
           {
             seriesType: "line",
             collectionAlias: "Temperature in celcius",
-            data: temp
+            data: temp1
           }
         ]
       });
@@ -85,7 +85,7 @@
           {
             seriesType: "line",
             collectionAlias: "Humidity in %",
-            data: hum
+            data: hum1
           }
         ]
       });
@@ -118,7 +118,7 @@
           {
             seriesType: "line",
             collectionAlias: "Air Quality Index",
-            data: aqi
+            data: aqi1
           }
         ]
       });
@@ -132,22 +132,22 @@
             
             if(data["field4"]==1004){
                 console.log(data);
-                temp[temp.length] = parseFloat(data["field1"]);
-                hum[hum.length] = parseFloat(data["field2"]);
-                aqi[aqi.length] = parseFloat(data["field3"]);
-                lab[lab.length] = parseInt(data["field4"]);
+                temp1[temp1.length] = parseFloat(data["field1"]);
+                hum1[hum1.length] = parseFloat(data["field2"]);
+                aqi1[aqi1.length] = parseFloat(data["field3"]);
+                lab1[lab1.length] = parseInt(data["field4"]);
             
-                if (temp.length > 50) {
-                temp = temp.splice(1, 49);
+                if (temp1.length > 50) {
+                temp1 = temp1.splice(1, 49);
                 }
-                if (hum.length > 50) {
-                hum = hum.splice(1, 49);
+                if (hum1.length > 50) {
+                hum1 = hum1.splice(1, 49);
                 }
-                if (aqi.length > 50) {
-                hum = hum.splice(1, 49);
+                if (aqi1.length > 50) {
+                aqi1 = aqi1.splice(1, 49);
                 }
-                if (lab.length > 50) {
-                lab = lab.splice(1, 49);
+                if (lab1.length > 50) {
+                lab1 = lab1.splice(1, 49);
                 }
 
                 var container = $("#temp2").swidget();
@@ -192,7 +192,7 @@
                     {
                     seriesType: "line",
                     collectionAlias: "Temperature in celcius",
-                    data: temp
+                    data: temp1
                     }
                 ]
                 });
@@ -225,7 +225,7 @@
                     {
                     seriesType: "line",
                     collectionAlias: "HUmidity in %",
-                    data: hum
+                    data: hum1
                     }
                 ]
                 });
@@ -258,7 +258,7 @@
                     {
                     seriesType: "line",
                     collectionAlias: "Air Quality Index",
-                    data: aqi
+                    data: aqi1
                     }
                 ]
                 });
