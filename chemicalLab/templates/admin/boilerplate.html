@@ -45,7 +45,7 @@
       <div class="sidebar-menu">
         <div class="sidebar-header">
           <div class="logo">
-            <a href="{% url 'login' %}"><img src="{% static 'logo_assets/logo_transparent.png' %}" alt="logo" /></a>
+            <a href="{% url 'dashboard' %}"><img src="{% static 'logo_assets/logo_transparent.png' %}" alt="logo" /></a>
           </div>
         </div>
         <div class="main-menu">
@@ -53,9 +53,14 @@
             <nav>
               <ul class="metismenu" id="menu">
                 <li>
-                  <a href="{% url 'login' %}" aria-expanded="true"><i class="ti-dashboard"></i><span>dashboard</span></a>
+                  <a href="{% url 'dashboard' %}" aria-expanded="true"><i class="ti-dashboard"></i><span>dashboard</span></a>
                 </li>
-                
+                <li>
+                  <a href="{% url 'statistics' %}" aria-expanded="true"><i class="ti-dashboard"></i><span>Statistics</span></a>
+                </li>
+                <li>
+                  <a href="{% url 'table' %}" aria-expanded="true"><i class="ti-dashboard"></i><span>Tables</span></a>
+                </li>
               </ul>
             </nav>
           </div>

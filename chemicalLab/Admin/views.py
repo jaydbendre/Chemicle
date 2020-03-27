@@ -20,3 +20,11 @@ def dashboard(request):
     }
     # return HttpResponse(len(number_lab_operator))
     return render(request, "admin/dashboard.html",user_data)
+
+def table(request):
+
+    return render(request,"admin/table.html")
+    
+def statistics(request):
+
+    return render(request,"admin/statistics.html")
