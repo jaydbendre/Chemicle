@@ -55,6 +55,10 @@ start highcharts js
     <a class="nav-link" id="profile-tab-just" data-toggle="tab" href="#profile-just" role="tab" aria-controls="profile-just"
       aria-selected="false">Lab Data</a>
   </li>
+    <li class="nav-item">
+      <a class="nav-link" id="contact-tab-just" data-toggle="tab" href="#test-just" role="tab"
+        aria-controls="contact-just" aria-selected="false">Experiment wise analysis</a>
+    </li>
   <li class="nav-item">
     <a class="nav-link" id="contact-tab-just" data-toggle="tab" href="#contact-just" role="tab" aria-controls="contact-just"
       aria-selected="false">Tabular Data</a>
@@ -66,6 +70,9 @@ start highcharts js
   </div>
   <div class="tab-pane fade" id="profile-just" role="tabpanel" aria-labelledby="profile-tab-just">
     {% include "lab_operator/charts/analysis/lab_data.html" %}
+  </div>
+  <div class="tab-pane fade" id="test-just" role="tabpanel" aria-labelledby="test-tab-just">
+    {% include "lab_operator/charts/analysis/schedule_data.html" %}
   </div>
   <div class="tab-pane fade" id="contact-just" role="tabpanel" aria-labelledby="contact-tab-just">
     {% include "lab_operator/charts/analysis/tabular_data.html" %}
