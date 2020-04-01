@@ -9,5 +9,6 @@ urlpatterns = [
     path("analysis/" ,views.analysis , name="analysis"),
     path("view_schedule/" ,views.schedule , name = "view_schedule"),
     path("get_historic_data/<int:id>",views.get_historic_data , name="historic_data"),
-    path("get_schedule_details" , views.get_schedule_details , name="get_schedule_details")
+    path("get_schedule_details" , views.get_schedule_details , name="get_schedule_details"),
+    path("get_scheduled_data" , views.get_scheduled_data , name = "get_scheduled_data"),
 ]
