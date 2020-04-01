@@ -96,10 +96,27 @@
                 else
                 {
                   var acc = "";
-                  $.each(data ,function(i,d){
-                    
+                  html_content = "<div class = 'container'>"
+                  var content = "";
+                  $("#boileplate_text").html("")
+                    $.each(data["data"] ,function(i,d){
+                      console.log(d)
+                    content += " <div class = 'row'>\
+                                  <div class = 'col-12'>\
+                                    <div class='card'>\
+                                      <h6 class = 'card-title'>" +
+                                        d["title"]+ "<h6>\
+                                        <div class = 'card-body'>\
+                                          <p>"+ d["description"]+"</p>\
+                                          <h6 class = 'text-muted'>"+d["time-range"]+"</h6>\
+                                        </div>\
+                                      </div>\
+                                    </div>\
+                                  <div>\
+                                          "
                   })
-                  html_content = '<div class="accordion" id="accordionExample">'
+                  html_content = '<div class="accordion" id="accordionExample">'+acc+'</div>';
+                  $("#content").html(content)
                 }
               }
             )
