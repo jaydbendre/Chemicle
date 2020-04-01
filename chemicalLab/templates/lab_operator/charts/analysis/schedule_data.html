@@ -1,1 +1,109 @@
-{% load static %} {% block LabOperator %} {% endblock %}
+{% load static %} {% block LabOperator %}
+<div class = "row">
+<div class="container mr-auto text-center">
+    <h5 class = "mb-4 mt-0">Select appropriate date and time range </h5>
+    <div class="alert alert-danger" role="alert" id="error_alert" hidden>
+        No date selected,Please select a date
+    </div>
+  <form class="form-inline">
+    <div class="form-group">
+      <label for="start-date-input">Start Date</label>
+      <div class="col-2">
+        <input class="form-control" type="date" id="start-date-input" />
+      </div>
+    </div>
+    <div class = "form-group">
+      <label for="start-time-input">Start Time</label>
+      <div class="col-2">
+        <input class="form-control" type="time" id="start-time-input" />
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="end-date-input">End Date</label>
+      <div class="col-2">
+        <input class="form-control" type="date" id="end-date-input" />
+      </div>
+    </div>
+    <div class = "form-group">
+      <label for="end-time-input">Start Time</label>
+      <div class="col-2">
+        <input class="form-control" type="time" id="end-time-input" />
+      </div>
+      </div>
+    <div class="form-group">
+        <div class="col-2">
+            <a class="btn" style="background-color:#4336FB;color:white" id="range">Submit</a>
+        </div>
+    </div>
+    </div>
+  </form>
+</div>
+<div class = "row mt-4 text-center">
+  <div class = "col-12" id ="boilerplate_text">
+        <hr />
+        <p class = "text-muted">
+            To load data onto the page , select a date and time range within<br/>
+            which you wish to load the content for.<br />
+            <br />
+            <br />
+            If you select only start date , it will get data from that date to current date<br/>
+            <br />
+            <br />
+            If you select only last date , it will get data from start to selected date<br />
+            <br />
+            <br />
+        </p>
+    </div>
+    <hr />
+</div>
+<hr />
+<div class="row mt-1 text-center">
+  <div class="col-12">
+    <div id ="content">
+      Hi
+  </div>
+  <hr />
+</div>
+</div>
+
+<script>
+    jQuery(function($){      
+        $("#range").click(function(){
+            start_date = $("#start-date-input").val()
+            end_date = $("#end-date-input").val()
+            start_time = $("#start-time-input").val()
+            end_time = $("#end-time-input").val()
+            console.log(start_date)
+            console.log(end_date)
+            console.log(start_time)
+            console.log(end_time)
+            $.post(
+              "http://127.0.0.1:8000/get_scheduled_data",
+              {
+                s_date : start_date,
+                e_date: end_date,
+                s_time: start_time,
+                e_time: end_time,
+              },
+              function(data,status){
+                console.log(data)
+                if(data["Error"])
+                {
+                  console.log("Hi")
+                  $("#error_alert").html("<p>"+data["Error"]+"</p>")
+                  $("#error_alert").show() 
+                }
+                else
+                {
+                  var acc = "";
+                  $.each(data ,function(i,d){
+                    
+                  })
+                  html_content = '<div class="accordion" id="accordionExample">'
+                }
+              }
+            )
+        })
+        })
+</script>
+{% endblock %}

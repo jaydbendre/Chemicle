@@ -231,6 +231,143 @@ def get_schedule_details(request):
     
     return JsonResponse({"error" : "No events found for the day"})
 
+@csrf_exempt
+def get_scheduled_data(request):
+    start_date = request.POST["s_date"]
+    end_date = request.POST["e_date"]
+    start_time = request.POST["s_time"]
+    end_time = request.POST["e_time"]
+    schedule_data = []
+    if start_date == "" and end_date == "" and start_time == "" and end_time == "":
+        return JsonResponse({"Error" : "Please select a date/s "}, safe=False)
+    
+    elif start_date != "" and end_date == "":
+        print("1")
+        s_timestamp = ""
+        if start_time != "":
+            s_timestamp = start_date + " " + start_time+":00"
+        else:    
+            s_timestamp = start_date + " 00:00:00"
+        s_timestamp = datetime.datetime.strptime(s_timestamp , "%Y-%m-%d %H:%M:%S")
+        data = m.Schedule.objects.order_by("-date","-start_time").all()
+        
+        for d in data:
+            
+            c_s_timestamp = datetime.datetime.strptime(str(d.date) + " "+str(d.start_time) , "%Y-%m-%d %H:%M:%S")
+            c_e_timestamp = datetime.datetime.strptime(str(d.date) + " "+str(d.end_time) , "%Y-%m-%d %H:%M:%S")
+            
+            if s_timestamp.date() <= c_s_timestamp.date() and d.lab_id == request.session["lab_id"]:
+                # print("hi")
+                if s_timestamp.date() == c_s_timestamp.date():
+                    if s_timestamp.time() <= c_s_timestamp.time():
+                        schedule_data.append({
+                    "title" : d.title,
+                    "time-range" : str(d.start_time) + " - "+str(d.end_time),
+                    "date" : d.date,
+                    "description" : d.description
+                        })
+                    else:
+                        continue
+                schedule_data.append({
+                    "title" : d.title,
+                    "time-range" : str(d.start_time) + " - "+str(d.end_time),
+                    "date" : d.date,
+                    "description" : d.description
+                })
+        
+        # print(schedule_data)    
+        return JsonResponse({"data": schedule_data}, safe=False)
+    elif end_date!="" and start_date == "":
+        print("2")
+        e_timestamp = ""
+        if end_time != "":
+            e_timestamp = end_date + " " + end_time+":00"
+        else:    
+            e_timestamp = end_date + " 00:00:00"
+        e_timestamp = datetime.datetime.strptime(e_timestamp , "%Y-%m-%d %H:%M:%S")
+        data = m.Schedule.objects.order_by("-date","-start_time").all()
+        
+        for d in data:
+            
+            c_s_timestamp = datetime.datetime.strptime(str(d.date) + " "+str(d.start_time) , "%Y-%m-%d %H:%M:%S")
+            c_e_timestamp = datetime.datetime.strptime(str(d.date) + " "+str(d.end_time) , "%Y-%m-%d %H:%M:%S")
+            print(c_s_timestamp)
+            if e_timestamp.date() >= c_s_timestamp.date() and d.lab_id == request.session["lab_id"]:
+                # print("hi")
+                if e_timestamp.date() == c_s_timestamp.date():
+                    if e_timestamp.time() >= c_s_timestamp.time():
+                        schedule_data.append({
+                        "title" : d.title,
+                        "time-range" : str(d.start_time) + " - "+str(d.end_time),
+                        "date" : d.date,
+                        "description" : d.description
+                        })
+                    else:
+                        continue
+                schedule_data.append({
+                    "title" : d.title,
+                    "time-range" : str(d.start_time) + " - "+str(d.end_time),
+                    "date" : d.date,
+                    "description" : d.description
+                })
+        
+        # print(schedule_data)    
+        return JsonResponse({"data": schedule_data}, safe=False)
+    else:
+        print("3")
+        s_timestamp = ""
+        if start_time != "":
+            s_timestamp = start_date + " " + start_time+":00"
+        else:    
+            s_timestamp = start_date + " 00:00:00"
+        s_timestamp = datetime.datetime.strptime(s_timestamp , "%Y-%m-%d %H:%M:%S")
+        e_timestamp = ""
+        if end_time != "":
+            e_timestamp = end_date + " " + end_time+":00"
+        else:    
+            e_timestamp = end_date + " 00:00:00"
+        e_timestamp = datetime.datetime.strptime(e_timestamp , "%Y-%m-%d %H:%M:%S")
+        data = m.Schedule.objects.order_by("-date","-start_time").all()
+        
+        for d in data:
+            
+            c_s_timestamp = datetime.datetime.strptime(str(d.date) + " "+str(d.start_time) , "%Y-%m-%d %H:%M:%S")
+            c_e_timestamp = datetime.datetime.strptime(str(d.date) + " "+str(d.end_time) , "%Y-%m-%d %H:%M:%S")
+            
+            if s_timestamp.date() <= c_s_timestamp.date() and e_timestamp.date() >= c_s_timestamp.date() and d.lab_id == request.session["lab_id"]:
+                # print("hi")
+                if s_timestamp.date() == c_s_timestamp.date():
+                    if s_timestamp.time() <= c_e_timestamp.time():
+                        schedule_data.append({
+                            "title" : d.title,
+                            "time-range" : str(d.start_time) + " - "+str(d.end_time),
+                            "date" : d.date,
+                            "description" : d.description
+                                })
+                    else:
+                        continue
+                if e_timestamp.date() == c_s_timestamp.date():
+                        if e_timestamp.time() >= c_s_timestamp.time():
+                            schedule_data.append({
+                            "title" : d.title,
+                            "time-range" : str(d.start_time) + " - "+str(d.end_time),
+                            "date" : d.date,
+                            "description" : d.description
+                            })
+                        else:
+                            continue    
+                    
+                schedule_data.append({
+                    "title" : d.title,
+                    "time-range" : str(d.start_time) + " - "+str(d.end_time),
+                    "date" : d.date,
+                    "description" : d.description
+                })
+        
+        # print(schedule_data)    
+        return JsonResponse({"data": schedule_data}, safe=False)
+        return JsonResponse(request.POST, safe=False)
+    
 def log_out(request):
     logout(request)
     return redirect("/")
