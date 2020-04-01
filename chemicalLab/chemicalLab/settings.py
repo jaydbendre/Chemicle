@@ -148,3 +148,13 @@ LOGOUT_REDIRECT_URL = '/'
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = "1080243531740-c6gp8sj9olf95ja4t88o5d5me765hng4.apps.googleusercontent.com"
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = "FhELJs4D4ybMG3WDF5yHgmOZ"
+
+# Email
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = '2017.ayesha.gulrajani@ves.ac.in'
+EMAIL_HOST_PASSWORD = 'hakunamatata123A'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
