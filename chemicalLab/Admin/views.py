@@ -29,10 +29,20 @@ def table(request):
         role = request.POST.get("role")
         if(user == 'user'):
             user_data = m.User.objects.values_list()
+            user_content = dict()
+            for user in user_data:
+                user_content[str(user[0])] = {
+                    "fname" : user[1],
+                    "lname" : user[2],
+                    "email" : user[3],
+                    "address" : user[5],
+                    "role_id" : user[6],
+                    "lab_id" : user[7]
+                }
             data = {
-                'user_data':user_data
+                'user_data':user_content
             }
-            print(data)
+            # print(data)
             return render(request,"admin/tables/user.html",{"data":data})
         if(lab == 'lab'):
             pass
