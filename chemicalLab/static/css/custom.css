@@ -1,0 +1,13 @@
+.custom-btn{
+    width: 100%;
+    background: linear-gradient(to right, #8914fe 0%, #8063f5 100%);
+    color: white;
+    font-weight: 500;
+    font-size: large;
+}
+.custom-btn:hover{
+    transform: scale(1.03);
+    transition: transform;
+    transition-duration: 0.3s;
+    transition-timing-function: ease-out;
+}

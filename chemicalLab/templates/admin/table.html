@@ -42,6 +42,24 @@
     You are  : {{ request.session.role }} 
   </div>
   
-
+<div class="container-fluid">
+  <form action="table" method="POST">
+    {% csrf_token %}
+    <div class="row pt--20">
+      <div class="col-md-3">
+        <button class="btn custom-btn" type="submit" value="user"  name="user">User</button>
+      </div>
+      <div class="col-md-3">
+        <button class="btn custom-btn" type="submit" value="lab" name="lab">Lab</button>
+      </div>
+      <div class="col-md-3">
+        <button class="btn custom-btn" type="submit" value="department" name="department">Department</button>
+      </div>
+      <div class="col-md-3">
+        <button class="btn custom-btn" type="submit" value="role" name="role">Role</button>
+      </div>
+    </div> 
+  </form>
+</div>
 
 {% endblock%}

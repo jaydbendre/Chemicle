@@ -30,6 +30,7 @@
     <link rel="stylesheet" href="{% static 'css/default-css.css' %}" />
     <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
     <link rel="stylesheet" href="{% static 'css/responsive.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}" />
     <!-- modernizr css -->
     <script src="{% static 'js/vendor/modernizr-2.8.3.min.js' %}"></script>
   </head>
@@ -59,7 +60,7 @@
                   <a href="{% url 'statistics' %}" aria-expanded="true"><i class="ti-dashboard"></i><span>Statistics</span></a>
                 </li>
                 <li>
-                  <a href="{% url 'table' %}" aria-expanded="true"><i class="ti-dashboard"></i><span>Tables</span></a>
+                  <a href="{% url 'table' %}" aria-expanded="true"><i class="fa fa-table"></i><span>Tables</span></a>
                 </li>
               </ul>
             </nav>

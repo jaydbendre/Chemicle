@@ -22,7 +22,21 @@ def dashboard(request):
     return render(request, "admin/dashboard.html",user_data)
 
 def table(request):
-
+    if request.method == 'POST':
+        user = request.POST.get("user")
+        lab = request.POST.get("lab")
+        department = request.POST.get("department")
+        role = request.POST.get("role")
+        if(user == 'user'):
+            user_data = m.User.objects.all()
+            
+            return HttpResponse(user_data)
+        if(lab == 'lab'):
+            pass
+        if(department == 'department'):
+            pass
+        if(role == 'role'):
+            pass
     return render(request,"admin/table.html")
     
 def statistics(request):
