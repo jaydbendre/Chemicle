@@ -1,0 +1,37 @@
+{% extends "admin/table.html" %}{% load static %}
+
+
+{% block table %}
+
+
+  <div class="row table_custom pt--30">
+    <table class="table table-light table-hover ">
+        <thead>
+            <tr>
+                <th width="15%">User_id</th>
+                <th width="15%">F_name</th>
+                <th width="15%">L_name</th>
+                <th width="15%">Email</th>
+                <th width="15%">Address</th>
+                <th width="15%">role_id</th>
+                <th width="10%">lab_id</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in user_data %}
+            <tr>
+               
+                    <td>{{ row.items }}</td>
+                <!-- <td><<form action="admin_users">><button class="btn btn-danger" {% for r in row %} name="{{r}}" {% endfor %} type="submit"><i class="fa fa-trash-alt"></i> Delete</button></form></td>             -->
+                <!-- <td><a href="{% url 'Admin:delete_user' row.0 %}"><button class="btn btn-danger" name=""
+                            type="submit"><i class="fa fa-trash-alt"></i> Delete</button></a></td> -->
+             
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+
+{% endblock %} 

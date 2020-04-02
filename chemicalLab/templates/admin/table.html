@@ -43,7 +43,7 @@
   </div>
   
 <div class="container-fluid">
-  <form action="table" method="POST">
+  <form action="{% url 'table' %}" method="POST">
     {% csrf_token %}
     <div class="row pt--20">
       <div class="col-md-3">
@@ -60,6 +60,8 @@
       </div>
     </div> 
   </form>
+
+{% block table %} {% endblock %}
 </div>
 
 {% endblock%}

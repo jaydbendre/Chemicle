@@ -28,16 +28,19 @@ def table(request):
         department = request.POST.get("department")
         role = request.POST.get("role")
         if(user == 'user'):
-            user_data = m.User.objects.all()
-            
-            return HttpResponse(user_data)
+            user_data = m.User.objects.values_list()
+            data = {
+                'user_data':user_data
+            }
+            print(data)
+            return render(request,"admin/tables/user.html",{"data":data})
         if(lab == 'lab'):
             pass
         if(department == 'department'):
             pass
         if(role == 'role'):
             pass
-    return render(request,"admin/table.html")
+    return render(request,"admin/table.html")  
     
 def statistics(request):
 
