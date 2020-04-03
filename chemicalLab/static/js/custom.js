@@ -10,11 +10,17 @@ function edit_user(x){
     var id = "edit_"+x;
     $("#save_"+ x).toggle();
     $("#edit_"+ x).hide();
+    $('#save_'+x).submit(
+        function(){
+            console.log("hi")
+        }
+    )
 }
 
-$('#edit_'+x).click(
-    function(){
-        $('#save_'+x).toggle();
-        $('#edit_'+x).hide();
-    }
-)
+// $('#edit_'+x).click(
+//     function(){
+//         $('#save_'+x).toggle();
+//         $('#edit_'+x).hide();
+//     }
+// )
+

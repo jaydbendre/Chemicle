@@ -43,14 +43,16 @@ def statistics(request):
 
 def t_users(request):
     if request.method == 'POST':
-        u_id = request.POST.get("id")
+        dummy = request.POST.get("dummy")
+        u_id = request.POST
         fname = request.POST.get("fname")
         lname = request.POST.get("lname")
         email = request.POST.get("email")
         address = request.POST.get("address")
         role_id = request.POST.get("role_id")
         lab_id = request.POST.get("lab_id")
-        print(u_id,fname,lname,email,address,role_id,lab_id)
+        print(request.POST.items())
+        print(dummy,u_id,fname,lname,email,address,role_id,lab_id)
         # user_data = m.User.objects.get(id=user_id)
         # print(user_data)
     user_data = m.User.objects.values_list()
