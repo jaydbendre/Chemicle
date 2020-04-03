@@ -11,3 +11,26 @@
     transition-duration: 0.3s;
     transition-timing-function: ease-out;
 }
+
+.custom-input{
+    border: 0px;
+    width: 100%;  
+    background-color: white;
+    padding: 12px 12px 12px 12px;
+}
+
+.custom-input:hover{
+    background-color: lightgray;
+}
+
+.custom-td{
+    padding: 0px !important;
+}
+
+#custom-td{
+    padding: 0px !important;
+}
+
+#custom-td:hover{
+    background-color: white;
+}

@@ -46,17 +46,23 @@
   <form action="{% url 'table' %}" method="POST">
     {% csrf_token %}
     <div class="row pt--20">
-      <div class="col-md-3">
-        <button class="btn custom-btn" type="submit" value="user"  name="user">User</button>
+      <div class="col-md-2">
+        <button class="btn custom-btn" type="submit" value="user"  name="user">User Table</button>
       </div>
-      <div class="col-md-3">
-        <button class="btn custom-btn" type="submit" value="lab" name="lab">Lab</button>
+      <div class="col-md-2">
+        <button class="btn custom-btn" type="submit" value="lab" name="lab">Lab Table</button>
       </div>
-      <div class="col-md-3">
-        <button class="btn custom-btn" type="submit" value="department" name="department">Department</button>
+      <div class="col-md-2">
+        <button class="btn custom-btn" type="submit" value="department" name="department">Department Table</button>
       </div>
-      <div class="col-md-3">
-        <button class="btn custom-btn" type="submit" value="role" name="role">Role</button>
+      <div class="col-md-2">
+        <button class="btn custom-btn" type="submit" value="role" name="role">Role Table</button>
+      </div>
+      <div class="col-md-2">
+        <button class="btn custom-btn" type="submit" value="role" name="role">Schedule Table</button>
+      </div>
+      <div class="col-md-2">
+        <button class="btn custom-btn" type="submit" value="role" name="role">Request Table</button>
       </div>
     </div> 
   </form>

@@ -1,7 +1,7 @@
 {% extends "admin/table.html" %}{% load static %} {% block table %}
 
 <div class="row table_custom pt--30">
-  <table class="table table-light table-hover ">
+  <table class="table table-light ">
     <thead>
       <tr>
         <th width="15%">User_id</th>
@@ -9,14 +9,29 @@
         <th width="15%">L_name</th>
         <th width="15%">Email</th>
         <th width="15%">Address</th>
-        <th width="15%">role_id</th>
-        <th width="10%">lab_id</th>
+        <th width="6%">role_id</th>
+        <th width="8%">lab_id</th>
+        <th width="11%">Edit/Delete</th>
       </tr>
     </thead>
     <tbody>
-      {% for k,v in data.user_data.items %}
-      <tr>
-        <td>{{ k }}{{ v }}</td>
+      {% for row in data.user_data.values %}
+      <tr>  
+        <form action="{% url 't_users' %}" method="POST">
+          {% csrf_token %}
+          <td class="custom-td"><input class="custom-input {{ row.id }}" name="id" type="text" value="{{ row.id }}" disabled></td>
+          <td class="custom-td"><input class="custom-input {{ row.id }}" name="fname" type="text" value="{{ row.fname }}" disabled></td>
+          <td class="custom-td"><input class="custom-input {{ row.id }}" name="lname" type="text" value="{{ row.lname }}" disabled></td>
+          <td class="custom-td"><input class="custom-input {{ row.id }}" name="email" type="text" value="{{ row.email }}" disabled></td>
+          <td class="custom-td"><input class="custom-input {{ row.id }}" name="address" type="text" value="{{ row.address }}" disabled></td>
+          <td class="custom-td"><input class="custom-input {{ row.id }}" name="role_id" type="text" value="{{ row.role_id }}" disabled></td>
+          <td class="custom-td"><input class="custom-input {{ row.id }}" name="lab_id" type="text" value="{{ row.lab_id }}" disabled></td>
+          <td id="custom-td">
+            <button type="submit" class="btn btn-success" id="save_{{ row.id }}" style="display:none;"><i class="fa fa-save"></i> Save</button>
+            <button type="button" class="btn btn-info" id="edit_{{ row.id }}" onclick="edit_user('{{ row.id }}')"><i class="fa fa-edit"></i> Edit</button>
+            <button type="button" class="btn btn-danger" onclick="del('{{ row.id }}')"><i class="fa fa-trash"></i> Delete</button>
+          </td>
+        </form> 
       </tr>
       {% endfor %}
     </tbody>
