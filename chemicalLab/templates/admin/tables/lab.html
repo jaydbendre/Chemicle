@@ -1,0 +1,34 @@
+{% extends "admin/table.html" %}{% load static %} {% block table %}
+
+<div class="row table_custom pt--30">
+  <table class="table table-light ">
+    <thead>
+      <tr>
+        <th width=30%">Lab_id</th>
+        <th width="29%">Lab Name</th>
+        <th width="29%">Dept_id</th>
+        <th width="12%">Edit/Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in data.lab_data.values %}
+      <tr>  
+        <form action="{% url 't_labs' %}" method="POST">
+          {% csrf_token %}
+          <!-- <td class="custom-td" style="display: none;"><input type="text" style="display: none;" value="dummy" name="dummy"></td> -->
+          <td class="custom-td"><input class="custom-input {{ row.id }}" name="lab_id" type="number" value="{{ row.id }}" disabled></input></td>
+          <td class="custom-td"><input class="custom-input {{ row.id }}" name="name" type="text" value="{{ row.name }}" disabled></input></td>         
+          <td class="custom-td"><input class="custom-input {{ row.id }}" name="dept_id" type="number" value="{{ row.dept_id }}" disabled></input></td>         
+          <td id="custom-td">
+            <button type="submit" class="btn btn-success" id="save_{{ row.id }}" style="display:none;" name ="_save" value="save"><i class="fa fa-save"></i> Save</button>
+            <button type="button" class="btn btn-info" id="edit_{{ row.id }}" onclick="edit_lab('{{ row.id }}')"><i class="fa fa-edit"></i> Edit</button>
+            <button type="submit" class="btn btn-danger" onclick="del('{{ row.id }}')" name = "_delete" value="delete"><i class="fa fa-trash"></i> Delete</button>
+          </td>
+        </form>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}
