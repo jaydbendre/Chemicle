@@ -152,7 +152,25 @@ def t_roles(request):
     
 
 def t_schedules(request):
-    return HttpResponse("table/schedules")
+    schedule_data = m.Schedule.objects.values_list()
+    schedule_content = dict()
+    for schedule in schedule_data:
+        schedule_content[str(schedule[0])] = {
+            "id" : schedule[0],
+            "date" : schedule[1],
+            "start_time" : schedule[2],
+            "end_time" : schedule[3],
+            "lab" : schedule[4],
+            "added_by" : schedule[5],
+            "description" : schedule[6],
+            "event_type" : schedule[7],
+            "title" : schedule[8]
+        }
+    data = {
+        "schedule_data" : schedule_content
+    }
+    return render(request, "admin/tables/schedule.html",{"data":data})
+    
 
 def t_requests(request):
     return HttpResponse("table/requests")
