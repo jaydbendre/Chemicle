@@ -4,16 +4,16 @@
   <table class="table table-light ">
     <thead>
       <tr>
-        <th width=10%">Schedule_id</th>
-        <th width=10%">Date</th>
-        <th width=10%">Start_time</th>
-        <th width=10%">End_time</th>
-        <th width=10%">Lab</th>
-        <th width=10%">Added_by</th>
-        <th width=10%">Description</th>
+        <th width=5%">Schedule_id</th>
+        <th width=12%">Date</th>
+        <th width=7%">Start_time</th>
+        <th width=7%">End_time</th>
+        <th width=7%">Lab</th>
+        <th width=7%">Added_by</th>
+        <th width=15%">Description</th>
         <th width=10%">Event_type</th>
-        <th width="10%">Title</th>
-        <th width="10%">Edit/Delete</th>
+        <th width="15%">Title</th>
+        <th width="15%">Edit/Delete</th>
       </tr>
     </thead>
     <tbody>
@@ -22,7 +22,7 @@
         <form action="{% url 't_schedules' %}" method="POST">
           {% csrf_token %}
           <!-- <td class="custom-td" style="display: none;"><input type="text" style="display: none;" value="dummy" name="dummy"></td> -->
-          <td class="custom-td"><input class="custom-input {{ row.id }}" name="schdule_id" type="number" value="{{ row.id }}" disabled></input></td>
+          <td class="custom-td"><input class="custom-input {{ row.id }}" name="schedule_id" type="number" value="{{ row.id }}" disabled></input></td>
           <td class="custom-td"><input class="custom-input {{ row.id }}" name="date" type="text" value="{{ row.date }}" disabled></input></td>
           <td class="custom-td"><input class="custom-input {{ row.id }}" name="start_time" type="text" value="{{ row.start_time }}" disabled></input></td>
           <td class="custom-td"><input class="custom-input {{ row.id }}" name="end_time" type="text" value="{{ row.end_time }}" disabled></input></td>
@@ -33,7 +33,7 @@
           <td class="custom-td"><input class="custom-input {{ row.id }}" name="title" type="text" value="{{ row.title }}" disabled></input></td>                  
           <td id="custom-td">
             <button type="submit" class="btn btn-success" id="save_{{ row.id }}" style="display:none;" name ="_save" value="save"><i class="fa fa-save"></i> Save</button>
-            <button type="button" class="btn btn-info" id="edit_{{ row.id }}" onclick="edit_dept('{{ row.id }}')"><i class="fa fa-edit"></i> Edit</button>
+            <button type="button" class="btn btn-info" id="edit_{{ row.id }}" onclick="edit_schedule('{{ row.id }}')"><i class="fa fa-edit"></i> Edit</button>
             <button type="submit" class="btn btn-danger" onclick="del('{{ row.id }}')" name = "_delete" value="delete"><i class="fa fa-trash"></i> Delete</button>
           </td>
         </form>

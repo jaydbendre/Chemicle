@@ -1,0 +1,40 @@
+{% extends "admin/table.html" %}{% load static %} {% block table %}
+
+<div class="row table_custom pt--30">
+  <table class="table table-light ">
+    <thead>
+      <tr>
+        <th width="10%">Request_id</th>
+        <th width="20%">Description</th>
+        <th width="15%">Request_from</th>
+        <th width="14%">Request_to</th>
+        <th width="13%">Humidity</th>
+        <th width="13%">Temperature</th>
+        <th width="15%">Edit/Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in data.request_data.values %}
+      <tr>  
+        <form action="{% url 't_requests' %}" method="POST">
+          {% csrf_token %}
+          <!-- <td class="custom-td" style="display: none;"><input type="text" style="display: none;" value="dummy" name="dummy"></td> -->
+          <td class="custom-td"><input class="custom-input {{ row.id }}" name="req_id" type="number" value="{{ row.id }}" disabled></input></td>
+          <td class="custom-td"><input class="custom-input {{ row.id }}" name="description" type="text" value="{{ row.description }}" disabled></input></td>         
+          <td class="custom-td"><input class="custom-input {{ row.id }}" name="req_from" type="text" value="{{ row.request_from}}" disabled></input></td>         
+          <td class="custom-td"><input class="custom-input {{ row.id }}" name="req_to" type="text" value="{{ row.request_to }}" disabled></input></td>
+          <td class="custom-td"><input class="custom-input {{ row.id }}" name="humidity" type="text" value="{{ row.humidity}}" disabled></input></td>
+          <td class="custom-td"><input class="custom-input {{ row.id }}" name="temperature" type="text" value="{{ row.temperature }}" disabled></input></td>
+          <td id="custom-td">
+            <button type="submit" class="btn btn-success" id="save_{{ row.id }}" style="display:none;" name ="_save" value="save"><i class="fa fa-save"></i> Save</button>
+            <button type="button" class="btn btn-info" id="edit_{{ row.id }}" onclick="edit_request('{{ row.id }}')"><i class="fa fa-edit"></i> Edit</button>
+            <button type="submit" class="btn btn-danger" onclick="del('{{ row.id }}')" name = "_delete" value="delete"><i class="fa fa-trash"></i> Delete</button>
+          </td>
+        </form>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}

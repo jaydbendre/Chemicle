@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from . import models as m
+import datetime
 
 # Create your views here.
 def index(request):
@@ -125,6 +126,20 @@ def t_labs(request):
 
 
 def t_departments(request):
+    if request.method == 'POST':
+        if request.POST : 
+            if '_save' in request.POST:
+                dept_id = request.POST.get("dept_id")
+                name = request.POST.get("name")
+                print(dept_id,name)
+                update_dept = m.Department.objects.get(id=dept_id)
+                update_dept.id = dept_id
+                update_dept.name = name
+                update_dept.save()
+            if '_delete' in request.POST:
+                dept_id = request.POST.get("dept_id")
+                delete_dept = m.Lab.objects.get(id=dept_id)
+                delete_dept.delete()
     dept_data = m.Department.objects.values_list()
     dept_content = dict()
     for dept in dept_data:
@@ -138,6 +153,20 @@ def t_departments(request):
     return render(request, "admin/tables/department.html",{"data":data})
 
 def t_roles(request):
+    if request.method == 'POST':
+        if request.POST : 
+            if '_save' in request.POST:
+                role_id = request.POST.get("role_id")
+                post = request.POST.get("post")
+                print(role_id,post)
+                update_role = m.Role.objects.get(id=role_id)
+                update_role.id = role_id
+                update_role.post = post
+                update_role.save()
+            if '_delete' in request.POST:
+                role_id = request.POST.get("role_id")
+                delete_role = m.Lab.objects.get(id=role_id)
+                delete_role.delete()
     role_data = m.Role.objects.values_list()
     role_content = dict()
     for role in role_data:
@@ -152,14 +181,42 @@ def t_roles(request):
     
 
 def t_schedules(request):
+    if request.method == 'POST':
+        if request.POST : 
+            if '_save' in request.POST:
+                schedule_id = request.POST.get("schedule_id")
+                date = request.POST.get("date")
+                start_time = request.POST.get("start_time")
+                end_time = request.POST.get("end_time")
+                lab = request.POST.get("lab")
+                added_by = request.POST.get("added_by")
+                description = request.POST.get("description")
+                event_type = request.POST.get("event_type")
+                title = request.POST.get("title")
+                print(schedule_id,date,start_time,end_time,lab,added_by,description,event_type,title)
+                update_schedule = m.Schedule.objects.get(id=schedule_id)
+                update_schedule.id = schedule_id
+                update_schedule.date = date
+                update_schedule.start_time = start_time
+                update_schedule.end_time = end_time
+                update_schedule.lab_id = lab
+                update_schedule.added_by_id = added_by
+                update_schedule.description = description
+                update_schedule.event_type = event_type
+                update_schedule.title = title
+                update_schedule.save()
+            if '_delete' in request.POST:
+                schedule_id = request.POST.get("schedule_id")
+                delete_schedule = m.Lab.objects.get(id=schedule_id)
+                delete_schedule.delete()
     schedule_data = m.Schedule.objects.values_list()
     schedule_content = dict()
     for schedule in schedule_data:
         schedule_content[str(schedule[0])] = {
             "id" : schedule[0],
-            "date" : schedule[1],
-            "start_time" : schedule[2],
-            "end_time" : schedule[3],
+            "date" : str(schedule[1]),
+            "start_time" : str(schedule[2]),
+            "end_time" : str(schedule[3]),
             "lab" : schedule[4],
             "added_by" : schedule[5],
             "description" : schedule[6],
@@ -173,4 +230,42 @@ def t_schedules(request):
     
 
 def t_requests(request):
-    return HttpResponse("table/requests")
+    if request.method == 'POST':
+        if request.POST : 
+            if '_save' in request.POST:
+                req_id = request.POST.get("req_id")
+                description = request.POST.get("description")
+                req_from = request.POST.get("req_from")
+                req_to = request.POST.get("req_to")
+                humidity = request.POST.get("humidity")
+                temperature = request.POST.get("temperature")
+                print(req_id,description,req_from,req_to,humidity,temperature)
+                update_request = m.Request.objects.get(id=req_id)
+                update_request.id = req_id
+                update_request.description = description
+                update_request.req_from_id = req_from
+                update_request.req_to = req_to
+                update_request.humidity = humidity
+                update_request.temperature = temperature
+                update_request.save()
+            if '_delete' in request.POST:
+                req_id = request.POST.get("req_id")
+                delete_request = m.Lab.objects.get(id=req_id)
+                delete_request.delete()
+    request_data = m.Request.objects.values_list()
+    request_content = dict()
+    print(request_data)
+    for req in request_data:
+        request_content[str(req[0])] = {
+            "id" : req[0],
+            "description" : req[1],
+            "request_from" : req[2],
+            "request_to" :  req[3],
+            "humidity" : req[4],
+            "temperature" : req[5],
+        }
+    data = {
+        "request_data" : request_content
+    }
+    return render(request, "admin/tables/request.html",{"data":data})
+    
