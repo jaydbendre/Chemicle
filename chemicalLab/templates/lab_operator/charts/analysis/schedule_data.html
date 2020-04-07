@@ -95,7 +95,7 @@
                 else
                 {
                   var acc = "";
-                  html_content = "<div class='container'><div class = 'accordion'>"
+                  html_content = "<div class='container'><div class = 'accordion'>Schedule Data"
                   var content = "";
                   $("#hide_instruction").hide()
                     $.each(data["data"] ,function(i,d){
@@ -103,25 +103,39 @@
                     content += 
                     '  <div class="card">\
                         <div class="card-header" id = "headingOne" >\
-                          <h5 class="mb-0">\
-                            <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">\
-                              Collapsible Group Item #1\
+                          <h5 class="mb-0">'+ d["title"]+
+                            '<button class="btn btn-link collapsed mr-0" data-toggle="collapse" data-target="#collapse'+d["id"]+'" aria-expanded="true" aria-controls="collapseOne">\
+                              <i class="ti-arrow-down"></i>\
                             </button>\
                           </h5>\
                         </div >\
-                        <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">\
+                        <div id="collapse'+d["id"]+'" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">\
                           <div class="card-body">\
-                            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven\'t heard of them accusamus labore sustainable VHS.\
+                            <p>\
+                              Time-Range:'+d["time-range"]+
+                              '<br />Description: '+d["description"]+
+                              '<br />Schedule ID: ' + d["id"] +
+                              '<br />Date: '+d["date"]+
+                              '<br /><button class="btn btn-primary" onclick="getSensorData('+d["id"]+')">Get Sensor Data</button></p>\
+                              <div class = "sensor_data'+d["id"]+'">\
+                              </div>\
+                        </div>\
                         </div>\
                         </div>\
                       </div >'
                   })
-                  html_content = '<div class="accordion">'+content+'</div></div>';
+                  html_content = '<div class="accordion mt-5"><h5 class="text-center">Schedule Data for '+start_date+' '+start_time+'to'+end_date+' '+end_time+'</h5>'+content+'</div></div>';
                   $("#content").html(html_content)
                 }
               }
             )
         })
         })
+
+        function getSensorData(id)
+        {
+          console.log(id)
+          $(".sensor_data"+id).html("Hello")
+        }
 </script>
 {% endblock %}
