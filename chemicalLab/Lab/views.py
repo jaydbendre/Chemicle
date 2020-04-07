@@ -395,8 +395,6 @@ def log_out(request):
     return redirect("/")
 
 # Email
-
-
 def email(request):
     data = m.User.objects.get(id=10001)
     data = data.__dict__
