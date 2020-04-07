@@ -5,3 +5,7 @@ from django.shortcuts import render
 
 def dashboard(request):
     return render(request, 'incharge/dashboard.html')
+
+
+def schedule(request):
+    return render(request, 'incharge/schedule.html')
