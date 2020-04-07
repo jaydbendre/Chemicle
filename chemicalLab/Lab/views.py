@@ -283,6 +283,13 @@ def get_scheduled_data(request):
                         })
                     else:
                         continue
+                schedule_data.append({
+                            "id": d.id,
+                            "title": d.title,
+                            "time-range": str(d.start_time) + " - "+str(d.end_time),
+                            "date": d.date,
+                            "description": d.description
+                        })
                 
         # print(schedule_data)
         return JsonResponse({"data": schedule_data}, safe=False)
@@ -317,7 +324,13 @@ def get_scheduled_data(request):
                         })
                     else:
                         continue
-                
+                schedule_data.append({
+                            "id": d.id,
+                            "title": d.title,
+                            "time-range": str(d.start_time) + " - "+str(d.end_time),
+                            "date": d.date,
+                            "description": d.description
+                        })
 
         # print(schedule_data)
         return JsonResponse({"data": schedule_data}, safe=False)
@@ -349,7 +362,7 @@ def get_scheduled_data(request):
             if s_timestamp.date() <= c_s_timestamp.date() and e_timestamp.date() >= c_s_timestamp.date() and d.lab_id == request.session["lab_id"]:
                 # print("hi")
                 if s_timestamp.date() == c_s_timestamp.date():
-                    if s_timestamp.time() <= c_e_timestamp.time():
+                    if s_timestamp.time() <= c_s_timestamp.time() and e_timestamp.time() >= c_e_timestamp.time():
                         schedule_data.append({
                             "id": d.id,
                             "title": d.title,
@@ -360,7 +373,7 @@ def get_scheduled_data(request):
                     else:
                         continue
                 if e_timestamp.date() == c_s_timestamp.date():
-                    if e_timestamp.time() >= c_s_timestamp.time():
+                    if e_timestamp.time() <= c_e_timestamp.time() and e_timestamp.time() >= c_s_timestamp.time():
                         schedule_data.append({
                             "id": d.id,
                             "title": d.title,
@@ -370,8 +383,14 @@ def get_scheduled_data(request):
                         })
                     else:
                         continue
-
-
+                schedule_data.append({
+                            "id": d.id,
+                            "title": d.title,
+                            "time-range": str(d.start_time) + " - "+str(d.end_time),
+                            "date": d.date,
+                            "description": d.description
+                        })
+            
         # print(schedule_data)
         return JsonResponse({"data": schedule_data}, safe=False)
         return JsonResponse(request.POST, safe=False)

@@ -95,7 +95,7 @@
                 else
                 {
                   var acc = "";
-                  html_content = "<div class = 'accordion'>"
+                  html_content = "<div class='container'><div class = 'accordion'>"
                   var content = "";
                   $("#hide_instruction").hide()
                     $.each(data["data"] ,function(i,d){
@@ -116,7 +116,7 @@
                         </div>\
                       </div >'
                   })
-                  html_content = '<div class="accordion">'+content+'</div>';
+                  html_content = '<div class="accordion">'+content+'</div></div>';
                   $("#content").html(html_content)
                 }
               }
