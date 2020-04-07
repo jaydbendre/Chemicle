@@ -1,0 +1,208 @@
+{% extends "incharge/boilerplate.html"%}
+<!---->
+{% load static %} {% block incharge%}
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+  integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<script src="{% static 'js/vendor/jquery-2.2.4.min.js' %}"></script>
+<script src="{% static 'js/zabuto_calendar.min.js' %}"></script>
+<link rel="stylesheet" href="{% static 'css/calendar.css' %}" />
+<script src="{% static 'js/calendar.js' %}"></script>
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="{% static 'css/zabuto_calendar.min.css' %}"
+/>
+<div class="page-title-area">
+  <div class="row align-items-center">
+    <div class="col-sm-6">
+      <div class="breadcrumbs-area clearfix">
+        <h4 class="page-title pull-left">Schedule</h4>
+        <ul class="breadcrumbs pull-left">
+          <li><a href="{% url 'login' %}">Home</a></li>
+          <li><span>Schedule</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-sm-6 clearfix">
+      <div class="user-profile pull-right">
+        <img
+          class="avatar user-thumb"
+          src="{% static 'images/author/avatar.png' %}"
+          alt="avatar"
+        />
+        <h4 class="user-name dropdown-toggle" data-toggle="dropdown">
+          {{ request.session.username }} <i class="fa fa-angle-down"></i>
+        </h4>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" href="#">Message</a>
+          <a class="dropdown-item" href="#">Settings</a>
+          <a class="dropdown-item" href="{% url 'logout' %}">Log Out</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class = "container">
+<div class = "row mb-4">
+    <div class = "col-6 mt-5">
+      <div class="elegant-calencar">
+        <p id="reset">reset</p>
+        <div id="header" class="clearfix">
+          <div class="pre-button"><</div>
+          <div class="head-info">
+            <div class="head-day"></div>
+            <div class="head-month"></div>
+          </div>
+          <div class="next-button">></div>
+        </div>
+        <table id="calendar">
+          <thead>
+            <tr>
+              <th>Sun</th>
+              <th>Mon</th>
+              <th>Tue</th>
+              <th>Wed</th>
+              <th>Thu</th>
+              <th>Fri</th>
+              <th>Sat</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Large modal -->
+    <div class="mr-auto mt-2 mb-2 text-center">
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg" style = "background-color: #2a3246;">Add Event</button>
+    </div>
+    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="container mr-auto text-center">
+            <h5 class = "mb-4 mt-0">Please fill your event details</h5>
+          <form>
+            <div class="form-group">
+              <label for="start-date-input">Start Date</label>
+                <input class="form-control" type="date" id="start-date-input" />
+            </div>
+            <div class = "form-group">
+              <label for="start-time-input">Start Time</label>
+                <input class="form-control" type="time" id="start-time-input" />
+            </div>
+            <div class = "form-group">
+              <label for="end-time-input">End Time</label>
+                <input class="form-control" type="time" id="end-time-input" />
+            </div>
+            <div class="form-group">
+              <label for="title">Title</label>
+              <textarea class="form-control" id="title" rows="1"></textarea>
+            </div>
+            <div class="form-group">
+              <label for="description">Description</label>
+              <textarea class="form-control" id="description" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+              <label for="eventType">Event Type</label>
+              <select class="form-control" id="eventType">
+                <option>test1</option>
+                <option>test2</option>
+                <option>test3</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <a class="btn" style="background-color:#2a3246;color:white" id="range">Submit</a>
+            </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+      
+    </div>
+    <div class = "col-6">
+        <div class="card mb-5 mt-4" style = "height: 100%;">
+            <div class="card-body">
+                <h4 class="header-title text-center" id="timeline"></h4>
+                <div class="timeline-area text-center" id="timelineArea">
+                  <p class = "text-muted" id = "intro-text">
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    
+                    
+                    Welcome to Timeline Area<br />
+                    To see the timeline of the day click on the day
+                    <div class="spinner-grow text-secondary" role="status" id="timeline-spinner" hidden>
+                      <span class="sr-only">Loading...</span>
+                    </div>
+                  </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
