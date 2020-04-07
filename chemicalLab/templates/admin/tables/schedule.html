@@ -1,0 +1,46 @@
+{% extends "admin/table.html" %}{% load static %} {% block table %}
+
+<div class="row table_custom pt--30">
+  <table class="table table-light ">
+    <thead>
+      <tr>
+        <th width=5%">Schedule_id</th>
+        <th width=12%">Date</th>
+        <th width=7%">Start_time</th>
+        <th width=7%">End_time</th>
+        <th width=7%">Lab</th>
+        <th width=7%">Added_by</th>
+        <th width=15%">Description</th>
+        <th width=10%">Event_type</th>
+        <th width="15%">Title</th>
+        <th width="15%">Edit/Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in data.schedule_data.values %}
+      <tr>  
+        <form action="{% url 't_schedules' %}" method="POST">
+          {% csrf_token %}
+          <!-- <td class="custom-td" style="display: none;"><input type="text" style="display: none;" value="dummy" name="dummy"></td> -->
+          <td class="custom-td"><input class="custom-input {{ row.id }}" name="schedule_id" type="number" value="{{ row.id }}" disabled></input></td>
+          <td class="custom-td"><input class="custom-input {{ row.id }}" name="date" type="text" value="{{ row.date }}" disabled></input></td>
+          <td class="custom-td"><input class="custom-input {{ row.id }}" name="start_time" type="text" value="{{ row.start_time }}" disabled></input></td>
+          <td class="custom-td"><input class="custom-input {{ row.id }}" name="end_time" type="text" value="{{ row.end_time }}" disabled></input></td>
+          <td class="custom-td"><input class="custom-input {{ row.id }}" name="lab" type="text" value="{{ row.lab }}" disabled></input></td>
+          <td class="custom-td"><input class="custom-input {{ row.id }}" name="added_by" type="text" value="{{ row.added_by }}" disabled></input></td>
+          <td class="custom-td"><input class="custom-input {{ row.id }}" name="description" type="text" value="{{ row.description }}" disabled></input></td>
+          <td class="custom-td"><input class="custom-input {{ row.id }}" name="event_type" type="text" value="{{ row.event_type }}" disabled></input></td>
+          <td class="custom-td"><input class="custom-input {{ row.id }}" name="title" type="text" value="{{ row.title }}" disabled></input></td>                  
+          <td id="custom-td">
+            <button type="submit" class="btn btn-success" id="save_{{ row.id }}" style="display:none;" name ="_save" value="save"><i class="fa fa-save"></i> Save</button>
+            <button type="button" class="btn btn-info" id="edit_{{ row.id }}" onclick="edit_schedule('{{ row.id }}')"><i class="fa fa-edit"></i> Edit</button>
+            <button type="submit" class="btn btn-danger" onclick="del('{{ row.id }}')" name = "_delete" value="delete"><i class="fa fa-trash"></i> Delete</button>
+          </td>
+        </form>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}

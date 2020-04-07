@@ -1,10 +1,12 @@
 {% load static %} {% block LabOperator %}
+<div class="container" style="width:100%; margin-left:35%">
+<div class="row text-center" id="error_alert">
+</div>
+</div>
 <div class = "row">
 <div class="container mr-auto text-center">
     <h5 class = "mb-4 mt-0">Select appropriate date and time range </h5>
-    <div class="alert alert-danger" role="alert" id="error_alert" hidden>
-        No date selected,Please select a date
-    </div>
+    
   <form class="form-inline">
     <div class="form-group">
       <label for="start-date-input">Start Date</label>
@@ -38,8 +40,8 @@
     </div>
   </form>
 </div>
-<div class = "row mt-4 text-center">
-  <div class = "col-12" id ="boilerplate_text">
+<div class = "row mt-4 text-center" id="hide_instruction">
+  <div class = "col-12">
         <hr />
         <p class = "text-muted">
             To load data onto the page , select a date and time range within<br/>
@@ -56,13 +58,10 @@
     </div>
     <hr />
 </div>
-<hr />
 <div class="row mt-1 text-center">
   <div class="col-12">
     <div id ="content">
-      Hi
   </div>
-  <hr />
 </div>
 </div>
 
@@ -90,33 +89,35 @@
                 if(data["Error"])
                 {
                   console.log("Hi")
-                  $("#error_alert").html("<p>"+data["Error"]+"</p>")
+                  $("#error_alert").html('<div class="alert alert-danger text-center col-4 mr-auto" alert="role"> '+data["Error"]+'</div>')
                   $("#error_alert").show() 
                 }
                 else
                 {
                   var acc = "";
-                  html_content = "<div class = 'container'>"
+                  html_content = "<div class = 'accordion'>"
                   var content = "";
-                  $("#boileplate_text").html("")
+                  $("#hide_instruction").hide()
                     $.each(data["data"] ,function(i,d){
                       console.log(d)
-                    content += " <div class = 'row'>\
-                                  <div class = 'col-12'>\
-                                    <div class='card'>\
-                                      <h6 class = 'card-title'>" +
-                                        d["title"]+ "<h6>\
-                                        <div class = 'card-body'>\
-                                          <p>"+ d["description"]+"</p>\
-                                          <h6 class = 'text-muted'>"+d["time-range"]+"</h6>\
-                                        </div>\
-                                      </div>\
-                                    </div>\
-                                  <div>\
-                                          "
+                    content += 
+                    '  <div class="card">\
+                        <div class="card-header" id = "headingOne" >\
+                          <h5 class="mb-0">\
+                            <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">\
+                              Collapsible Group Item #1\
+                            </button>\
+                          </h5>\
+                        </div >\
+                        <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">\
+                          <div class="card-body">\
+                            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven\'t heard of them accusamus labore sustainable VHS.\
+                        </div>\
+                        </div>\
+                      </div >'
                   })
-                  html_content = '<div class="accordion" id="accordionExample">'+acc+'</div>';
-                  $("#content").html(content)
+                  html_content = '<div class="accordion">'+content+'</div>';
+                  $("#content").html(html_content)
                 }
               }
             )
