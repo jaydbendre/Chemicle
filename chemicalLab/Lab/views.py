@@ -396,6 +396,15 @@ def get_scheduled_data(request):
         return JsonResponse(request.POST, safe=False)
 
 
+@csrf_exempt
+def get_sensor_data(request):
+    id = request.POST["schedule_id"]
+    
+    schedule_info = m.Schedule.objects.get(id=id)
+    schedule_info = schedule_info.__dict__
+    print(schedule_info.items())
+    return JsonResponse({"id":id},safe=False)
+
 def log_out(request):
     logout(request)
     return redirect("/")

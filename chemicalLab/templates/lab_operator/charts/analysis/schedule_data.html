@@ -135,7 +135,17 @@
         function getSensorData(id)
         {
           console.log(id)
-          $(".sensor_data"+id).html("Hello")
+          $.post(
+            "http://127.0.0.1:8000/get_sensor_data",
+            {
+              schedule_id: id
+            },
+            function(data,status){
+              console.log(data)
+              $(".sensor_data" + id).html("Hello")
+            }
+          )
+          
         }
 </script>
 {% endblock %}
