@@ -58,10 +58,10 @@
                   <a href='{% url "incharge_schedule" %}' aria-expanded="true"><i class="ti-calendar"></i><span>View Schedule</span></a>
                 </li>
                 <li>
-                  <a href='#' aria-expanded="true"><i class="fa fa-bar-chart-o"></i><span>Analysis</span></a>
+                  <a href='{% url "incharge_analysis" %}' aria-expanded="true"><i class="fa fa-bar-chart-o"></i><span>Analysis</span></a>
                 </li>
                 <li>
-                  <a href='#' aria-expanded="true"><i class="ti-user"></i><span>Edit Profile</span></a>
+                  <a href='{% url "login" %}' aria-expanded="true"><i class="ti-user"></i><span>Edit Profile</span></a>
                 </li>
               </ul>
             </nav>
@@ -288,3 +288,61 @@
     <script src="{% static 'js/scripts.js' %}"></script>
   </body>
 </html>
+
+
+{% comment %}
+Important things to do with template tags
+
+1. Boiler plate content :
+  To access images and css and js in static folders , always load the static folder as :
+    {% load static %}
+
+2. To access URLs :
+  a. Normal method :
+    giving exact paths like normal html 
+      <a href = "/incharge/dashboard"></a>
+
+  b.  Template tags:
+    using {% url tag %}
+      <a href = "{% url 'name_given_to_the_path_in_urls.py' %}"></a>
+    
+    To pass content(generally GET method) :
+      <a href = "{% url 'name_of_url' var_value %}"></a>
+
+3. Template tags to render data:
+  a. Rendering data from a variable:
+    {{ var_name }}
+
+  b. {% for %} and {% if %}
+
+    i. For loop to access content from a dictionary sent from views.py
+      {% for key,value in dictionary.items %}
+        <div>{{ key }} {{ value }}</div>
+      {% endfor %}
+    
+    ii. If elif for conditional rendering
+      Suppose you want to show a error message or a success message or want to change colour according to certain value 
+        {% if var !="" %}
+          <div> {{var}} exists</div>
+        {% else %}
+          <div> Var doesnt exist</div>
+        {% endif %}
+
+2. Forms 
+Generally have 2 methods 
+  a. GET :
+    - means that the variable goes in the URL , to set that 
+      <form action = "{% url 'form_url'%}" method = "GET">
+  b. POST :
+        -means that data goes in the request body
+      <form action = "{% url 'form_url'%}" method = "POST">
+
+To actually make forms work , the first line after opening the form tag should be to pass the csrf_token with it , else Django gives an error
+Eg:
+      <form action = "{% url 'form_url'%}" method = "POST">
+        {% csrf_token %}
+        .
+        .
+        .
+      </form>
+{% endcomment %}
