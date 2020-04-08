@@ -1,4 +1,131 @@
 {% load static %} {% block LabOperator %}
+<link
+      id="themecss"
+      rel="stylesheet"
+      type="text/css"
+      href="//www.shieldui.com/shared/components/latest/css/light-bootstrap/all.min.css"
+    />
+    <script
+      type="text/javascript"
+      src="//www.shieldui.com/shared/components/latest/js/jquery-1.11.1.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="//www.shieldui.com/shared/components/latest/js/shieldui-all.min.js"
+    ></script>
+<script>
+  jQuery(function ($) {
+    $("#range").click(function () {
+      start_date = $("#start-date-input").val();
+      end_date = $("#end-date-input").val();
+      start_time = $("#start-time-input").val();
+      end_time = $("#end-time-input").val();
+      console.log(start_date);
+      console.log(end_date);
+      console.log(start_time);
+      console.log(end_time);
+      $.post(
+        "http://127.0.0.1:8000/get_scheduled_data",
+        {
+          s_date: start_date,
+          e_date: end_date,
+          s_time: start_time,
+          e_time: end_time,
+        },
+        function (data, status) {
+          console.log(data);
+          if (data["Error"]) {
+            console.log("Hi");
+            $("#error_alert").html(
+              '<div class="alert alert-danger text-center col-4 mr-auto" alert="role"> ' +
+                data["Error"] +
+                "</div>"
+            );
+            $("#error_alert").show();
+          } else {
+            var acc = "";
+            html_content =
+              "<div class='container'><div class = 'accordion'>Schedule Data";
+            var content = "";
+            $("#hide_instruction").hide();
+            $.each(data["data"], function (i, d) {
+              console.log(d);
+              content +=
+                '  <div class="card">\
+                      <div class="card-header" id = "headingOne" >\
+                        <h5 class="mb-0">' +
+                d["title"] +
+                '<button class="btn btn-link collapsed mr-0" data-toggle="collapse" data-target="#collapse' +
+                d["id"] +
+                '" aria-expanded="true" aria-controls="collapseOne">\
+                            <i class="ti-arrow-down"></i>\
+                          </button>\
+                        </h5>\
+                      </div >\
+                      <div id="collapse' +
+                d["id"] +
+                '" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">\
+                        <div class="card-body">\
+                          <p>\
+                            Time-Range:' +
+                d["time-range"] +
+                "<br />Description: " +
+                d["description"] +
+                "<br />Schedule ID: " +
+                d["id"] +
+                "<br />Date: " +
+                d["date"] +
+                '<br /><button class="btn btn-primary" onclick="getSensorData(' +
+                d["id"] +
+                ')">Get Sensor Data</button></p>\
+                            <div class = "sensor_data' +
+                d["id"] +
+                '">\
+                            </div>\
+                            <div class = "chart"' +
+                d["id"] +
+                ' ">\
+                            </div>\
+                      </div>\
+                      </div>\
+                      </div>\
+                    </div >';
+            });
+            html_content =
+              '<div class="accordion mt-5"><h5 class="text-center">Schedule Data for ' +
+              start_date +
+              " " +
+              start_time +
+              "to" +
+              end_date +
+              " " +
+              end_time +
+              "</h5>" +
+              content +
+              "</div></div>";
+            $("#content").html(html_content);
+          }
+        }
+      );
+    });
+  });
+  
+  function getSensorData(id) {
+    console.log(id);
+    jQuery(function ($) {
+      $.post(
+        "http://127.0.0.1:8000/get_sensor_data",
+        {
+          schedule_id: id,
+        },
+        function (data, status) {
+          console.log(data);
+          $(".sensor_data" + id).html("Hello");
+          
+    });
+  }
+  
+</script>
 <div class="container" style="width:100%; margin-left:35%">
 <div class="row text-center" id="error_alert">
 </div>
@@ -66,86 +193,6 @@
 </div>
 
 <script>
-    jQuery(function($){      
-        $("#range").click(function(){
-            start_date = $("#start-date-input").val()
-            end_date = $("#end-date-input").val()
-            start_time = $("#start-time-input").val()
-            end_time = $("#end-time-input").val()
-            console.log(start_date)
-            console.log(end_date)
-            console.log(start_time)
-            console.log(end_time)
-            $.post(
-              "http://127.0.0.1:8000/get_scheduled_data",
-              {
-                s_date : start_date,
-                e_date: end_date,
-                s_time: start_time,
-                e_time: end_time,
-              },
-              function(data,status){
-                console.log(data)
-                if(data["Error"])
-                {
-                  console.log("Hi")
-                  $("#error_alert").html('<div class="alert alert-danger text-center col-4 mr-auto" alert="role"> '+data["Error"]+'</div>')
-                  $("#error_alert").show() 
-                }
-                else
-                {
-                  var acc = "";
-                  html_content = "<div class='container'><div class = 'accordion'>Schedule Data"
-                  var content = "";
-                  $("#hide_instruction").hide()
-                    $.each(data["data"] ,function(i,d){
-                      console.log(d)
-                    content += 
-                    '  <div class="card">\
-                        <div class="card-header" id = "headingOne" >\
-                          <h5 class="mb-0">'+ d["title"]+
-                            '<button class="btn btn-link collapsed mr-0" data-toggle="collapse" data-target="#collapse'+d["id"]+'" aria-expanded="true" aria-controls="collapseOne">\
-                              <i class="ti-arrow-down"></i>\
-                            </button>\
-                          </h5>\
-                        </div >\
-                        <div id="collapse'+d["id"]+'" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">\
-                          <div class="card-body">\
-                            <p>\
-                              Time-Range:'+d["time-range"]+
-                              '<br />Description: '+d["description"]+
-                              '<br />Schedule ID: ' + d["id"] +
-                              '<br />Date: '+d["date"]+
-                              '<br /><button class="btn btn-primary" onclick="getSensorData('+d["id"]+')">Get Sensor Data</button></p>\
-                              <div class = "sensor_data'+d["id"]+'">\
-                              </div>\
-                        </div>\
-                        </div>\
-                        </div>\
-                      </div >'
-                  })
-                  html_content = '<div class="accordion mt-5"><h5 class="text-center">Schedule Data for '+start_date+' '+start_time+'to'+end_date+' '+end_time+'</h5>'+content+'</div></div>';
-                  $("#content").html(html_content)
-                }
-              }
-            )
-        })
-        })
 
-        function getSensorData(id)
-        {
-          console.log(id)
-          $.post(
-            "http://127.0.0.1:8000/get_sensor_data",
-            {
-              schedule_id: id
-            },
-            function(data,status){
-              console.log(data)
-              $(".sensor_data" + id).html("Hello")
-            }
-          )
-          
-        }
 </script>
 {% endblock %}

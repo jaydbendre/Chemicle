@@ -402,8 +402,33 @@ def get_sensor_data(request):
     
     schedule_info = m.Schedule.objects.get(id=id)
     schedule_info = schedule_info.__dict__
-    print(schedule_info.items())
-    return JsonResponse({"id":id},safe=False)
+    s_timestamp = datetime.datetime.strptime(str(schedule_info["date"])+" "+ str(schedule_info["start_time"]) , "%Y-%m-%d %H:%M:%S")
+    e_timestamp = datetime.datetime.strptime(str(schedule_info["date"])+" "+ str(schedule_info["end_time"]) , "%Y-%m-%d %H:%M:%S")
+    sensor_data = m.Sensor_log.objects.filter(lab_id=request.session["lab_id"]).all()
+    
+    sensor_info = {
+        "temp" : [],
+        "humidity" : [],
+        "aqi" : [],
+        "temp_avg" : 0,
+        "hum_avg" : 0,
+        "aqi_avg" : 0
+    }
+
+    print(s_timestamp , e_timestamp)
+    for s in sensor_data:
+        s=s.__dict__
+        
+        if s["timestamp"]>= s_timestamp and s["timestamp"]<=e_timestamp:
+            sensor_info["temp"].append(s["temperature"])
+            sensor_info["humidity"].append(s["humidity"])
+            sensor_info["aqi"].append(s["air_quality"])
+                # print(sensor_data.items())
+    
+    sensor_info["temp_avg"] = sum(sensor_info["temp"])/len(sensor_info["temp"])
+    sensor_info["hum_avg"] = sum(sensor_info["humidity"])/len(sensor_info["humidity"])
+    sensor_info["aqi_avg"] = sum(sensor_info["aqi"])/len(sensor_info["aqi"])
+    return JsonResponse(sensor_info,safe=False)
 
 def log_out(request):
     logout(request)
