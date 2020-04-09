@@ -55,8 +55,8 @@ def analysis(request):
     aqi_avg = sum(aqi)/len(aqi)
 
     temperature = temperature[:20]
-    humidity = humidity[:20]
     aqi = aqi[:20]
+    humidity = humidity[:20]
 
     lab_labels = [v for v in lab_count.keys()]
     lab_data = []
@@ -272,7 +272,8 @@ def get_scheduled_data(request):
 
             if s_timestamp.date() <= c_s_timestamp.date() and d.lab_id == request.session["lab_id"]:
                 # print("hi")
-                if s_timestamp.date() == c_s_timestamp.date():
+                
+                if start_time != "" and s_timestamp.date() == c_s_timestamp.date():
                     if s_timestamp.time() <= c_s_timestamp.time():
                         schedule_data.append({
                             "id": d.id,
@@ -283,14 +284,14 @@ def get_scheduled_data(request):
                         })
                     else:
                         continue
-                schedule_data.append({
+                elif start_time == "" and s_timestamp.date() == c_s_timestamp.date():
+                    schedule_data.append({
                             "id": d.id,
                             "title": d.title,
                             "time-range": str(d.start_time) + " - "+str(d.end_time),
                             "date": d.date,
                             "description": d.description
                         })
-                
         # print(schedule_data)
         return JsonResponse({"data": schedule_data}, safe=False)
     elif end_date != "" and start_date == "":
@@ -313,7 +314,7 @@ def get_scheduled_data(request):
             print(c_s_timestamp)
             if e_timestamp.date() >= c_s_timestamp.date() and d.lab_id == request.session["lab_id"]:
                 # print("hi")
-                if e_timestamp.date() == c_s_timestamp.date():
+                if end_time!= "" and e_timestamp.date() == c_s_timestamp.date():
                     if e_timestamp.time() >= c_s_timestamp.time():
                         schedule_data.append({
                             "id": d.id,
@@ -324,14 +325,15 @@ def get_scheduled_data(request):
                         })
                     else:
                         continue
-                schedule_data.append({
+                elif end_time == "" and e_timestamp.date() == c_s_timestamp.date():
+                    schedule_data.append({
                             "id": d.id,
                             "title": d.title,
                             "time-range": str(d.start_time) + " - "+str(d.end_time),
                             "date": d.date,
                             "description": d.description
                         })
-
+                
         # print(schedule_data)
         return JsonResponse({"data": schedule_data}, safe=False)
     else:
@@ -383,14 +385,7 @@ def get_scheduled_data(request):
                         })
                     else:
                         continue
-                schedule_data.append({
-                            "id": d.id,
-                            "title": d.title,
-                            "time-range": str(d.start_time) + " - "+str(d.end_time),
-                            "date": d.date,
-                            "description": d.description
-                        })
-            
+                
         # print(schedule_data)
         return JsonResponse({"data": schedule_data}, safe=False)
         return JsonResponse(request.POST, safe=False)
@@ -415,20 +410,32 @@ def get_sensor_data(request):
         "aqi_avg" : 0
     }
 
+    i=0
     print(s_timestamp , e_timestamp)
     for s in sensor_data:
         s=s.__dict__
-        
         if s["timestamp"]>= s_timestamp and s["timestamp"]<=e_timestamp:
-            sensor_info["temp"].append(s["temperature"])
-            sensor_info["humidity"].append(s["humidity"])
-            sensor_info["aqi"].append(s["air_quality"])
+            i+=1
+            sensor_info["temp"].append({
+                "x":i,
+                "y":s["temperature"]
+                })
+            sensor_info["humidity"].append({
+                "x":i,
+                "y":s["humidity"]
+                })
+            sensor_info["aqi"].append({
+                "x":i,
+                "y":s["air_quality"]
+                })
                 # print(sensor_data.items())
     
-    sensor_info["temp_avg"] = sum(sensor_info["temp"])/len(sensor_info["temp"])
-    sensor_info["hum_avg"] = sum(sensor_info["humidity"])/len(sensor_info["humidity"])
-    sensor_info["aqi_avg"] = sum(sensor_info["aqi"])/len(sensor_info["aqi"])
-    return JsonResponse(sensor_info,safe=False)
+    if len(sensor_info)==0:
+        return JsonResponse({"Error" : "No data found"} ,safe=False)    
+    sensor_info["temp_avg"] = sum(x["y"] for x in sensor_info["temp"] )/i
+    sensor_info["hum_avg"] = sum(x["y"] for x in sensor_info["humidity"])/i
+    sensor_info["aqi_avg"] = sum(x["y"] for x in sensor_info["aqi"])/i
+    return JsonResponse(sensor_info)
 
 def log_out(request):
     logout(request)

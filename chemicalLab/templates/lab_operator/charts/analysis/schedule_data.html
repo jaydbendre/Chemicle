@@ -1,20 +1,7 @@
-{% load static %} {% block LabOperator %}
-<link
-      id="themecss"
-      rel="stylesheet"
-      type="text/css"
-      href="//www.shieldui.com/shared/components/latest/css/light-bootstrap/all.min.css"
-    />
-    <script
-      type="text/javascript"
-      src="//www.shieldui.com/shared/components/latest/js/jquery-1.11.1.min.js"
-    ></script>
-    <script
-      type="text/javascript"
-      src="//www.shieldui.com/shared/components/latest/js/shieldui-all.min.js"
-    ></script>
+{% load static %}
+
 <script>
-  jQuery(function ($) {
+  jQuery(function($){
     $("#range").click(function () {
       start_date = $("#start-date-input").val();
       end_date = $("#end-date-input").val();
@@ -52,16 +39,16 @@
               console.log(d);
               content +=
                 '  <div class="card">\
-                      <div class="card-header" id = "headingOne" >\
+                      <div class="card-header" id = "heading'+d["id"]+' " >\
                         <h5 class="mb-0">' +
-                d["title"] +
+                d["title"] + d["id"]+
                 '<button class="btn btn-link collapsed mr-0" data-toggle="collapse" data-target="#collapse' +
                 d["id"] +
                 '" aria-expanded="true" aria-controls="collapseOne">\
                             <i class="ti-arrow-down"></i>\
                           </button>\
                         </h5>\
-                      </div >\
+                      </div>\
                       <div id="collapse' +
                 d["id"] +
                 '" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">\
@@ -88,8 +75,7 @@
                             </div>\
                       </div>\
                       </div>\
-                      </div>\
-                    </div >';
+                      </div>';
             });
             html_content =
               '<div class="accordion mt-5"><h5 class="text-center">Schedule Data for ' +
@@ -108,22 +94,61 @@
         }
       );
     });
-  });
+
+  })  
   
-  function getSensorData(id) {
-    console.log(id);
-    jQuery(function ($) {
-      $.post(
-        "http://127.0.0.1:8000/get_sensor_data",
-        {
-          schedule_id: id,
-        },
-        function (data, status) {
-          console.log(data);
-          $(".sensor_data" + id).html("Hello");
-          
-    });
-  }
+    function getSensorData(id) {
+      console.log(id);
+      jQuery(function($){
+        $.post(
+          "http://127.0.0.1:8000/get_sensor_data",
+          {
+            schedule_id: id,
+          },
+          function (data, status) {
+            console.log(data);
+            temp=[]
+            hum = []
+            aqi = []
+  
+            for(i=0; i < data["temp"].length ;i++)
+            {
+              temp.push(data["temp"][i])
+              hum.push(data["humidity"][i])
+              aqi.push(data["aqi"][i])
+            }
+            $(".sensor_data" + id).html("Hello");
+            $(function(){
+              $(".chart"+id).shieldChart({
+                theme: "light",
+                exportOptions: {
+                    image: false,
+                    print: false
+                },
+                primaryHeader: {
+                    text: "Electricity prices"
+                },
+                axisY: {
+                    title: {
+                        text: "Price (EUR per kWh)"
+                    }
+                },
+                dataSeries: [{
+                    seriesType: "spline",
+                    collectionAlias: "Household Prices",
+                    data: data["temp"]
+                }, {
+                    seriesType: "spline",
+                    collectionAlias: "Industry Prices",
+                    data: data["humidity"]
+                }]
+            });
+            })
+      });
+      })
+      
+    }
+    
   
 </script>
 <div class="container" style="width:100%; margin-left:35%">
@@ -191,8 +216,3 @@
   </div>
 </div>
 </div>
-
-<script>
-
-</script>
-{% endblock %}
