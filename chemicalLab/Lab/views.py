@@ -405,6 +405,7 @@ def get_sensor_data(request):
         "temp" : [],
         "humidity" : [],
         "aqi" : [],
+        "index" : [],
         "temp_avg" : 0,
         "hum_avg" : 0,
         "aqi_avg" : 0
@@ -416,25 +417,17 @@ def get_sensor_data(request):
         s=s.__dict__
         if s["timestamp"]>= s_timestamp and s["timestamp"]<=e_timestamp:
             i+=1
-            sensor_info["temp"].append({
-                "x":i,
-                "y":s["temperature"]
-                })
-            sensor_info["humidity"].append({
-                "x":i,
-                "y":s["humidity"]
-                })
-            sensor_info["aqi"].append({
-                "x":i,
-                "y":s["air_quality"]
-                })
+            sensor_info["index"].append(i)
+            sensor_info["temp"].append(s["temperature"])
+            sensor_info["humidity"].append(s["humidity"])
+            sensor_info["aqi"].append(s["air_quality"])
                 # print(sensor_data.items())
     
     if len(sensor_info)==0:
         return JsonResponse({"Error" : "No data found"} ,safe=False)    
-    sensor_info["temp_avg"] = sum(x["y"] for x in sensor_info["temp"] )/i
-    sensor_info["hum_avg"] = sum(x["y"] for x in sensor_info["humidity"])/i
-    sensor_info["aqi_avg"] = sum(x["y"] for x in sensor_info["aqi"])/i
+    sensor_info["temp_avg"] = "{:.2f}".format(sum(sensor_info["temp"] )/i)
+    sensor_info["hum_avg"] = "{:.2f}".format(sum(sensor_info["humidity"])/i)
+    sensor_info["aqi_avg"] = "{:.2f}".format(sum(sensor_info["aqi"])/i)
     return JsonResponse(sensor_info)
 
 def log_out(request):

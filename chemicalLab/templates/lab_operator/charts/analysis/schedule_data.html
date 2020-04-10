@@ -69,10 +69,14 @@
                 d["id"] +
                 '">\
                             </div>\
-                            <div class = "chart"' +
+                            <div class = "chart' +
                 d["id"] +
-                ' ">\
+                '">\
                             </div>\
+                            <div class = "sensorData' +
+                            d["id"] +
+                            '">\
+                                        </div>\
                       </div>\
                       </div>\
                       </div>';
@@ -90,6 +94,7 @@
               content +
               "</div></div>";
             $("#content").html(html_content);
+
           }
         }
       );
@@ -106,48 +111,99 @@
             schedule_id: id,
           },
           function (data, status) {
-            console.log(data);
-            temp=[]
-            hum = []
-            aqi = []
-  
-            for(i=0; i < data["temp"].length ;i++)
-            {
-              temp.push(data["temp"][i])
-              hum.push(data["humidity"][i])
-              aqi.push(data["aqi"][i])
-            }
-            $(".sensor_data" + id).html("Hello");
-            $(function(){
-              $(".chart"+id).shieldChart({
-                theme: "light",
-                exportOptions: {
-                    image: false,
-                    print: false
-                },
-                primaryHeader: {
-                    text: "Electricity prices"
-                },
-                axisY: {
-                    title: {
-                        text: "Price (EUR per kWh)"
-                    }
-                },
-                dataSeries: [{
-                    seriesType: "spline",
-                    collectionAlias: "Household Prices",
-                    data: data["temp"]
-                }, {
-                    seriesType: "spline",
-                    collectionAlias: "Industry Prices",
-                    data: data["humidity"]
-                }]
+            if (data.error) {
+              alert(r.data.error[0].msg);
+          }
+          else {
+            var chart = new Chartist.Line('.chart' + id, {
+              labels: data["index"],
+              series: [
+              data["temp"],
+              data["humidity"],
+              data["aqi"]
+              ]
+            }, {
+              low: 0,
+              showArea: true,
+              showPoint: false,
+              fullWidth: true
             });
-            })
-      });
-      })
+            
+            chart.on('draw', function(data) {
+              if(data.type === 'line' || data.type === 'area') {
+                data.element.animate({
+                  d: {
+                    begin: 2000 * data.index,
+                    dur: 2000,
+                    from: data.path.clone().scale(1, 0).translate(0, data.chartRect.height()).stringify(),
+                    to: data.path.clone().stringify(),
+                    easing: Chartist.Svg.Easing.easeOutQuint
+                  }
+                });
+              }
+            });
+
+            $(".sensorData"+id).html(
+              '<div class="container container-fluid">\
+                <div class="row">\
+                  <div class="col-md-6 mt-0 mb-3">\
+                    <div class="card">\
+                      <div class="seo-fact sbg1">\
+                        <div class="p-4 d-flex justify-content-between align-items-center">\
+                          <div class="seofct-icon">\
+                            <i class="fa fa-thermometer-half"></i>Average temperature\
+                          </div>\
+                          <h2>'+ data["temp_avg"]+' °C</h2>\
+                        </div>\
+                      </div>\
+                    </div>\
+                  </div>\
+                  <div class="col-md-6 mt-md-0 mb-3">\
+                    <div class="card">\
+                      <div class="seo-fact sbg2">\
+                        <div class="p-4 d-flex justify-content-between align-items-center">\
+                          <div class="seofct-icon">\
+                            <i class="fa fa-tint"></i>\
+                            Average humidity\
+                          </div>\
+                          <h2>'+ data["hum_avg"]+' %</h2>\
+                        </div>\
+                      </div>\
+                    </div>\
+                  </div>\
+                  <div class="col-md-6 mt-md-0 mb-3">\
+                    <div class="card">\
+                      <div class="seo-fact sbg3">\
+                        <div class="p-4 d-flex justify-content-between align-items-center">\
+                          <div class="seofct-icon">\
+                            <i class="fas fa-wind"></i> Average AQI\
+                          </div>\
+                          <h2>'+data["aqi_avg"]+'</h2>\
+                        </div>\
+                      </div>\
+                    </div>\
+                  </div>\
+                  <div class="col-md-6">\
+                    <div class="card">\
+                      <div class="seo-fact sbg4">\
+                        <div class="p-4 d-flex justify-content-between align-items-center">\
+                          <div class="seofct-icon">\
+                            <i class="fa fa-users"></i>Number of Data points collected\
+                          </div>\
+                          <h2>'+data["index"].length+'</h2>\
+                        </div>\
+                      </div>\
+                    </div>\
+                  </div>\
+                </div>\
+                </div>\
+                '
+            )
+         }
+      }); // end jQuery.get()            
+  });
       
-    }
+}
     
   
 </script>
