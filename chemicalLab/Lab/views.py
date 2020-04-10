@@ -110,7 +110,17 @@ def login(request):
         request.session["email"] = user_data["email"]
         request.session["username"] = user_data["fname"] + \
             " " + user_data["lname"]
-        return render(request, "lab_operator/dashboard.html", {"user_data": user_data})
+        if user_data["role_id_id"] == 0:
+            request.session["role"] = "Admin"
+            return render(request, "admin/dashboard.html", {"user_data": user_data})
+        elif user_data["role_id_id"] == 1:
+            request.session["role"] = "Lab Incharge"
+            return redirect('/incharge')
+        else:
+            request.session["role"] = "Lab Operator"
+            # data = requests.get("https://api.thingspeak.com/channels/1017900/feeds.json?api_key=CQ98H95JG2IBYHNH").text
+            # return HttpResponse(data.items())
+            return render(request, "lab_operator/dashboard.html", {"user_data": user_data})
 
     elif request.method == "POST":
         email = request.POST["email"]
@@ -172,7 +182,8 @@ def login(request):
             request.session["role"] = "Admin"
             return render(request, "admin/dashboard.html", {"user_data": user_data})
         elif user_data["role_id_id"] == 1:
-            pass
+            request.session["role"] = "Lab Incharge"
+            return redirect('/incharge')
         else:
             request.session["role"] = "Lab Operator"
             # data = requests.get("https://api.thingspeak.com/channels/1017900/feeds.json?api_key=CQ98H95JG2IBYHNH").text
