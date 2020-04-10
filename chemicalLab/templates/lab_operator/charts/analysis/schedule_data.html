@@ -111,8 +111,8 @@
             schedule_id: id,
           },
           function (data, status) {
-            if (data.error) {
-              alert(r.data.error[0].msg);
+            if (data["Error"]!=="") {
+              alert(data["Error"]);
           }
           else {
             var chart = new Chartist.Line('.chart' + id, {
