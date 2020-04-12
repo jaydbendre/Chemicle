@@ -9,6 +9,7 @@ import datetime
 import random
 from chemicalLab.settings import EMAIL_HOST_USER
 from django.core.mail import send_mail
+
 """
 To render the pages
 """
@@ -283,7 +284,7 @@ def get_scheduled_data(request):
 
             if s_timestamp.date() <= c_s_timestamp.date() and d.lab_id == request.session["lab_id"]:
                 # print("hi")
-                
+
                 if start_time != "" and s_timestamp.date() == c_s_timestamp.date():
                     if s_timestamp.time() <= c_s_timestamp.time():
                         schedule_data.append({
@@ -297,12 +298,12 @@ def get_scheduled_data(request):
                         continue
                 elif start_time == "" and s_timestamp.date() == c_s_timestamp.date():
                     schedule_data.append({
-                            "id": d.id,
-                            "title": d.title,
-                            "time-range": str(d.start_time) + " - "+str(d.end_time),
-                            "date": d.date,
-                            "description": d.description
-                        })
+                        "id": d.id,
+                        "title": d.title,
+                        "time-range": str(d.start_time) + " - "+str(d.end_time),
+                        "date": d.date,
+                        "description": d.description
+                    })
         # print(schedule_data)
         return JsonResponse({"data": schedule_data}, safe=False)
     elif end_date != "" and start_date == "":
@@ -325,7 +326,7 @@ def get_scheduled_data(request):
             print(c_s_timestamp)
             if e_timestamp.date() >= c_s_timestamp.date() and d.lab_id == request.session["lab_id"]:
                 # print("hi")
-                if end_time!= "" and e_timestamp.date() == c_s_timestamp.date():
+                if end_time != "" and e_timestamp.date() == c_s_timestamp.date():
                     if e_timestamp.time() >= c_s_timestamp.time():
                         schedule_data.append({
                             "id": d.id,
@@ -338,13 +339,13 @@ def get_scheduled_data(request):
                         continue
                 elif end_time == "" and e_timestamp.date() == c_s_timestamp.date():
                     schedule_data.append({
-                            "id": d.id,
-                            "title": d.title,
-                            "time-range": str(d.start_time) + " - "+str(d.end_time),
-                            "date": d.date,
-                            "description": d.description
-                        })
-                
+                        "id": d.id,
+                        "title": d.title,
+                        "time-range": str(d.start_time) + " - "+str(d.end_time),
+                        "date": d.date,
+                        "description": d.description
+                    })
+
         # print(schedule_data)
         return JsonResponse({"data": schedule_data}, safe=False)
     else:
@@ -396,7 +397,7 @@ def get_scheduled_data(request):
                         })
                     else:
                         continue
-                
+
         # print(schedule_data)
         return JsonResponse({"data": schedule_data}, safe=False)
         return JsonResponse(request.POST, safe=False)
@@ -405,47 +406,53 @@ def get_scheduled_data(request):
 @csrf_exempt
 def get_sensor_data(request):
     id = request.POST["schedule_id"]
-    
+
     schedule_info = m.Schedule.objects.get(id=id)
     schedule_info = schedule_info.__dict__
-    s_timestamp = datetime.datetime.strptime(str(schedule_info["date"])+" "+ str(schedule_info["start_time"]) , "%Y-%m-%d %H:%M:%S")
-    e_timestamp = datetime.datetime.strptime(str(schedule_info["date"])+" "+ str(schedule_info["end_time"]) , "%Y-%m-%d %H:%M:%S")
-    sensor_data = m.Sensor_log.objects.filter(lab_id=request.session["lab_id"]).all()
-    
+    s_timestamp = datetime.datetime.strptime(str(
+        schedule_info["date"])+" " + str(schedule_info["start_time"]), "%Y-%m-%d %H:%M:%S")
+    e_timestamp = datetime.datetime.strptime(str(
+        schedule_info["date"])+" " + str(schedule_info["end_time"]), "%Y-%m-%d %H:%M:%S")
+    sensor_data = m.Sensor_log.objects.filter(
+        lab_id=request.session["lab_id"]).all()
+
     sensor_info = {
-        "temp" : [],
-        "humidity" : [],
-        "aqi" : [],
-        "index" : [],
-        "temp_avg" : 0,
-        "hum_avg" : 0,
-        "aqi_avg" : 0
+        "temp": [],
+        "humidity": [],
+        "aqi": [],
+        "index": [],
+        "temp_avg": 0,
+        "hum_avg": 0,
+        "aqi_avg": 0
     }
 
-    i=0
-    print(s_timestamp , e_timestamp)
+    i = 0
+    print(s_timestamp, e_timestamp)
     for s in sensor_data:
-        s=s.__dict__
-        if s["timestamp"]>= s_timestamp and s["timestamp"]<=e_timestamp:
-            i+=1
+        s = s.__dict__
+        if s["timestamp"] >= s_timestamp and s["timestamp"] <= e_timestamp:
+            i += 1
             sensor_info["index"].append(i)
             sensor_info["temp"].append(s["temperature"])
             sensor_info["humidity"].append(s["humidity"])
             sensor_info["aqi"].append(s["air_quality"])
-                # print(sensor_data.items())
-    
-    if len(sensor_info["temp"])==0:
-        return JsonResponse({"Error" : "No data found"} ,safe=False)    
-    sensor_info["temp_avg"] = "{:.2f}".format(sum(sensor_info["temp"] )/i)
+            # print(sensor_data.items())
+
+    if len(sensor_info["temp"]) == 0:
+        return JsonResponse({"Error": "No data found"}, safe=False)
+    sensor_info["temp_avg"] = "{:.2f}".format(sum(sensor_info["temp"])/i)
     sensor_info["hum_avg"] = "{:.2f}".format(sum(sensor_info["humidity"])/i)
     sensor_info["aqi_avg"] = "{:.2f}".format(sum(sensor_info["aqi"])/i)
     return JsonResponse(sensor_info)
+
 
 def log_out(request):
     logout(request)
     return redirect("/")
 
 # Email
+
+
 def email(request):
     data = m.User.objects.get(id=10001)
     data = data.__dict__

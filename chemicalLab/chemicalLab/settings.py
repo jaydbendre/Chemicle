@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'social_django',
     'Lab',
     'Admin',
-    'labAssistent'
+    'labAssistent',
 ]
 
 MIDDLEWARE = [

@@ -15,11 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf.urls import url
 
 urlpatterns = [
     path("", include("Lab.urls")),
     path("", include("social_django.urls", namespace="social")),
     path("incharge/", include("labAssistent.urls")),
     path("admin/", include("Admin.urls")),
-    
 ]

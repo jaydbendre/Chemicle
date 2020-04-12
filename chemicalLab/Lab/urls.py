@@ -13,6 +13,7 @@ urlpatterns = [
     path("get_schedule_details", views.get_schedule_details,
          name="get_schedule_details"),
     path("get_scheduled_data", views.get_scheduled_data, name="get_scheduled_data"),
-    path("get_sensor_data",views.get_sensor_data , name="get_sensor_data"),
-    path("email/", views.email, name='email'),
+    path("get_sensor_data", views.get_sensor_data, name="get_sensor_data"),
+    path("email", views.email, name='email'),
+    path("notifications", views.check_notifications_working, name="notifications")
 ]
