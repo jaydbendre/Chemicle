@@ -81,12 +81,12 @@
                 <span></span>
                 <span></span>
               </div>
-              <div class="search-box pull-left">
+              {% comment %} <div class="search-box pull-left">
                 <form action="#">
                   <input type="text" name="search" placeholder="Search..." required />
                   <i class="ti-search"></i>
                 </form>
-              </div>
+              </div> {% endcomment %}
             </div>
             <!-- profile info & task notification -->
             <div class="col-md-6 col-sm-4 clearfix">
@@ -94,10 +94,9 @@
                 <li id="full-view"><i class="ti-fullscreen"></i></li>
                 <li id="full-view-exit"><i class="ti-zoom-out"></i></li>
                 <li class="dropdown">
-                  <i class="ti-bell dropdown-toggle" data-toggle="dropdown">
-                    <span>2</span>
-                  </i>
-                  <div class="dropdown-menu bell-notify-box notify-box">
+                <div id = "notif-count">
+                </div>
+                  {% comment %} <div class="dropdown-menu bell-notify-box notify-box">
                     <span class="notify-title">You have 2 new notifications <a href="#">view all</a></span>
                     <div class="nofity-list">
                       <a href="#" class="notify-item">
@@ -164,9 +163,9 @@
                         </div>
                       </a>
                     </div>
-                  </div>
+                  </div> {% endcomment %}
                 </li>
-                <li class="dropdown">
+                {% comment %} <li class="dropdown">
                   <i class="fa fa-envelope-o dropdown-toggle" data-toggle="dropdown"><span>3</span></i>
                   <div class="dropdown-menu notify-box nt-enveloper-box">
                     <span class="notify-title">You have 3 new notifications <a href="#">view all</a></span>
@@ -244,7 +243,7 @@
                       </a>
                     </div>
                   </div>
-                </li>
+                </li> {% endcomment %}
                 <li class="settings-btn">
                   <i class="ti-settings"></i>
                 </li>
@@ -257,6 +256,64 @@
     {% block LabOperator %}{% endblock %}
     <!-- offset area end -->
     <!-- jquery latest version -->
+    <script>
+    jQuery(function(){
+      $(document).ready(
+        function(){
+          setInterval(
+        function(){
+          $.get(
+            "http://127.0.0.1:8000/get_user_notifs",
+            function(data,status){
+              console.log(data)
+              var i = 0
+              notification_list = ""
+              $.each(data["Notif"] , function(index , value){
+                if( i === 5){
+                  return false;
+                }
+                i = i+1;
+                if(value["category"] == 1){
+                  notification_list +='<a href="#" class="notify-item">\
+                        <div class="notify-thumb">\
+                          <i class="ti-key btn-danger"></i>\
+                        </div>\
+                        <div class="notify-text">\
+                          <p>'+ value["description"]+'</p>\
+                          <span>'+ value["at"]+'</span>\
+                        </div>\
+                      </a>'
+                }
+                else if(value["category"] == 0){
+                  '<a href="#" class="notify-item">\
+                        <div class="notify-thumb">\
+                          <i class="ti-key btn-primary"></i>\
+                        </div>\
+                        <div class="notify-text">\
+                          <p>'+ value["description"]+'</p>\
+                          <span>'+ value["at"]+'</span>\
+                        </div>\
+                      </a>'
+                }
+              })
+              $("#notif-count").html('<i class="fa fa-bell-o fa-2x  dropdown-toggle" data-toggle="dropdown">\
+                    <span>'+data["Notif"].length+'</span>\
+                  </i>\
+                  <div class="dropdown-menu bell-notify-box notify-box">\
+                    <span class="notify-title">You have'+data["Notif"].length+' new notifications <a href="#">view all</a></span>\
+                    <div class="nofity-list">'+notification_list+'\
+                      </div>\
+                      </div>')
+            }
+          )
+        },10000
+      )
+        }
+      )
+      
+    })
+  </script>
+  
     <script src="{% static 'js/vendor/jquery-2.2.4.min.js' %}"></script>
     <!-- bootstrap 4 js -->
     <script src="{% static 'js/popper.min.js' %}"></script>

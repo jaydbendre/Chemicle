@@ -128,21 +128,17 @@
             "https://api.thingspeak.com/channels/1017900/feeds/last?api_key=CQ98H95JG2IBYHNH",
           dataType: "json",
           success: function(data) {
-            console.log(data);
             temp[temp.length] = parseFloat(data["field1"]);
             hum[hum.length] = parseFloat(data["field2"]);
             aqi[aqi.length] = parseFloat(data["field3"]);
 
             if (temp.length != 0){
-              console.log("Here")
-              console.log(temp[temp.length - 1])
-              console.log(temp[temp.length - 2])
+
               diff_temp = Math.abs(temp[temp.length -1] - temp[temp.length-2])
               diff_hum = Math.abs(hum[hum.length - 1] - hum[hum.length-2])
               diff_aqi = Math.abs(aqi[aqi.length - 1] - aqi[aqi.length-2])
-              console.log(diff_temp)
+              console.log(diff_aqi)
               if (diff_temp >= 5){
-                console.log("Hey")
                 $.post(
                   "http://127.0.0.1:8000/create_notif/1",
                   {
@@ -166,7 +162,7 @@
                   }
                 )
               }
-              if (diff_aqi >= 20){
+              if (diff_aqi >= 200){
                 $.post(
                   "http://127.0.0.1:8000/create_notif/3",
                   data = {

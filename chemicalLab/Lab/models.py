@@ -43,6 +43,10 @@ class Notification(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     category = models.CharField(max_length=100)
     delete_field = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ["-timestamp"]
+
     @classmethod
     def create_notification(cls, to, by, description, category):
         notif = Notification(Notification_to=to, Notification_by=by,

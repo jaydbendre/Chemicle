@@ -455,7 +455,7 @@ def create_notif_anamoly(request, id):
         description = ""
         if temp1 > temp2:
             description = "Warning , The temperature has dropped by " + \
-                (temp1-temp2) + " °C"
+                str(float(temp1)-float(temp2)) + " °C"
         else:
             description = "Warning , The temperature has spiked by " + \
                 str(float(temp2)-float(temp1)) + " °C"
@@ -471,14 +471,78 @@ def create_notif_anamoly(request, id):
                 description=description,
                 category=1
             )
-        return JsonResponse({"temp1": temp1, "temp2": temp2})
+        return JsonResponse({"Success": "Done"})
     elif id == 2:
-        pass
+        hum1 = request.POST["hum_before"]
+        hum2 = request.POST["hum_after"]
+
+        description = ""
+        if hum1 > hum2:
+            description = "Warning , The humidity has dropped by " + \
+                str(float(hum1)-float(hum2)) + " %"
+        else:
+            description = "Warning , The humidity has spiked by " + \
+                str(float(hum2)-float(hum1)) + " %"
+
+        user_data = m.User.objects.all().filter(
+            lab_id=request.session["lab_id"])
+
+        admin = m.User.objects.get(email="2017.jatin.acharya@ves.ac.in")
+        for u in user_data:
+            m.Notification.create_notification(
+                to=u,
+                by=admin,
+                description=description,
+                category=1
+            )
+        return JsonResponse({"Success": "Done"})
     elif id == 3:
-        pass
+        aqi1 = request.POST["aqi_before"]
+        aqi2 = request.POST["aqi_after"]
+
+        description = ""
+        if aqi1 > aqi2:
+            description = "Warning , The Air Quality has dropped by " + \
+                str(float(aqi1)-float(aqi2))
+        else:
+            description = "Warning , The Air Quality has spiked by " + \
+                str(float(aqi2)-float(aqi1))
+
+        user_data = m.User.objects.all().filter(
+            lab_id=request.session["lab_id"])
+
+        admin = m.User.objects.get(email="2017.jatin.acharya@ves.ac.in")
+        for u in user_data:
+            m.Notification.create_notification(
+                to=u,
+                by=admin,
+                description=description,
+                category=1
+            )
+        return JsonResponse({"Success": "Done"})
     else:
         return JsonResponse({"Error": "Invalid URL"})
     pass
+
+
+@csrf_exempt
+def get_all_notifs(request):
+    user_id = m.User.objects.get(email=request.session["email"])
+    user_notifications = m.Notification.objects.all().filter(Notification_to=user_id.id)
+    notif = []
+    i = 0
+    for u in user_notifications:
+        u = u.__dict__
+        by = m.User.objects.get(id=u["Notification_by_id"])
+        notif.append({
+            "by": by.fname + " " + by.lname,
+            "category": u["category"],
+            "at": u["timestamp"],
+            "viewed": u["delete_field"],
+            "description": u["description"],
+        })
+
+    return JsonResponse({"Notif": notif})
 
 
 def log_out(request):
