@@ -446,6 +446,41 @@ def get_sensor_data(request):
     return JsonResponse(sensor_info)
 
 
+@csrf_exempt
+def create_notif_anamoly(request, id):
+    if id == 1:
+        temp1 = request.POST["temp_before"]
+        temp2 = request.POST["temp_after"]
+
+        description = ""
+        if temp1 > temp2:
+            description = "Warning , The temperature has dropped by " + \
+                (temp1-temp2) + " °C"
+        else:
+            description = "Warning , The temperature has spiked by " + \
+                str(float(temp2)-float(temp1)) + " °C"
+
+        user_data = m.User.objects.all().filter(
+            lab_id=request.session["lab_id"])
+
+        admin = m.User.objects.get(email="2017.jatin.acharya@ves.ac.in")
+        for u in user_data:
+            m.Notification.create_notification(
+                to=u,
+                by=admin,
+                description=description,
+                category=1
+            )
+        return JsonResponse({"temp1": temp1, "temp2": temp2})
+    elif id == 2:
+        pass
+    elif id == 3:
+        pass
+    else:
+        return JsonResponse({"Error": "Invalid URL"})
+    pass
+
+
 def log_out(request):
     logout(request)
     return redirect("/")

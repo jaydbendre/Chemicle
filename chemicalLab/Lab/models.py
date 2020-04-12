@@ -1,4 +1,5 @@
 from django.db import models
+import datetime
 
 
 class Role(models.Model):
@@ -34,10 +35,20 @@ class Request(models.Model):
 
 
 class Notification(models.Model):
-    Notification_to = models.ForeignKey(User, on_delete=models.CASCADE)
+    Notification_to = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="Sender")
+    Notification_by = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="Reciever")
     description = models.TextField(max_length=1000)
-    timestamp = models.DateField(auto_now_add=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
     category = models.CharField(max_length=100)
+    delete_field = models.BooleanField(default=False)
+    @classmethod
+    def create_notification(cls, to, by, description, category):
+        notif = Notification(Notification_to=to, Notification_by=by,
+                             description=description, timestamp=datetime.datetime.now(),
+                             category=category, delete_field=False)
+        notif.save()
 
 
 class Sensor_log(models.Model):

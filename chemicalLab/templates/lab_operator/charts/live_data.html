@@ -133,6 +133,54 @@
             hum[hum.length] = parseFloat(data["field2"]);
             aqi[aqi.length] = parseFloat(data["field3"]);
 
+            if (temp.length != 0){
+              console.log("Here")
+              console.log(temp[temp.length - 1])
+              console.log(temp[temp.length - 2])
+              diff_temp = Math.abs(temp[temp.length -1] - temp[temp.length-2])
+              diff_hum = Math.abs(hum[hum.length - 1] - hum[hum.length-2])
+              diff_aqi = Math.abs(aqi[aqi.length - 1] - aqi[aqi.length-2])
+              console.log(diff_temp)
+              if (diff_temp >= 5){
+                console.log("Hey")
+                $.post(
+                  "http://127.0.0.1:8000/create_notif/1",
+                  {
+                    "temp_before" : temp[temp.length-2],
+                    "temp_after" : temp[temp.length -1]
+                  },
+                  function(data){
+                    console.log(data)
+                  }
+                )
+              }
+              if (diff_hum >= 10){
+                $.post(
+                  "http://127.0.0.1:8000/create_notif/2",
+                  data = {
+                    "hum_before" : hum[hum.length-2],
+                    "hum_after" : hum[hum.length - 1]
+                  },
+                  function(data){
+                    console.log(data)
+                  }
+                )
+              }
+              if (diff_aqi >= 20){
+                $.post(
+                  "http://127.0.0.1:8000/create_notif/3",
+                  data = {
+                    "aqi_before" : aqi[aqi.length-2],
+                    "aqi_after" : aqi[aqi.length - 1]
+                  },
+                  function(data){
+                    console.log(data)
+                  }
+                )
+              }
+              
+            }
+
             if (temp.length > 50) {
               temp = temp.splice(1, 49);
             }

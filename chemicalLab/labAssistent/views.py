@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse , JsonResponse
+from django.http import HttpResponse, JsonResponse
 from Lab import models as m
 # Create your views here.
 
@@ -44,8 +44,18 @@ Certain key functions that you can use in backend coding.
 def dashboard(request):
     return render(request, 'incharge/dashboard.html')
 
+
 def schedule(request):
+    lab_operator = m.User.objects.get(id=10000)
+    user_data = m.User.objects.get(email=request.session["email"])
+    m.Notification.create_notification(
+        to=lab_operator,
+        by=user_data,
+        description="This is a new notification",
+        category=0
+    )
     return render(request, 'incharge/schedule.html')
 
+
 def analysis(request):
-    return render(request , "incharge/analysis.html")
+    return render(request, "incharge/analysis.html")

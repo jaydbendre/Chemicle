@@ -15,5 +15,6 @@ urlpatterns = [
     path("get_scheduled_data", views.get_scheduled_data, name="get_scheduled_data"),
     path("get_sensor_data", views.get_sensor_data, name="get_sensor_data"),
     path("email", views.email, name='email'),
+    path("create_notif/<int:id>", views.create_notif_anamoly, name="create_notif")
     #path("notifications", views.check_notifications_working, name="notifications")
 ]
