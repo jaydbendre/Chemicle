@@ -88,6 +88,48 @@ def schedule(request):
     return render(request, "lab_operator/schedule.html")
 
 
+def notifications(request):
+    user = m.User.objects.get(email=request.session["email"])
+    notification_content = m.Notification.objects.all().filter(Notification_to=user)
+
+    notif_data = dict()
+    s_count = 0
+    for n in notification_content:
+        print(n.__dict__.items())
+
+        if n.category not in notif_data.keys():
+            notif_data[n.category] = dict()
+
+        if n.category == "0":
+            if n.data == None:
+                continue
+            schedule_info = m.Schedule.objects.get(id=int(n.data))
+            notif_data[n.category][n.id] = {
+                "content": n.description,
+                "at": n.timestamp,
+                "start_time": schedule_info.start_time,
+                "end_time": schedule_info.end_time,
+                "date": schedule_info.date,
+                "event_description": schedule_info.description,
+                "event_title": schedule_info.title,
+                "viewed": n.delete_field
+            }
+            s_count += 1
+            pass
+        elif n.category == 1:
+            pass
+        elif n.category == 2:
+            pass
+        elif n.category == 3:
+            pass
+        else:
+            pass
+
+    notif_data["unread_schedule"] = s_count
+    print(notif_data.items())
+    return render(request, "lab_operator/notifications.html", {"notif_data": notif_data})
+
+
 """
 To check for something in the database
 """

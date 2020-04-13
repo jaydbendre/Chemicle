@@ -40,18 +40,15 @@ class Notification(models.Model):
     Notification_by = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="Reciever")
     description = models.TextField(max_length=1000)
-    timestamp = models.DateTimeField(auto_now_add=True)
+    timestamp = models.DateField(auto_now_add=True)
     category = models.CharField(max_length=100)
     delete_field = models.BooleanField(default=False)
-
-    class Meta:
-        ordering = ["-timestamp"]
-
+    data = models.TextField(null=True)
     @classmethod
-    def create_notification(cls, to, by, description, category):
-        notif = Notification(Notification_to=to, Notification_by=by,
-                             description=description, timestamp=datetime.datetime.now(),
-                             category=category, delete_field=False)
+    def create_notification(cls, to, by, description, category, data):
+        notif = Notification.create(Notification_to=to, Notification_by=by,
+                                    description=description, timestamp=datetime.datetime.now(),
+                                    category=category, delete_field=False, data=data)
         notif.save()
 
 
@@ -69,6 +66,6 @@ class Schedule(models.Model):
     end_time = models.TimeField(auto_now_add=True)
     lab = models.ForeignKey(Lab, on_delete=models.CASCADE)
     added_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    title = models.TextField(default=None)
     description = models.TextField(default=None)
     event_type = models.IntegerField(default=1)
-    title = models.TextField(default=None)
