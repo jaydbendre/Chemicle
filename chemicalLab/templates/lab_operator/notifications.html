@@ -19,40 +19,106 @@
         Notifications <i class="ti-bell"></i>
     </h5>
 </div>
-<div class="row mt-3 text-center">
-    <div class="column col-4">
-        Schedule <i class="ti-calendar"></i> <span class="badge badge-danger">{{  notif_data.unread_schedule }}</span>
-        <div class="nofity-list" style="overflow-y: auto;">
-            {% for key,value in notif_data.0.items %}
-            <div class="card mb-3">
-                <div class="card-body">
-                    <a href="#" class="notify-item">
-                        <div class="notify-thumb">
-                            <i class="ti-calendar btn-warning"></i>
+<div class="row mt-3">
+    <div class="column col-6">
+        <div class="card border-info">
+            <h5 class="card-title mt-2 text-center">Schedule <i class="ti-calendar"></i> <span
+                    class="badge badge-info">{{  notif_data.unread_schedule }}</span></h5>
+            <div class="card-body">
+                <div class="card-group">
+                    {% for key,value in notif_data.0.items %}
+                    <div class="card border-info mb-2 p-4">
+                        <h5 class="card-title mt-2 text-center"> {{ value.content}}</h5>
+                        <p class="card-text">
+                            A new lab titled, <strong>{{ value.event_title }}</strong> <br />
+                            is scheduled at
+                            <strong>{{ value.date }},
+                                from {{ value.start_time }} to {{ value.end_time }}</strong>
+                            <br />
+                            Lab Description: {{ value.event_description }}
+                        </p>
+                        <div class="card-footer border-info bg-transparent">
+                            <span>Posted at {{ value.at|date:'Y-m-d H:i' }}</span>
                         </div>
-                        <div class="notify-text">
-                            <p><b>{{ value.content }}</b></p>
-                            <div class="card mt-2">
-                                <div class="card-body">
-                                    <p class="text-muted"><u>Lab Title</u><br />{{ value.event_title }}</p>
-                                    <p class="text-muted"><u>Lab Description</u> <br /> {{ value.event_description }}
-                                    </p>
-                                    <span class="badge badge-info" style="color:white;"><b>At {{ value.date }},
-                                            {{ value.start_time }} -
-                                            {{ value.end_time }}</b></span><br />
-                                    <span>Posted At :{{ value.at }}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
+                    </div>
+                    {% endfor %}
                 </div>
             </div>
-            {% endfor %}
-
         </div>
     </div>
-    <div class="column col-4">
-        Warning <i class="ti-alert"></i>
+    <div class="column col-6">
+        <div class="card border-danger">
+            <h5 class="card-title mt-2 text-center">Warning <i class="ti-alert"></i> <span
+                    class="badge badge-danger">{{  notif_data.unread_warning }}</span></h5>
+            <div class="card-body">
+                <div class="card-group">
+                    {% for key,value in notif_data.1.items %}
+                    <div class="card border-danger mb-2 p-4">
+                        <h5 class="card-title mt-2 text-center"> {{ value.content}}</h5>
+                        <p class="card-text">
+                            Value Transition from <strong
+                                class="text-{{ value.data_before_class }}">{{ value.data_before }}</strong>
+                            <i class="ti-arrow-right"></i>
+                            <strong class="text-{{ value.data_after_class}}">{{ value.data_after}}</strong>
+                        </p>
+                        <div class="card-footer border-danger bg-transparent">
+                            <span>Posted at {{ value.at|date:'Y-m-d H:i' }}</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row mt-3 text-center">
+    <div class="column col-6">
+        <div class="card border-warning">
+            <h5 class="card-title mt-2 text-center">Request Pending <i class="ti-lock"></i> <span
+                    class="badge badge-warning">{{  notif_data.unread_warning }}</span></h5>
+            <div class="card-body">
+                <div class="card-group">
+                    {% for key,value in notif_data.1.items %}
+                    <div class="card border-warning mb-2 p-4">
+                        <h5 class="card-title mt-2 text-center"> {{ value.content}}</h5>
+                        <p class="card-text">
+                            Value Transition from <strong
+                                class="text-{{ value.data_before_class }}">{{ value.data_before }}</strong>
+                            <i class="ti-arrow-right"></i>
+                            <strong class="text-{{ value.data_after_class}}">{{ value.data_after}}</strong>
+                        </p>
+                        <div class="card-footer border-warning bg-transparent">
+                            <span>Posted at {{ value.at|date:'Y-m-d H:i' }}</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="column col-6">
+        <div class="card border-success">
+            <h5 class="card-title mt-2 text-center">Request Accepted <i class="ti-check"></i> <span
+                    class="badge badge-success">{{  notif_data.unread_warning }}</span></h5>
+            <div class="card-body">
+                <div class="card-group">
+                    {% for key,value in notif_data.1.items %}
+                    <div class="card border-success mb-2 p-4">
+                        <h5 class="card-title mt-2 text-center"> {{ value.content}}</h5>
+                        <p class="card-text">
+                            Value Transition from <strong
+                                class="text-{{ value.data_before_class }}">{{ value.data_before }}</strong>
+                            <i class="ti-arrow-right"></i>
+                            <strong class="text-{{ value.data_after_class}}">{{ value.data_after}}</strong>
+                        </p>
+                        <div class="card-footer border-success bg-transparent">
+                            <span>Posted at {{ value.at|date:'Y-m-d H:i' }}</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}

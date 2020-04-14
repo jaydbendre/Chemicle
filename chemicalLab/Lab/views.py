@@ -94,8 +94,9 @@ def notifications(request):
 
     notif_data = dict()
     s_count = 0
+    w_count = 0
     for n in notification_content:
-        print(n.__dict__.items())
+        # print(n.__dict__.items())
 
         if n.category not in notif_data.keys():
             notif_data[n.category] = dict()
@@ -115,9 +116,29 @@ def notifications(request):
                 "viewed": n.delete_field
             }
             s_count += 1
-            pass
-        elif n.category == 1:
-            pass
+
+        elif n.category == "1":
+            if n.data == None:
+                continue
+            print(n)
+            d1, d2 = n.data.split(",")
+
+            d1_class = "danger"
+            d2_class = "danger"
+            if d1 >= d2:
+                d1_class = "success"
+            else:
+                d2_class = "success"
+
+            notif_data[n.category][n.id] = {
+                "content": n.description,
+                "at": n.timestamp,
+                "data_before": d1,
+                "data_after": d2,
+                "data_before_class": d1_class,
+                "data_after_class": d2_class
+            }
+            w_count += 1
         elif n.category == 2:
             pass
         elif n.category == 3:
@@ -126,6 +147,7 @@ def notifications(request):
             pass
 
     notif_data["unread_schedule"] = s_count
+    notif_data["unread_warning"] = w_count
     print(notif_data.items())
     return render(request, "lab_operator/notifications.html", {"notif_data": notif_data})
 
