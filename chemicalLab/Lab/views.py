@@ -120,7 +120,7 @@ def notifications(request):
         elif n.category == "1":
             if n.data == None:
                 continue
-            print(n)
+            # print(n)
             d1, d2 = n.data.split(",")
 
             d1_class = "danger"
