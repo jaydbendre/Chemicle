@@ -34,12 +34,22 @@
     </div>
   </div>
   
-  
-  <div class="container container-fluid text-center mt-2">
-    Welcome back , {{ request.session.username }}
-    <br />
-    You are  : {{ request.session.role }} 
+  <div class="container-fluid">
+    <form action="{% url 'statistics' %}" method="POST">
+      {% csrf_token %}
+      <div class="row pt--20">
+        <div class="col-md-4">
+          <button class="btn custom-btn" type="submit" value="lab1001" name="lab1001">Lab 1001</button>
+        </div>
+        <div class="col-md-4">
+          <button class="btn custom-btn" type="submit" value="lab1004" name="lab1004">Lab 1004</button>
+        </div>
+        <div class="col-md-4">
+          <button class="btn custom-btn" type="submit" value="compare" name="compare">Compare</button>
+        </div>
+      </div> 
+    </form>
+  {% block analysis %} {% endblock %}
   </div>
-  {% include "./charts/live_data_1004.html" %}
 
 {% endblock%}

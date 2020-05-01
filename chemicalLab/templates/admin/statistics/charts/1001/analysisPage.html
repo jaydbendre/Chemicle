@@ -1,0 +1,31 @@
+{% extends "admin/statistics.html" %}{% load static %}{% block analysis %}
+
+
+<ul class="nav nav-tabs nav-justified md-tabs indigo pt--30" id="myTabJust" role="tablist">
+    <li class="nav-item">
+      <a class="nav-link active" id="home-tab-just" data-toggle="tab" href="#home-just" role="tab" aria-controls="home-just"
+        aria-selected="true">Last 20 Records</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="profile-tab-just" data-toggle="tab" href="#profile-just" role="tab" aria-controls="profile-just"
+        aria-selected="false">Lab Data</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="contact-tab-just" data-toggle="tab" href="#contact-just" role="tab" aria-controls="contact-just"
+        aria-selected="false">Tabular Data</a>
+    </li>
+  </ul>
+  <div class="tab-content card pt-5" id="myTabContentJust">
+    <div class="tab-pane fade show active" id="home-just" role="tabpanel" aria-labelledby="home-tab-just">
+      {% include "admin/statistics/charts/1001/historic_data.html" %}
+    </div>
+    <div class="tab-pane fade" id="profile-just" role="tabpanel" aria-labelledby="profile-tab-just">
+      {% include "lab_operator/charts/analysis/lab_data.html" %}
+    </div>
+    <div class="tab-pane fade" id="contact-just" role="tabpanel" aria-labelledby="contact-tab-just">
+      {% include "lab_operator/charts/analysis/tabular_data.html" %}
+    </div>
+  </div>  
+
+
+{% endblock %}

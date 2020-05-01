@@ -35,13 +35,6 @@
     </div>
   </div>
   
-  
-  <div class="container container-fluid text-center mt-2">
-    Welcome back , {{ request.session.username }}
-    <br />
-    You are  : {{ request.session.role }} 
-  </div>
-  
 <div class="container-fluid">
   <form action="{% url 'table' %}" method="POST">
     {% csrf_token %}
@@ -66,7 +59,6 @@
       </div>
     </div> 
   </form>
-
 {% block table %} {% endblock %}
 </div>
 

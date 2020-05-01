@@ -13,4 +13,7 @@ urlpatterns = [
     path('table/schedules', views.t_schedules, name = 't_schedules'),
     path('table/requests', views.t_requests, name = 't_requests'),
     path('statistics', views.statistics, name = 'statistics'),
+    path('statistics/lab1001', views.lab1001 , name = 'lab1001'),
+    path('statistics/lab1004', views.lab1004, name = 'lab1004'),
+    path('statistics/compare', views.compare, name = 'compare'),
 ]

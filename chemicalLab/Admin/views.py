@@ -44,9 +44,6 @@ def table(request):
             return redirect('/admin/table/requests')
     return render(request,"admin/table.html")  
     
-def statistics(request):
-
-    return render(request,"admin/statistics.html")
 
 def t_users(request):
     if request.method == 'POST':
@@ -269,3 +266,63 @@ def t_requests(request):
     }
     return render(request, "admin/tables/request.html",{"data":data})
     
+def statistics(request):
+    if request.method == 'POST':
+        lab1001 = request.POST.get("lab1001")
+        lab1004 = request.POST.get("lab1004")
+        compare = request.POST.get("compare")
+        if(lab1001 == 'lab1001'):
+            return redirect('/admin/statistics/lab1001')
+        if(lab1004 == 'lab1004'):
+            return redirect('/admin/statistics/lab1004')
+        if(compare == 'compare'):
+            return redirect('/admin/statistics/compare')
+    return render(request,"admin/statistics.html")
+
+def lab1001(request):
+    sensor_data = m.Sensor_log.objects.order_by("-timestamp").all()
+    
+    temperature = []
+    created_at = []
+    humidity = []
+    aqi = []
+
+    for i in sensor_data:
+        if(i.lab_id.id == 1001):
+            temperature.append(i.temperature)
+            created_at.append(datetime.datetime.strftime(i.timestamp, "%d %B, %Y %I:%M %p"))
+            humidity.append(i.humidity)
+            aqi.append(i.air_quality)
+    
+    temp_avg = sum(temperature)/len(temperature)
+    hum_avg = sum(humidity)/len(humidity)
+    aqi_avg = sum(aqi)/len(aqi)
+    
+    temperature = temperature[:20]
+    created_at = created_at[:20]
+    humidity = humidity[:20]
+    aqi = aqi[:20]
+
+    temp_table = zip(temperature, created_at)
+    hum_table = zip(humidity, created_at)
+    aqi_table = zip(aqi, created_at)
+
+    user_number = m.User.objects.filter(lab_id=1001).all()
+    user_number = len(user_number)
+
+    return render(request,"admin/statistics/charts/1001/analysisPage.html", )
+        # return HttpResponse(o)
+        # if o.lab_id.id not in lab_count.keys():
+        #     lab_count[o.lab_id.id] = 1
+        # else:
+        #     lab_count[o.lab_id.id] += 1
+
+    # print(lab_count)
+    # return HttpResponse(sensor_data)
+
+def lab1004(request):
+
+    return HttpResponse("lab1004")
+
+def compare(request):
+    return HttpResponse("compare")
