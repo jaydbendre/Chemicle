@@ -13,14 +13,36 @@ def dashboard(request):
     # user_data = m.User.objects.get(email = email ,password = password)
     # user_data=user_data.__dict__
     # return HttpResponse(user_data.values())
+    sensor_log = m.Sensor_log.objects.order_by("-timestamp").all()
+
+    temperature = []
+    humidity = []
+    aqi = [] 
+
+    for i in sensor_log:
+        temperature.append(i.temperature)
+        humidity.append(i.humidity)
+        aqi.append(i.air_quality)
+    
+    temp_avg = sum(temperature)/len(temperature)
+    hum_avg = sum(humidity)/len(humidity)
+    aqi_avg = sum(aqi)/len(aqi)
+
+    print(temp_avg,hum_avg,aqi_avg)
+
     number_lab_operator = m.User.objects.filter(role_id = 2).all()
     number_lab_incharge = m.User.objects.filter(role_id = 1).all()
-    user_data={
+    number_departments = m.Department.objects.all().count()
+    data={
         "lab_operator" : len(number_lab_operator),
         "lab_incharge" : len(number_lab_incharge),
+        "department": number_departments,
+        "temp_avg": temp_avg,
+        "hum_avg": hum_avg,
+        "aqi_avg": aqi_avg,
     }
     # return HttpResponse(len(number_lab_operator))
-    return render(request, "admin/dashboard.html",user_data)
+    return render(request, "admin/dashboard.html",data)
 
 def table(request):
     if request.method == 'POST':

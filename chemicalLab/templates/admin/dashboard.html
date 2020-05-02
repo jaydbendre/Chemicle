@@ -49,33 +49,100 @@
     You are  : {{ request.session.role }} 
   </div>
 
-  <div class="row mt-4">
-    <div class="col-md-3 height">
-        <div class="card dash-box">
-            <h2> {{ lab_operator }} </h2>
-            <h2>lab </h2>
+ 
+<div class="pt--20">
+  <div class="row">
+    <div class="col-md-4 ">
+      <div class="card">
+        <div class="seo-fact sbg1">
+          <div class="p-4 d-flex justify-content-between align-items-center">
+            <div class="seofct-icon">
+              <i class="fa fa-thermometer-half"></i>Average temperature
+            </div>
+            <h2>{{ temp_avg|floatformat:2 }} °C</h2>
+          </div>
         </div>
+      </div>
     </div>
-    <div class="col-md-3">
-        <div class="card dash-box">
-            <h2> {{ lab_operator }} </h2>
-            <h2>Lab</h2>
+    <div class="col-md-4 ">
+      <div class="card">
+        <div class="seo-fact sbg4">
+          <div class="p-4 d-flex justify-content-between align-items-center">
+            <div class="seofct-icon">
+              <i class="fa fa-tint"></i>Average Humidity
+            </div>
+            <h2>{{ hum_avg|floatformat:2 }} %</h2>
+          </div>
         </div>
+      </div>
     </div>
-    <div class="col-md-3">
-        <div class="card dash-box">
-            <h2> {{ lab_incharge }} </h2>
-            <h2> Lab </h2>
+    <div class="col-md-4 ">
+      <div class="card">
+        <div class="seo-fact sbg2">
+          <div class="p-4 d-flex justify-content-between align-items-center">
+            <div class="seofct-icon">
+              <i class="fa fa-line-chart"></i>
+              Average AQI
+            </div>
+            <h2>{{ aqi_avg|floatformat:2 }} </h2>
+          </div>
         </div>
-    </div>
-    <div class="col-md-3" style="padding-right: 15px !important;">
-        <div class="card dash-box">
-            <h2> {{ lab_incharge }} </h2>
-            <h2>Lab </h2>
-        </div>
+      </div>
     </div>
   </div>
-  
+</div>
+
+<div class="pt--20">
+  <div class="row">
+    <div class="col-md-4 ">
+      <div class="card">
+        <div class="seo-fact sbg2">
+          <div class="p-4 d-flex justify-content-between align-items-center">
+            <div class="seofct-icon">
+              <i class="fa fa-id-card" aria-hidden="true"></i> Lab Incharges
+            </div>
+            <h2>{{ lab_incharge }}</h2>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 ">
+      <div class="card">
+        <div class="seo-fact sbg3">
+          <div class="p-4 d-flex justify-content-between align-items-center">
+            <div class="seofct-icon">
+              <i class="fa fa-flask"></i>Lab Operators
+            </div>
+            <h2>{{ lab_operator }}</h2>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 ">
+      <div class="card">
+        <div class="seo-fact sbg1">
+          <div class="p-4 d-flex justify-content-between align-items-center">
+            <div class="seofct-icon">
+              <i class="fa fa-users"></i>
+              Departments
+            </div>
+            <h2>{{ department }} </h2>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="pt--20">
+  <div class="card text-center">
+    <h5 class="card-title" style="font-weight: bold; font-size: 25px;!important">Live Data</h5>
+    <h6 class="card-subtitle mb-2 text-muted">Fetched from Thingspeak</h6>
+    <div class="card-body">
+      {% include "admin/statistics/live_data.html" %}
+    </div>
+  </div>
+</div>
 
 </div>
 
