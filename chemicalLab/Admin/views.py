@@ -310,7 +310,8 @@ def lab1001(request):
     user_number = m.User.objects.filter(lab_id=1001).all()
     user_number = len(user_number)
 
-    return render(request,"admin/statistics/charts/1001/analysisPage.html", )
+    return render(request,"admin/statistics/charts/1001/analysisPage.html", { "temperature": temperature, "created_at": created_at, "humidity": humidity, "aqi": aqi, "temp_avg": temp_avg,
+    "hum_avg":hum_avg, "aqi_avg":aqi_avg, "temp_table":temp_table, "hum_table":hum_table, "aqi_table":aqi_table, "user_number": user_number })
         # return HttpResponse(o)
         # if o.lab_id.id not in lab_count.keys():
         #     lab_count[o.lab_id.id] = 1
@@ -321,8 +322,99 @@ def lab1001(request):
     # return HttpResponse(sensor_data)
 
 def lab1004(request):
+    sensor_data = m.Sensor_log.objects.order_by("-timestamp").all()
+    
+    temperature = []
+    created_at = []
+    humidity = []
+    aqi = []
 
+    for i in sensor_data:
+        if(i.lab_id.id == 1004):
+            temperature.append(i.temperature)
+            created_at.append(datetime.datetime.strftime(i.timestamp, "%d %B, %Y %I:%M %p"))
+            humidity.append(i.humidity)
+            aqi.append(i.air_quality)
+    
+    temp_avg = sum(temperature)/len(temperature)
+    hum_avg = sum(humidity)/len(humidity)
+    aqi_avg = sum(aqi)/len(aqi)
+    
+    temperature = temperature[:20]
+    created_at = created_at[:20]
+    humidity = humidity[:20]
+    aqi = aqi[:20]
+
+    temp_table = zip(temperature, created_at)
+    hum_table = zip(humidity, created_at)
+    aqi_table = zip(aqi, created_at)
+
+    user_number = m.User.objects.filter(lab_id=1004).all()
+    user_number = len(user_number)
+
+    return render(request,"admin/statistics/charts/1004/analysisPage.html", { "temperature": temperature, "created_at": created_at, "humidity": humidity, "aqi": aqi, "temp_avg": temp_avg,
+    "hum_avg":hum_avg, "aqi_avg":aqi_avg, "temp_table":temp_table, "hum_table":hum_table, "aqi_table":aqi_table, "user_number": user_number })
+        # return HttpResponse(o)
     return HttpResponse("lab1004")
 
 def compare(request):
-    return HttpResponse("compare")
+    sensor_data = m.Sensor_log.objects.order_by("-timestamp").all()
+
+    temperature1 = []
+    created_at1 = []
+    humidity1 = []
+    aqi1 = []
+
+    temperature4 = []
+    created_at4 = []
+    humidity4 = []
+    aqi4 = []
+
+    for i in sensor_data:
+        if(i.lab_id.id == 1001):
+            temperature1.append(i.temperature)
+            created_at1.append(datetime.datetime.strftime(i.timestamp, "%d %B, %Y %I:%M %p"))
+            humidity1.append(i.humidity)
+            aqi1.append(i.air_quality)
+        elif(i.lab_id.id == 1004):
+            temperature4.append(i.temperature)
+            created_at4.append(datetime.datetime.strftime(i.timestamp, "%d %B, %Y %I:%M %p"))
+            humidity4.append(i.humidity)
+            aqi4.append(i.air_quality)
+
+    temp_avg1 = sum(temperature1)/len(temperature1)
+    hum_avg1 = sum(humidity1)/len(humidity1)
+    aqi_avg1 = sum(aqi1)/len(aqi1)
+
+    temp_avg4 = sum(temperature4)/len(temperature4)
+    hum_avg4 = sum(humidity4)/len(humidity4)
+    aqi_avg4 = sum(aqi4)/len(aqi4)
+
+    temperature1 = temperature1[:20]
+    created_at1 = created_at1[:20]
+    humidity1 = humidity1[:20]
+    aqi1 = aqi1[:20]
+
+    temperature4 = temperature4[:20]
+    created_at4 = created_at4[:20]
+    humidity4 = humidity4[:20]
+    aqi4 = aqi4[:20]
+
+    temp_table1 = zip(temperature1, created_at1)
+    hum_table1 = zip(humidity1, created_at1)
+    aqi_table1 = zip(aqi1, created_at1)
+
+    temp_table4 = zip(temperature4, created_at4)
+    hum_table4 = zip(humidity4, created_at4)
+    aqi_table4 = zip(aqi4, created_at4)
+
+    user_number1 = m.User.objects.filter(lab_id=1001).all()
+    user_number1 = len(user_number1)
+
+    user_number4 = m.User.objects.filter(lab_id=1004).all()
+    user_number4 = len(user_number4)
+
+    return render(request,"admin/statistics/charts/compare/analysisPage.html", { "temperature1": temperature1, "created_at1": created_at1, "humidity1": humidity1, "aqi1": aqi1, "temp_avg1": temp_avg1,
+    "hum_avg1":hum_avg1, "aqi_avg1":aqi_avg1, "temp_table1":temp_table1, "hum_table1":hum_table1, "aqi_table1":aqi_table1, "user_number1": user_number1,
+    "temperature4": temperature4, "created_at4": created_at4, "humidity4": humidity4, "aqi4": aqi4, "temp_avg4": temp_avg4,
+    "hum_avg4":hum_avg4, "aqi_avg4":aqi_avg4, "temp_table4":temp_table4, "hum_table4":hum_table4, "aqi_table4":aqi_table4, "user_number4": user_number4 })

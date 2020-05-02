@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link
+      id="themecss"
+      rel="stylesheet"
+      type="text/css"
+      href="//www.shieldui.com/shared/components/latest/css/light-bootstrap/all.min.css"
+    />
+    <script
+      type="text/javascript"
+      src="//www.shieldui.com/shared/components/latest/js/jquery-1.11.1.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="//www.shieldui.com/shared/components/latest/js/shieldui-all.min.js"
+    ></script>
+  </head>
+
+  <body class="theme-light">
+    <div class="pt--30" style="color:#8914fe"> <h2>Temperature</h2></div>
+    <div id="chart"></div>
+    <script type="text/javascript">
+      jQuery(function($) {
+        $("#chart").shieldChart({
+          theme: "bootstrap",
+          primaryHeader: {
+            text: "Temperature"
+          },
+          exportOptions: {
+            image: true,
+            print: true
+          },
+          axisX: {
+            categoricalValues: {{ created_at1|safe }}
+          },
+          tooltipSettings: {
+            chartBound: true,
+            axisMarkers: {
+              enabled: true,
+              mode: "xy"
+            }
+          },
+          dataSeries: [
+            {
+              seriesType: "spline",
+              collectionAlias: "Lab 1001 Temperature in °C",
+              data: {{ temperature1|safe }}
+            },
+            {
+              seriesType: "spline",
+              collectionAlias: "Lab 1004 Temperature in °C",
+              data: {{ temperature4|safe }}
+            },
+          ]
+        });
+      });
+    </script>
+<div class="pt--30" style="color:#8914fe"> <h2>Humidity</h2></div>
+<div id="chart1" class="mt--30"></div>
+<script type="text/javascript">
+  jQuery(function($) {
+    $("#chart1").shieldChart({
+      theme: "bootstrap",
+      primaryHeader: {
+        text: "Humidity"
+      },
+      exportOptions: {
+        image: true,
+        print: true
+      },
+      axisX: {
+        categoricalValues: {{ created_at1|safe }}
+      },
+      tooltipSettings: {
+        chartBound: true,
+        axisMarkers: {
+          enabled: true,
+          mode: "xy"
+        }
+      },
+      dataSeries: [
+        {
+          seriesType: "spline",
+          collectionAlias: "Lab 1001 Humidity in %",
+          data: {{ humidity1|safe }}
+        },
+        {
+          seriesType: "spline",
+          collectionAlias: "Lab 1004 Humidity in %",
+          data: {{ humidity4|safe }}
+        },
+      ]
+    });
+  });
+</script>
+<div class="pt--30" style="color:#8914fe"> <h2>Air Quality</h2></div>
+<div id="chart2" ></div>
+    <script type="text/javascript">
+      jQuery(function($) {
+        $("#chart2").shieldChart({
+          theme: "bootstrap",
+          primaryHeader: {
+            text: "Air Quality"
+          },
+          exportOptions: {
+            image: true,
+            print: true
+          },
+          axisX: {
+            categoricalValues: {{ created_at1|safe }}
+          },
+          tooltipSettings: {
+            chartBound: true,
+            axisMarkers: {
+              enabled: true,
+              mode: "xy"
+            }
+          },
+          dataSeries: [
+            {
+              seriesType: "spline",
+              collectionAlias: "Lab 1001 Air Quality Index",
+              data: {{ aqi1|safe }}
+            },
+            {
+              seriesType: "spline",
+              collectionAlias: "Lab 1004 Air Quality Index",
+              data: {{ aqi4|safe }}
+            },
+          ]
+        });
+      });
+    </script>
+  </body>
+</html>
