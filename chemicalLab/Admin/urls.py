@@ -16,4 +16,6 @@ urlpatterns = [
     path('statistics/lab1001', views.lab1001 , name = 'lab1001'),
     path('statistics/lab1004', views.lab1004, name = 'lab1004'),
     path('statistics/compare', views.compare, name = 'compare'),
+    path('livedata', views.livedata, name = 'livedata'),
+    
 ]

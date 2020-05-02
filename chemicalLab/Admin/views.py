@@ -33,6 +33,22 @@ def dashboard(request):
     number_lab_operator = m.User.objects.filter(role_id = 2).all()
     number_lab_incharge = m.User.objects.filter(role_id = 1).all()
     number_departments = m.Department.objects.all().count()
+    user_data = m.User.objects.values_list()
+    user_content = dict()
+    count = 0 
+    for user in user_data:
+        if(count == 10):
+            break
+        user_content[str(user[0])] = {
+            "id" : user[0],
+            "fname" : user[1],
+            "lname" : user[2],
+            "email" : user[3],
+            "address" : user[5],
+            "role_id" : user[6],
+            "lab_id" : user[7]
+        }
+        count += 1
     data={
         "lab_operator" : len(number_lab_operator),
         "lab_incharge" : len(number_lab_incharge),
@@ -40,6 +56,7 @@ def dashboard(request):
         "temp_avg": temp_avg,
         "hum_avg": hum_avg,
         "aqi_avg": aqi_avg,
+        'user_data':user_content
     }
     # return HttpResponse(len(number_lab_operator))
     return render(request, "admin/dashboard.html",data)
@@ -440,3 +457,6 @@ def compare(request):
     "hum_avg1":hum_avg1, "aqi_avg1":aqi_avg1, "temp_table1":temp_table1, "hum_table1":hum_table1, "aqi_table1":aqi_table1, "user_number1": user_number1,
     "temperature4": temperature4, "created_at4": created_at4, "humidity4": humidity4, "aqi4": aqi4, "temp_avg4": temp_avg4,
     "hum_avg4":hum_avg4, "aqi_avg4":aqi_avg4, "temp_table4":temp_table4, "hum_table4":hum_table4, "aqi_table4":aqi_table4, "user_number4": user_number4 })
+
+def livedata(request):
+    return render(request, "admin/livedatapage.html")
