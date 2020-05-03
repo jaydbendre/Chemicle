@@ -1,5 +1,6 @@
 from django.shortcuts import render,redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 from . import models as m
 import datetime
 
@@ -460,3 +461,57 @@ def compare(request):
 
 def livedata(request):
     return render(request, "admin/livedatapage.html")
+
+@csrf_exempt
+def get_schedule_details_1001(request):
+    date = request.POST["date"]
+    date = datetime.datetime.strptime(date, "%Y-%m-%d")
+    schedule_data = m.Schedule.objects.order_by("date").all()
+    data = []
+    flag = False
+    for s in schedule_data:
+        s_date = datetime.datetime.strptime(str(s.date), "%Y-%m-%d")
+        if date == s_date and s.lab_id == 1001:
+            flag = True
+            user_data = m.User.objects.get(id=s.added_by_id)
+            data.append({
+                "start_time": s.start_time,
+                "end_time": s.end_time,
+                "description": s.description,
+                "lab_id": s.lab_id,
+                "added_by": user_data.fname + " " + user_data.lname,
+                "event_type": s.event_type,
+                "title": s.title,
+            })
+
+    if flag:
+        return JsonResponse(data, safe=False)
+
+    return JsonResponse({"error": "No events found for the day"})
+
+@csrf_exempt
+def get_schedule_details_1004(request):
+    date = request.POST["date"]
+    date = datetime.datetime.strptime(date, "%Y-%m-%d")
+    schedule_data = m.Schedule.objects.order_by("date").all()
+    data = []
+    flag = False
+    for s in schedule_data:
+        s_date = datetime.datetime.strptime(str(s.date), "%Y-%m-%d")
+        if date == s_date and s.lab_id == 1004:
+            flag = True
+            user_data = m.User.objects.get(id=s.added_by_id)
+            data.append({
+                "start_time": s.start_time,
+                "end_time": s.end_time,
+                "description": s.description,
+                "lab_id": s.lab_id,
+                "added_by": user_data.fname + " " + user_data.lname,
+                "event_type": s.event_type,
+                "title": s.title,
+            })
+
+    if flag:
+        return JsonResponse(data, safe=False)
+
+    return JsonResponse({"error": "No events found for the day"})

@@ -11,10 +11,10 @@ conn = mysql.connector.connect(
 
 cursor = conn.cursor()
 
-for i in range(1000):
+for i in range(500):
     year = 2020
-    month = 3
-    day = random.randint(1,31)
+    month = 4
+    day = random.randint(1,30)
     hour = random.randint(0,23)
 
     date = str(year)+ "-"+str(month)+"-"+str(day)
@@ -27,7 +27,7 @@ for i in range(1000):
     "end_time" : str(datetime.datetime.strptime(end_time , "%H:%M").time()),
     "description" : "Lorem ipsum",
     "added_by_id" : 10002,
-    "lab_id" : 1001,
+    "lab_id" : 1004,
     "event_type" : random.randint(0,2),
     "title" : "This is a new notification"
     }
