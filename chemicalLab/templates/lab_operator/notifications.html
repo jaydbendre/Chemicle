@@ -14,6 +14,33 @@
     crossorigin="anonymous"></script>
 <script src="{% static 'js/vendor/jquery-2.2.4.min.js' %}"></script>
 
+<div class="page-title-area">
+    <div class="row align-items-center">
+        <div class="col-sm-6">
+            <div class="breadcrumbs-area clearfix">
+                <h4 class="page-title pull-left">Notifications</h4>
+                <ul class="breadcrumbs pull-left">
+                    <li><a href="{% url 'login' %}">Home</a></li>
+                    <li><span>Notifications</span></li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-sm-6 clearfix">
+            <div class="user-profile pull-right">
+                <img class="avatar user-thumb" src="{% static 'images/author/avatar.png' %}" alt="avatar" />
+                <h4 class="user-name dropdown-toggle" data-toggle="dropdown">
+                    {{ request.session.username }} <i class="fa fa-angle-down"></i>
+                </h4>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="#">Message</a>
+                    <a class="dropdown-item" href="#">Settings</a>
+                    <a class="dropdown-item" href="{% url 'logout' %}">Log Out</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="text-center mt-5">
     <h5>
         Notifications <i class="ti-bell"></i>
@@ -72,22 +99,40 @@
     </div>
 </div>
 <div class="row mt-3 text-center">
-    <div class="column col-6">
+    <div class="column col-4">
         <div class="card border-warning">
             <h5 class="card-title mt-2 text-center">Request Pending <i class="ti-lock"></i> <span
-                    class="badge badge-warning">{{  notif_data.unread_warning }}</span></h5>
+                    class="badge badge-warning">{{  notif_data.unread_r_sent }}</span></h5>
             <div class="card-body">
                 <div class="card-group">
-                    {% for key,value in notif_data.1.items %}
+                    {% for key,value in notif_data.2.items %}
                     <div class="card border-warning mb-2 p-4">
-                        <h5 class="card-title mt-2 text-center"> {{ value.content}}</h5>
+                        <h6 class="card-title mt-2 text-center"> {{ value.session_at }}</h5>
+                            <p class="card-text">
+                                {{ value.content }}, sent to {{value.request_to}}
+                            </p>
+                            <div class="card-footer border-warning bg-transparent">
+                                <span>Posted at {{ value.at|date:'Y-m-d H:i' }}</span>
+                            </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="column col-4">
+        <div class="card border-success">
+            <h5 class="card-title mt-2 text-center">Request Accepted <i class="ti-check"></i> <span
+                    class="badge badge-success">{{  notif_data.unread_r_accept }}</span></h5>
+            <div class="card-body">
+                <div class="card-group">
+                    {% for key,value in notif_data.3.items %}
+                    <div class="card border-success mb-2 p-4">
+                        <h5 class="card-title mt-2 text-center"> {{ value.session_at }}</h5>
                         <p class="card-text">
-                            Value Transition from <strong
-                                class="text-{{ value.data_before_class }}">{{ value.data_before }}</strong>
-                            <i class="ti-arrow-right"></i>
-                            <strong class="text-{{ value.data_after_class}}">{{ value.data_after}}</strong>
+                            {{ value.content }}, accepted by {{value.request_to}}
                         </p>
-                        <div class="card-footer border-warning bg-transparent">
+                        <div class="card-footer border-success bg-transparent">
                             <span>Posted at {{ value.at|date:'Y-m-d H:i' }}</span>
                         </div>
                     </div>
@@ -96,22 +141,19 @@
             </div>
         </div>
     </div>
-    <div class="column col-6">
-        <div class="card border-success">
-            <h5 class="card-title mt-2 text-center">Request Accepted <i class="ti-check"></i> <span
-                    class="badge badge-success">{{  notif_data.unread_warning }}</span></h5>
+    <div class="column col-4">
+        <div class="card border-danger">
+            <h5 class="card-title mt-2 text-center">Request Rejected <i class="ti-close"></i> <span
+                    class="badge badge-danger">{{  notif_data.unread_r_reject }}</span></h5>
             <div class="card-body">
                 <div class="card-group">
-                    {% for key,value in notif_data.1.items %}
-                    <div class="card border-success mb-2 p-4">
-                        <h5 class="card-title mt-2 text-center"> {{ value.content}}</h5>
+                    {% for key,value in notif_data.4.items %}
+                    <div class="card border-danger mb-2 p-4">
+                        <h5 class="card-title mt-2 text-center"> {{ value.session_at }}</h5>
                         <p class="card-text">
-                            Value Transition from <strong
-                                class="text-{{ value.data_before_class }}">{{ value.data_before }}</strong>
-                            <i class="ti-arrow-right"></i>
-                            <strong class="text-{{ value.data_after_class}}">{{ value.data_after}}</strong>
+                            {{ value.content }}, rejected by {{value.request_to}}
                         </p>
-                        <div class="card-footer border-success bg-transparent">
+                        <div class="card-footer border-danger bg-transparent">
                             <span>Posted at {{ value.at|date:'Y-m-d H:i' }}</span>
                         </div>
                     </div>

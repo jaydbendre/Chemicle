@@ -95,6 +95,9 @@ def notifications(request):
     notif_data = dict()
     s_count = 0
     w_count = 0
+    request_sent_count = 0
+    request_accepted_count = 0
+    request_rejected_count = 0
     for n in notification_content:
         # print(n.__dict__.items())
 
@@ -139,16 +142,75 @@ def notifications(request):
                 "data_after_class": d2_class
             }
             w_count += 1
-        elif n.category == 2:
+        elif n.category == "2":
+            """
+            Request sent
+            """
+            print("Hi")
+            if n.data == None:
+                continue
+            date,start_time,end_time,uid = n.data.split(",")
+            user = m.User.objects.get(id = uid)
+            request_to = user.fname + " "+user.lname
+            notif_data[n.category][n.id] = {
+                "content": n.description,
+                "at" : n.timestamp,
+                "session_at": "On " + date + " from "+ start_time + " - "+end_time,
+                "date": date,
+                "start_time" : start_time,
+                "end_time": end_time,
+                "request_to" : request_to
+            }
+            request_sent_count += 1
             pass
-        elif n.category == 3:
+        elif n.category == "3":
+            """
+            Request accepted
+            """
+            if n.data == None:
+                continue
+            date,start_time,end_time,uid = n.data.split(",")
+            user = m.User.objects.get(id = uid)
+            request_to = user.fname + " "+user.lname
+            notif_data[n.category][n.id] = {
+                "content": n.description,
+                "at" : n.timestamp,
+                "session_at": "On " + date + " from "+ start_time + " - "+end_time,
+                "date": date,
+                "start_time" : start_time,
+                "end_time": end_time,
+                "request_to" : request_to
+            }
+            request_accepted_count += 1
             pass
-        else:
+        elif n.category == "4":
+            """
+            Request rejected
+            """
+            if n.data == None:
+                continue
+            date,start_time,end_time,uid = n.data.split(",")
+            user = m.User.objects.get(id = uid)
+            request_to = user.fname + " "+user.lname
+            notif_data[n.category][n.id] = {
+                "content": n.description,
+                "at" : n.timestamp,
+                "session_at": "On " + date + " from "+ start_time + " - "+end_time,
+                "date": date,
+                "start_time" : start_time,
+                "end_time": end_time,
+                "request_to" : request_to
+            }
+            request_rejected_count += 1
             pass
 
     notif_data["unread_schedule"] = s_count
     notif_data["unread_warning"] = w_count
-    print(notif_data.items())
+    notif_data["unread_r_sent"] = request_sent_count
+    notif_data["unread_r_accept"] = request_accepted_count
+    notif_data["unread_r_reject"] = request_rejected_count
+    
+    # print(notif_data.items())
     return render(request, "lab_operator/notifications.html", {"notif_data": notif_data})
 
 
