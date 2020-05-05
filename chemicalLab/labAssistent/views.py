@@ -1,6 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.http import HttpResponse, JsonResponse
 from Lab import models as m
+import datetime
 # Create your views here.
 
 """
@@ -80,3 +81,57 @@ def success_submit(request):
         data.added_by = added_by
         data.save()
         return render(request, 'incharge/schedule.html', {"success":"Event added successfully!"})
+
+def render_request(request):
+    notif_data = m.Notification.objects.filter(category = "2").order_by("-timestamp").all()
+    user_id = m.User.objects.get(email = request.session["email"])
+    requests = list()
+    i = 0
+    
+    for n in notif_data:
+        if n.data == None:
+            continue
+        
+        date,start_time,end_time,uid = n.data.split(",")
+        user = m.User.objects.get(id = n.Notification_to.id)
+        name = user.fname + " "+ user.lname
+
+        start_timestamp = datetime.datetime.strptime(date + " "+start_time,"%d-%m-%Y %H:%M")
+        end_timestamp = datetime.datetime.strptime(date + " "+end_time,"%d-%m-%Y %H:%M")
+        
+        requests.append({
+            "id":n.id,  
+            "content" : n.description,
+            "at" : n.timestamp,
+            "date" : start_timestamp.date(),
+            "time" : str(start_timestamp.strftime("%I:%M %p")) + " - "+str(end_timestamp.strftime("%I:%M %p")),
+            "request_from" : name
+        })
+    return render(request , "incharge/requests.html",{"requests" : requests})
+
+def accept_request(request,request_id):
+    notif = m.Notification.objects.filter(id = request_id).update(category = "3")
+    notif = m.Notification.objects.get(id = request_id)
+    desc = notif.description
+    date,start_time,end_time,uid = notif.data.split(",")
+    start_timestamp = datetime.datetime.strptime(date + " "+ start_time , "%d-%m-%Y %H:%M")
+    end_timestamp = datetime.datetime.strptime(date + " "+ end_time , "%d-%m-%Y %H:%M")
+    
+    user = m.User.objects.get(email = request.session["email"])
+    lab = m.Lab.objects.get(id = request.session["lab_id"])
+    
+    schedule_row = m.Schedule(date = start_timestamp.date(),
+                              start_time = start_timestamp.time(),
+                              end_time = end_timestamp.time(),
+                              added_by = user,
+                              lab = lab,
+                              title = "Request accepted",
+                              description = desc,
+                              event_type = 0)
+    schedule_row.save()
+    return redirect("/incharge/requests")
+
+def reject_request(request,request_id):
+    notif = m.Notification.objects.filter(id = request_id).update(category = "4")
+    return redirect("/incharge/requests")
+    pass
