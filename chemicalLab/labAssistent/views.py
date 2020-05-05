@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse , JsonResponse
 from Lab import models as m
 # Create your views here.
@@ -49,3 +49,30 @@ def schedule(request):
 
 def analysis(request):
     return render(request , "incharge/analysis.html")
+
+def success_submit(request):
+    submit_data = request.POST
+    start_date = request.POST['startDate']
+    start_time = request.POST['startTime']
+    end_time = request.POST['endTime']
+    title = request.POST['title']
+    description = request.POST['description']
+    event_type = request.POST['eventType']
+
+    if event_type == 'test1':
+        event_type = 0
+    elif event_type == 'test2':
+        event_type = 1
+    else:
+        event_type = 2
+    
+    if start_date == '' or start_time == '' or  end_time == '' or title == '' or description == '' or event_type == '':
+        pass
+
+    else:
+        user_data = m.User.objects.get(email = request.session['email'])
+        lab_data = m.Lab.objects.get(id = request.session['lab_id'])
+        data = m.Schedule.objects.create(date = start_date, start_time = start_time, end_time = end_time, title = title, description = description, event_type = event_type, lab = lab_data, added_by = user_data)
+        data.save()
+        # return HttpResponse(submit_data.items())
+        return redirect('/incharge/schedule')

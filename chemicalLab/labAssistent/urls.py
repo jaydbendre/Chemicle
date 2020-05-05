@@ -30,4 +30,5 @@ urlpatterns = [
     path("", views.dashboard, name='incharge_dashboard'),
     path("schedule", views.schedule, name='incharge_schedule'),
     path("analysis" , views.analysis, name = "incharge_analysis"),
+    path("success_submit", views.success_submit, name = 'success_submit'),
 ]

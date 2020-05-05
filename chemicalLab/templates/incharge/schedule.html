@@ -141,37 +141,38 @@
         <div class="modal-content">
           <div class="container mr-auto text-center">
             <h5 class = "mb-4 mt-0">Please fill your event details</h5>
-          <form>
+          <form action = '{% url "success_submit" %}' method = 'POST'>
+          {% csrf_token %}
             <div class="form-group">
               <label for="start-date-input">Start Date</label>
-                <input class="form-control" type="date" id="start-date-input" />
+                <input class="form-control" type="date" id="start-date-input" name = 'startDate'/>
             </div>
             <div class = "form-group">
               <label for="start-time-input">Start Time</label>
-                <input class="form-control" type="time" id="start-time-input" />
+                <input class="form-control" type="time" id="start-time-input" name = 'startTime' />
             </div>
             <div class = "form-group">
               <label for="end-time-input">End Time</label>
-                <input class="form-control" type="time" id="end-time-input" />
+                <input class="form-control" type="time" id="end-time-input" name = 'endTime'/>
             </div>
             <div class="form-group">
               <label for="title">Title</label>
-              <textarea class="form-control" id="title" rows="1"></textarea>
+              <textarea class="form-control" id="title" rows="1" name = 'title'></textarea>
             </div>
             <div class="form-group">
               <label for="description">Description</label>
-              <textarea class="form-control" id="description" rows="3"></textarea>
+              <textarea class="form-control" id="description" rows="3" name = 'description'></textarea>
             </div>
             <div class="form-group">
               <label for="eventType">Event Type</label>
-              <select class="form-control" id="eventType">
+              <select class="form-control" id="eventType" name = 'eventType'>
                 <option>test1</option>
                 <option>test2</option>
                 <option>test3</option>
               </select>
             </div>
             <div class="form-group">
-              <a class="btn" style="background-color:#2a3246;color:white" id="range">Submit</a>
+              <button class="btn" style="background-color:#2a3246;color:white" id="range" type = 'Submit'>Submit</button>
             </div>
             </div>
           </form>
