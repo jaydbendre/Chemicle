@@ -1,5 +1,6 @@
 from django.shortcuts import render,redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 from . import models as m
 import datetime
 
@@ -13,14 +14,53 @@ def dashboard(request):
     # user_data = m.User.objects.get(email = email ,password = password)
     # user_data=user_data.__dict__
     # return HttpResponse(user_data.values())
+    sensor_log = m.Sensor_log.objects.order_by("-timestamp").all()
+
+    temperature = []
+    humidity = []
+    aqi = [] 
+
+    for i in sensor_log:
+        temperature.append(i.temperature)
+        humidity.append(i.humidity)
+        aqi.append(i.air_quality)
+    
+    temp_avg = sum(temperature)/len(temperature)
+    hum_avg = sum(humidity)/len(humidity)
+    aqi_avg = sum(aqi)/len(aqi)
+
+    print(temp_avg,hum_avg,aqi_avg)
+
     number_lab_operator = m.User.objects.filter(role_id = 2).all()
     number_lab_incharge = m.User.objects.filter(role_id = 1).all()
-    user_data={
+    number_departments = m.Department.objects.all().count()
+    user_data = m.User.objects.values_list()
+    user_content = dict()
+    count = 0 
+    for user in user_data:
+        if(count == 10):
+            break
+        user_content[str(user[0])] = {
+            "id" : user[0],
+            "fname" : user[1],
+            "lname" : user[2],
+            "email" : user[3],
+            "address" : user[5],
+            "role_id" : user[6],
+            "lab_id" : user[7]
+        }
+        count += 1
+    data={
         "lab_operator" : len(number_lab_operator),
         "lab_incharge" : len(number_lab_incharge),
+        "department": number_departments,
+        "temp_avg": temp_avg,
+        "hum_avg": hum_avg,
+        "aqi_avg": aqi_avg,
+        'user_data':user_content
     }
     # return HttpResponse(len(number_lab_operator))
-    return render(request, "admin/dashboard.html",user_data)
+    return render(request, "admin/dashboard.html",data)
 
 def table(request):
     if request.method == 'POST':
@@ -44,9 +84,6 @@ def table(request):
             return redirect('/admin/table/requests')
     return render(request,"admin/table.html")  
     
-def statistics(request):
-
-    return render(request,"admin/statistics.html")
 
 def t_users(request):
     if request.method == 'POST':
@@ -269,3 +306,212 @@ def t_requests(request):
     }
     return render(request, "admin/tables/request.html",{"data":data})
     
+def statistics(request):
+    if request.method == 'POST':
+        lab1001 = request.POST.get("lab1001")
+        lab1004 = request.POST.get("lab1004")
+        compare = request.POST.get("compare")
+        if(lab1001 == 'lab1001'):
+            return redirect('/admin/statistics/lab1001')
+        if(lab1004 == 'lab1004'):
+            return redirect('/admin/statistics/lab1004')
+        if(compare == 'compare'):
+            return redirect('/admin/statistics/compare')
+    return render(request,"admin/statistics.html")
+
+def lab1001(request):
+    sensor_data = m.Sensor_log.objects.order_by("-timestamp").all()
+    
+    temperature = []
+    created_at = []
+    humidity = []
+    aqi = []
+
+    for i in sensor_data:
+        if(i.lab_id.id == 1001):
+            temperature.append(i.temperature)
+            created_at.append(datetime.datetime.strftime(i.timestamp, "%d %B, %Y %I:%M %p"))
+            humidity.append(i.humidity)
+            aqi.append(i.air_quality)
+    
+    temp_avg = sum(temperature)/len(temperature)
+    hum_avg = sum(humidity)/len(humidity)
+    aqi_avg = sum(aqi)/len(aqi)
+    
+    temperature = temperature[:20]
+    created_at = created_at[:20]
+    humidity = humidity[:20]
+    aqi = aqi[:20]
+
+    temp_table = zip(temperature, created_at)
+    hum_table = zip(humidity, created_at)
+    aqi_table = zip(aqi, created_at)
+
+    user_number = m.User.objects.filter(lab_id=1001).all()
+    user_number = len(user_number)
+
+    return render(request,"admin/statistics/charts/1001/analysisPage.html", { "temperature": temperature, "created_at": created_at, "humidity": humidity, "aqi": aqi, "temp_avg": temp_avg,
+    "hum_avg":hum_avg, "aqi_avg":aqi_avg, "temp_table":temp_table, "hum_table":hum_table, "aqi_table":aqi_table, "user_number": user_number })
+        # return HttpResponse(o)
+        # if o.lab_id.id not in lab_count.keys():
+        #     lab_count[o.lab_id.id] = 1
+        # else:
+        #     lab_count[o.lab_id.id] += 1
+
+    # print(lab_count)
+    # return HttpResponse(sensor_data)
+
+def lab1004(request):
+    sensor_data = m.Sensor_log.objects.order_by("-timestamp").all()
+    
+    temperature = []
+    created_at = []
+    humidity = []
+    aqi = []
+
+    for i in sensor_data:
+        if(i.lab_id.id == 1004):
+            temperature.append(i.temperature)
+            created_at.append(datetime.datetime.strftime(i.timestamp, "%d %B, %Y %I:%M %p"))
+            humidity.append(i.humidity)
+            aqi.append(i.air_quality)
+    
+    temp_avg = sum(temperature)/len(temperature)
+    hum_avg = sum(humidity)/len(humidity)
+    aqi_avg = sum(aqi)/len(aqi)
+    
+    temperature = temperature[:20]
+    created_at = created_at[:20]
+    humidity = humidity[:20]
+    aqi = aqi[:20]
+
+    temp_table = zip(temperature, created_at)
+    hum_table = zip(humidity, created_at)
+    aqi_table = zip(aqi, created_at)
+
+    user_number = m.User.objects.filter(lab_id=1004).all()
+    user_number = len(user_number)
+
+    return render(request,"admin/statistics/charts/1004/analysisPage.html", { "temperature": temperature, "created_at": created_at, "humidity": humidity, "aqi": aqi, "temp_avg": temp_avg,
+    "hum_avg":hum_avg, "aqi_avg":aqi_avg, "temp_table":temp_table, "hum_table":hum_table, "aqi_table":aqi_table, "user_number": user_number })
+        # return HttpResponse(o)
+    return HttpResponse("lab1004")
+
+def compare(request):
+    sensor_data = m.Sensor_log.objects.order_by("-timestamp").all()
+
+    temperature1 = []
+    created_at1 = []
+    humidity1 = []
+    aqi1 = []
+
+    temperature4 = []
+    created_at4 = []
+    humidity4 = []
+    aqi4 = []
+
+    for i in sensor_data:
+        if(i.lab_id.id == 1001):
+            temperature1.append(i.temperature)
+            created_at1.append(datetime.datetime.strftime(i.timestamp, "%d %B, %Y %I:%M %p"))
+            humidity1.append(i.humidity)
+            aqi1.append(i.air_quality)
+        elif(i.lab_id.id == 1004):
+            temperature4.append(i.temperature)
+            created_at4.append(datetime.datetime.strftime(i.timestamp, "%d %B, %Y %I:%M %p"))
+            humidity4.append(i.humidity)
+            aqi4.append(i.air_quality)
+
+    temp_avg1 = sum(temperature1)/len(temperature1)
+    hum_avg1 = sum(humidity1)/len(humidity1)
+    aqi_avg1 = sum(aqi1)/len(aqi1)
+
+    temp_avg4 = sum(temperature4)/len(temperature4)
+    hum_avg4 = sum(humidity4)/len(humidity4)
+    aqi_avg4 = sum(aqi4)/len(aqi4)
+
+    temperature1 = temperature1[:20]
+    created_at1 = created_at1[:20]
+    humidity1 = humidity1[:20]
+    aqi1 = aqi1[:20]
+
+    temperature4 = temperature4[:20]
+    created_at4 = created_at4[:20]
+    humidity4 = humidity4[:20]
+    aqi4 = aqi4[:20]
+
+    temp_table1 = zip(temperature1, created_at1)
+    hum_table1 = zip(humidity1, created_at1)
+    aqi_table1 = zip(aqi1, created_at1)
+
+    temp_table4 = zip(temperature4, created_at4)
+    hum_table4 = zip(humidity4, created_at4)
+    aqi_table4 = zip(aqi4, created_at4)
+
+    user_number1 = m.User.objects.filter(lab_id=1001).all()
+    user_number1 = len(user_number1)
+
+    user_number4 = m.User.objects.filter(lab_id=1004).all()
+    user_number4 = len(user_number4)
+
+    return render(request,"admin/statistics/charts/compare/analysisPage.html", { "temperature1": temperature1, "created_at1": created_at1, "humidity1": humidity1, "aqi1": aqi1, "temp_avg1": temp_avg1,
+    "hum_avg1":hum_avg1, "aqi_avg1":aqi_avg1, "temp_table1":temp_table1, "hum_table1":hum_table1, "aqi_table1":aqi_table1, "user_number1": user_number1,
+    "temperature4": temperature4, "created_at4": created_at4, "humidity4": humidity4, "aqi4": aqi4, "temp_avg4": temp_avg4,
+    "hum_avg4":hum_avg4, "aqi_avg4":aqi_avg4, "temp_table4":temp_table4, "hum_table4":hum_table4, "aqi_table4":aqi_table4, "user_number4": user_number4 })
+
+def livedata(request):
+    return render(request, "admin/livedatapage.html")
+
+@csrf_exempt
+def get_schedule_details_1001(request):
+    date = request.POST["date"]
+    date = datetime.datetime.strptime(date, "%Y-%m-%d")
+    schedule_data = m.Schedule.objects.order_by("date").all()
+    data = []
+    flag = False
+    for s in schedule_data:
+        s_date = datetime.datetime.strptime(str(s.date), "%Y-%m-%d")
+        if date == s_date and s.lab_id == 1001:
+            flag = True
+            user_data = m.User.objects.get(id=s.added_by_id)
+            data.append({
+                "start_time": s.start_time,
+                "end_time": s.end_time,
+                "description": s.description,
+                "lab_id": s.lab_id,
+                "added_by": user_data.fname + " " + user_data.lname,
+                "event_type": s.event_type,
+                "title": s.title,
+            })
+
+    if flag:
+        return JsonResponse(data, safe=False)
+
+    return JsonResponse({"error": "No events found for the day"})
+
+@csrf_exempt
+def get_schedule_details_1004(request):
+    date = request.POST["date"]
+    date = datetime.datetime.strptime(date, "%Y-%m-%d")
+    schedule_data = m.Schedule.objects.order_by("date").all()
+    data = []
+    flag = False
+    for s in schedule_data:
+        s_date = datetime.datetime.strptime(str(s.date), "%Y-%m-%d")
+        if date == s_date and s.lab_id == 1004:
+            flag = True
+            user_data = m.User.objects.get(id=s.added_by_id)
+            data.append({
+                "start_time": s.start_time,
+                "end_time": s.end_time,
+                "description": s.description,
+                "lab_id": s.lab_id,
+                "added_by": user_data.fname + " " + user_data.lname,
+                "event_type": s.event_type,
+                "title": s.title,
+            })
+
+    if flag:
+        return JsonResponse(data, safe=False)
+
+    return JsonResponse({"error": "No events found for the day"})

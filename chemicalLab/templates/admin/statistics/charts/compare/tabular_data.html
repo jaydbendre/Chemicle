@@ -1,0 +1,189 @@
+<!-- page title area end -->
+<div class="main-content-inner">
+    <div class="row text-center">
+        <!-- table primary start -->
+        <div class="col-lg-6 mt-0">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="header-title">Lab 1001 Temperature</h4>
+                    <div class="single-table">
+                        <div class="table-responsive">
+                            <table class="table text-center">
+                                <thead class="text-uppercase bg-primary">
+                                    <tr class="text-white">
+                                        <th scope="col">ID</th>
+                                        <th scope="col">Timestamp</th>
+                                        <th scope="col">Temperature</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for temp1 , created_at1 in temp_table1 %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ created_at1 }}</td>
+                                        <td>{{ temp1|floatformat:2 }} °C</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 mt-0">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="header-title">Lab 1004 Temperature</h4>
+                    <div class="single-table">
+                        <div class="table-responsive">
+                            <table class="table text-center">
+                                <thead class="text-uppercase bg-primary">
+                                    <tr class="text-white">
+                                        <th scope="col">ID</th>
+                                        <th scope="col">Timestamp</th>
+                                        <th scope="col">Temperature</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for temp4 , created_at4 in temp_table4 %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ created_at4 }}</td>
+                                        <td>{{ temp4|floatformat:2 }} °C</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- table primary end -->
+        <!-- table success start -->
+        <div class="col-lg-6 mt-5">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="header-title">Lab 1001 Humidity</h4>
+                    <div class="single-table">
+                        <div class="table-responsive">
+                            <table class="table text-center">
+                                <thead class="text-uppercase bg-success">
+                                    <tr class="text-white">
+                                        <th scope="col">ID</th>
+                                        <th scope="col">Timestamp</th>
+                                        <th scope="col">Humidity %</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for hum1 , created_at1 in hum_table1 %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ created_at1 }}</td>
+                                        <td>{{ hum1|floatformat:2 }} %</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 mt-5">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="header-title">Lab 1004 Humidity</h4>
+                    <div class="single-table">
+                        <div class="table-responsive">
+                            <table class="table text-center">
+                                <thead class="text-uppercase bg-success">
+                                    <tr class="text-white">
+                                        <th scope="col">ID</th>
+                                        <th scope="col">Timestamp</th>
+                                        <th scope="col">Humidity %</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for hum4 , created_at4 in hum_table4 %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ created_at4 }}</td>
+                                        <td>{{ hum4|floatformat:2 }} %</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- table success end -->
+        <!-- table info start -->
+        <div class="col-lg-6 mt-5">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="header-title">Lab 1001 Air Quality</h4>
+                    <div class="single-table">
+                        <div class="table-responsive">
+                            <table class="table text-center">
+                                <thead class="text-uppercase bg-info">
+                                    <tr class="text-white">
+                                        <th scope="col">ID</th>
+                                        <th scope="col">Timestamp</th>
+                                        <th scope="col">Air Quality Index</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for aqi1, created_at1 in aqi_table1 %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ created_at1 }}</td>
+                                        <td>{{ aqi1 }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 mt-5">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="header-title">Lab 1004 Air Quality</h4>
+                    <div class="single-table">
+                        <div class="table-responsive">
+                            <table class="table text-center">
+                                <thead class="text-uppercase bg-info">
+                                    <tr class="text-white">
+                                        <th scope="col">ID</th>
+                                        <th scope="col">Timestamp</th>
+                                        <th scope="col">Air Quality Index</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for aqi4, created_at4 in aqi_table4 %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ created_at4 }}</td>
+                                        <td>{{ aqi4 }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- table info end -->
+        <!-- table warning start -->
+        
+        <!-- Contextual Classes end -->
+    </div>
+</div>
+</div>

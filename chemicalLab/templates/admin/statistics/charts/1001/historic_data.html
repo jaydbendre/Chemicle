@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link
+      id="themecss"
+      rel="stylesheet"
+      type="text/css"
+      href="//www.shieldui.com/shared/components/latest/css/light-bootstrap/all.min.css"
+    />
+    <script
+      type="text/javascript"
+      src="//www.shieldui.com/shared/components/latest/js/jquery-1.11.1.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="//www.shieldui.com/shared/components/latest/js/shieldui-all.min.js"
+    ></script>
+  </head>
+
+  <body class="theme-light">
+    <div id="chart"></div>
+    <script type="text/javascript">
+      jQuery(function($) {
+        $("#chart").shieldChart({
+          theme: "bootstrap",
+          primaryHeader: {
+            text: "Lab 1001"
+          },
+          exportOptions: {
+            image: true,
+            print: true
+          },
+          axisX: {
+            categoricalValues: {{ created_at|safe }}
+          },
+          tooltipSettings: {
+            chartBound: true,
+            axisMarkers: {
+              enabled: true,
+              mode: "xy"
+            }
+          },
+          dataSeries: [
+            {
+              seriesType: "spline",
+              collectionAlias: "Temperature in °C",
+              data: {{ temperature|safe }}
+            },
+            {
+              seriesType: "spline",
+              collectionAlias: "Humidity in %",
+              data: {{ humidity|safe }}
+            },
+            {
+              seriesType: "spline",
+              collectionAlias: "Air Quality Index",
+              data: {{ aqi|safe }}
+            },
+
+          ]
+        });
+      });
+    </script>
+  </body>
+</html>

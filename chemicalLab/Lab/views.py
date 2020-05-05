@@ -9,6 +9,7 @@ import datetime
 import random
 from chemicalLab.settings import EMAIL_HOST_USER
 from django.core.mail import send_mail
+
 """
 To render the pages
 """
@@ -85,6 +86,70 @@ def analysis(request):
 
 def schedule(request):
     return render(request, "lab_operator/schedule.html")
+
+
+def notifications(request):
+    user = m.User.objects.get(email=request.session["email"])
+    notification_content = m.Notification.objects.all().filter(Notification_to=user)
+
+    notif_data = dict()
+    s_count = 0
+    w_count = 0
+    for n in notification_content:
+        # print(n.__dict__.items())
+
+        if n.category not in notif_data.keys():
+            notif_data[n.category] = dict()
+
+        if n.category == "0":
+            if n.data == None:
+                continue
+            schedule_info = m.Schedule.objects.get(id=int(n.data))
+            notif_data[n.category][n.id] = {
+                "content": n.description,
+                "at": n.timestamp,
+                "start_time": schedule_info.start_time,
+                "end_time": schedule_info.end_time,
+                "date": schedule_info.date,
+                "event_description": schedule_info.description,
+                "event_title": schedule_info.title,
+                "viewed": n.delete_field
+            }
+            s_count += 1
+
+        elif n.category == "1":
+            if n.data == None:
+                continue
+            # print(n)
+            d1, d2 = n.data.split(",")
+
+            d1_class = "danger"
+            d2_class = "danger"
+            if d1 >= d2:
+                d1_class = "success"
+            else:
+                d2_class = "success"
+
+            notif_data[n.category][n.id] = {
+                "content": n.description,
+                "at": n.timestamp,
+                "data_before": d1,
+                "data_after": d2,
+                "data_before_class": d1_class,
+                "data_after_class": d2_class
+            }
+            w_count += 1
+        elif n.category == 2:
+            pass
+        elif n.category == 3:
+            pass
+        else:
+            pass
+
+    notif_data["unread_schedule"] = s_count
+    notif_data["unread_warning"] = w_count
+    print(notif_data.items())
+    return render(request, "lab_operator/notifications.html", {"notif_data": notif_data})
 
 
 """
@@ -283,7 +348,7 @@ def get_scheduled_data(request):
 
             if s_timestamp.date() <= c_s_timestamp.date() and d.lab_id == request.session["lab_id"]:
                 # print("hi")
-                
+
                 if start_time != "" and s_timestamp.date() == c_s_timestamp.date():
                     if s_timestamp.time() <= c_s_timestamp.time():
                         schedule_data.append({
@@ -297,12 +362,12 @@ def get_scheduled_data(request):
                         continue
                 elif start_time == "" and s_timestamp.date() == c_s_timestamp.date():
                     schedule_data.append({
-                            "id": d.id,
-                            "title": d.title,
-                            "time-range": str(d.start_time) + " - "+str(d.end_time),
-                            "date": d.date,
-                            "description": d.description
-                        })
+                        "id": d.id,
+                        "title": d.title,
+                        "time-range": str(d.start_time) + " - "+str(d.end_time),
+                        "date": d.date,
+                        "description": d.description
+                    })
         # print(schedule_data)
         return JsonResponse({"data": schedule_data}, safe=False)
     elif end_date != "" and start_date == "":
@@ -325,7 +390,7 @@ def get_scheduled_data(request):
             print(c_s_timestamp)
             if e_timestamp.date() >= c_s_timestamp.date() and d.lab_id == request.session["lab_id"]:
                 # print("hi")
-                if end_time!= "" and e_timestamp.date() == c_s_timestamp.date():
+                if end_time != "" and e_timestamp.date() == c_s_timestamp.date():
                     if e_timestamp.time() >= c_s_timestamp.time():
                         schedule_data.append({
                             "id": d.id,
@@ -338,13 +403,13 @@ def get_scheduled_data(request):
                         continue
                 elif end_time == "" and e_timestamp.date() == c_s_timestamp.date():
                     schedule_data.append({
-                            "id": d.id,
-                            "title": d.title,
-                            "time-range": str(d.start_time) + " - "+str(d.end_time),
-                            "date": d.date,
-                            "description": d.description
-                        })
-                
+                        "id": d.id,
+                        "title": d.title,
+                        "time-range": str(d.start_time) + " - "+str(d.end_time),
+                        "date": d.date,
+                        "description": d.description
+                    })
+
         # print(schedule_data)
         return JsonResponse({"data": schedule_data}, safe=False)
     else:
@@ -396,7 +461,7 @@ def get_scheduled_data(request):
                         })
                     else:
                         continue
-                
+
         # print(schedule_data)
         return JsonResponse({"data": schedule_data}, safe=False)
         return JsonResponse(request.POST, safe=False)
@@ -405,47 +470,152 @@ def get_scheduled_data(request):
 @csrf_exempt
 def get_sensor_data(request):
     id = request.POST["schedule_id"]
-    
+
     schedule_info = m.Schedule.objects.get(id=id)
     schedule_info = schedule_info.__dict__
-    s_timestamp = datetime.datetime.strptime(str(schedule_info["date"])+" "+ str(schedule_info["start_time"]) , "%Y-%m-%d %H:%M:%S")
-    e_timestamp = datetime.datetime.strptime(str(schedule_info["date"])+" "+ str(schedule_info["end_time"]) , "%Y-%m-%d %H:%M:%S")
-    sensor_data = m.Sensor_log.objects.filter(lab_id=request.session["lab_id"]).all()
-    
+    s_timestamp = datetime.datetime.strptime(str(
+        schedule_info["date"])+" " + str(schedule_info["start_time"]), "%Y-%m-%d %H:%M:%S")
+    e_timestamp = datetime.datetime.strptime(str(
+        schedule_info["date"])+" " + str(schedule_info["end_time"]), "%Y-%m-%d %H:%M:%S")
+    sensor_data = m.Sensor_log.objects.filter(
+        lab_id=request.session["lab_id"]).all()
+
     sensor_info = {
-        "temp" : [],
-        "humidity" : [],
-        "aqi" : [],
-        "index" : [],
-        "temp_avg" : 0,
-        "hum_avg" : 0,
-        "aqi_avg" : 0
+        "temp": [],
+        "humidity": [],
+        "aqi": [],
+        "index": [],
+        "temp_avg": 0,
+        "hum_avg": 0,
+        "aqi_avg": 0
     }
 
-    i=0
-    print(s_timestamp , e_timestamp)
+    i = 0
+    print(s_timestamp, e_timestamp)
     for s in sensor_data:
-        s=s.__dict__
-        if s["timestamp"]>= s_timestamp and s["timestamp"]<=e_timestamp:
-            i+=1
+        s = s.__dict__
+        if s["timestamp"] >= s_timestamp and s["timestamp"] <= e_timestamp:
+            i += 1
             sensor_info["index"].append(i)
             sensor_info["temp"].append(s["temperature"])
             sensor_info["humidity"].append(s["humidity"])
             sensor_info["aqi"].append(s["air_quality"])
-                # print(sensor_data.items())
-    
-    if len(sensor_info["temp"])==0:
-        return JsonResponse({"Error" : "No data found"} ,safe=False)    
-    sensor_info["temp_avg"] = "{:.2f}".format(sum(sensor_info["temp"] )/i)
+            # print(sensor_data.items())
+
+    if len(sensor_info["temp"]) == 0:
+        return JsonResponse({"Error": "No data found"}, safe=False)
+    sensor_info["temp_avg"] = "{:.2f}".format(sum(sensor_info["temp"])/i)
     sensor_info["hum_avg"] = "{:.2f}".format(sum(sensor_info["humidity"])/i)
     sensor_info["aqi_avg"] = "{:.2f}".format(sum(sensor_info["aqi"])/i)
     return JsonResponse(sensor_info)
+
+
+@csrf_exempt
+def create_notif_anamoly(request, id):
+    if id == 1:
+        temp1 = request.POST["temp_before"]
+        temp2 = request.POST["temp_after"]
+
+        description = ""
+        if temp1 > temp2:
+            description = "Warning , The temperature has dropped by " + \
+                str(float(temp1)-float(temp2)) + " °C"
+        else:
+            description = "Warning , The temperature has spiked by " + \
+                str(float(temp2)-float(temp1)) + " °C"
+
+        user_data = m.User.objects.all().filter(
+            lab_id=request.session["lab_id"])
+
+        admin = m.User.objects.get(email="2017.jatin.acharya@ves.ac.in")
+        for u in user_data:
+            m.Notification.create_notification(
+                to=u,
+                by=admin,
+                description=description,
+                category=1
+            )
+        return JsonResponse({"Success": "Done"})
+    elif id == 2:
+        hum1 = request.POST["hum_before"]
+        hum2 = request.POST["hum_after"]
+
+        description = ""
+        if hum1 > hum2:
+            description = "Warning , The humidity has dropped by " + \
+                str(float(hum1)-float(hum2)) + " %"
+        else:
+            description = "Warning , The humidity has spiked by " + \
+                str(float(hum2)-float(hum1)) + " %"
+
+        user_data = m.User.objects.all().filter(
+            lab_id=request.session["lab_id"])
+
+        admin = m.User.objects.get(email="2017.jatin.acharya@ves.ac.in")
+        for u in user_data:
+            m.Notification.create_notification(
+                to=u,
+                by=admin,
+                description=description,
+                category=1
+            )
+        return JsonResponse({"Success": "Done"})
+    elif id == 3:
+        aqi1 = request.POST["aqi_before"]
+        aqi2 = request.POST["aqi_after"]
+
+        description = ""
+        if aqi1 > aqi2:
+            description = "Warning , The Air Quality has dropped by " + \
+                str(float(aqi1)-float(aqi2))
+        else:
+            description = "Warning , The Air Quality has spiked by " + \
+                str(float(aqi2)-float(aqi1))
+
+        user_data = m.User.objects.all().filter(
+            lab_id=request.session["lab_id"])
+
+        admin = m.User.objects.get(email="2017.jatin.acharya@ves.ac.in")
+        for u in user_data:
+            m.Notification.create_notification(
+                to=u,
+                by=admin,
+                description=description,
+                category=1
+            )
+        return JsonResponse({"Success": "Done"})
+    else:
+        return JsonResponse({"Error": "Invalid URL"})
+    pass
+
+
+@csrf_exempt
+def get_all_notifs(request):
+    user_id = m.User.objects.get(email=request.session["email"])
+    user_notifications = m.Notification.objects.all().filter(Notification_to=user_id.id)
+    notif = []
+    i = 0
+    for u in user_notifications:
+        u = u.__dict__
+        by = m.User.objects.get(id=u["Notification_by_id"])
+        notif.append({
+            "by": by.fname + " " + by.lname,
+            "category": u["category"],
+            "at": u["timestamp"],
+            "viewed": u["delete_field"],
+            "description": u["description"],
+        })
+
+    return JsonResponse({"Notif": notif})
+
 
 def log_out(request):
     logout(request)
     return redirect("/")
 
 # Email
+
+
 def email(request):
     data = m.User.objects.get(id=10001)
     data = data.__dict__

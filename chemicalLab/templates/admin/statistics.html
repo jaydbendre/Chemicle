@@ -1,7 +1,32 @@
 {% extends "admin/boilerplate.html" %}{% load static %}
 
 {% block Admin %}
-<!-- page title area end -->
+<style>
+  .nav-item a{
+    color : #4336FB;
+  }
+   .nav-item a:hover{
+    color : rgb(18, 9, 145);
+  }
+</style>
+<link id="themecss" rel="stylesheet" type="text/css" href="//www.shieldui.com/shared/components/latest/css/light/all.min.css" />
+    <script type="text/javascript" src="//www.shieldui.com/shared/components/latest/js/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="//www.shieldui.com/shared/components/latest/js/shieldui-all.min.js"></script>
+<!-- start chart js -->
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+start highcharts js
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script> -->
+<script src="https://www.amcharts.com/lib/3/amcharts.js"></script>
+<script src="https://www.amcharts.com/lib/3/ammap.js"></script>
+<script src="https://www.amcharts.com/lib/3/maps/js/worldLow.js"></script>
+<script src="https://www.amcharts.com/lib/3/serial.js"></script>
+<script src="https://www.amcharts.com/lib/4/core.js"></script>
+<script src="https://www.amcharts.com/lib/4/charts.js"></script>
+<script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
+<script src="https://www.amcharts.com/lib/3/plugins/export/export.min.js"></script>
+<script src="https://www.amcharts.com/lib/3/themes/light.js"></script>
 <!-- row area start-->
 <div class="page-title-area">
     <div class="row align-items-center">
@@ -34,12 +59,22 @@
     </div>
   </div>
   
-  
-  <div class="container container-fluid text-center mt-2">
-    Welcome back , {{ request.session.username }}
-    <br />
-    You are  : {{ request.session.role }} 
+  <div class="container-fluid">
+    <form action="{% url 'statistics' %}" method="POST">
+      {% csrf_token %}
+      <div class="row pt--20">
+        <div class="col-md-4">
+          <button class="btn custom-btn" type="submit" value="lab1001" name="lab1001">Lab 1001</button>
+        </div>
+        <div class="col-md-4">
+          <button class="btn custom-btn" type="submit" value="lab1004" name="lab1004">Lab 1004</button>
+        </div>
+        <div class="col-md-4">
+          <button class="btn custom-btn" type="submit" value="compare" name="compare">Compare</button>
+        </div>
+      </div> 
+    </form>
+  {% block analysis %} {% endblock %}
   </div>
-  {% include "./charts/live_data_1004.html" %}
 
 {% endblock%}
