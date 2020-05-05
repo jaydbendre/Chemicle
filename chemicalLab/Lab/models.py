@@ -44,12 +44,12 @@ class Notification(models.Model):
     category = models.CharField(max_length=100)
     delete_field = models.BooleanField(default=False)
     data = models.TextField(null=True)
-    @classmethod
-    def create_notification(cls, to, by, description, category, data):
-        notif = Notification.create(Notification_to=to, Notification_by=by,
-                                    description=description, timestamp=datetime.datetime.now(),
-                                    category=category, delete_field=False, data=data)
-        notif.save()
+    # @classmethod
+    # # def create_notification(cls, to, by, description, category, data):
+    #     notif = Notification.create(Notification_to=to, Notification_by=by,
+    #                                 description=description, timestamp=datetime.datetime.now(),
+    #                                 category=category, delete_field=False, data=data)
+    #     notif.save()
 
 
 class Sensor_log(models.Model):
@@ -61,9 +61,9 @@ class Sensor_log(models.Model):
 
 
 class Schedule(models.Model):
-    date = models.DateField(auto_now_add=True)
-    start_time = models.TimeField(auto_now_add=True)
-    end_time = models.TimeField(auto_now_add=True)
+    date = models.DateField()
+    start_time = models.TimeField()
+    end_time = models.TimeField()
     lab = models.ForeignKey(Lab, on_delete=models.CASCADE)
     added_by = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.TextField(default=None)

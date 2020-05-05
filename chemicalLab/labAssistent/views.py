@@ -1,10 +1,5 @@
-<<<<<<< HEAD
-from django.shortcuts import render, redirect
-from django.http import HttpResponse , JsonResponse
-=======
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
->>>>>>> b9ecb1a97278a6dd771bfcda9f9116746c732adc
 from Lab import models as m
 # Create your views here.
 
@@ -53,14 +48,35 @@ def dashboard(request):
 def schedule(request):
     lab_operator = m.User.objects.get(id=10000)
     user_data = m.User.objects.get(email=request.session["email"])
-    m.Notification.create_notification(
-        to=lab_operator,
-        by=user_data,
-        description="This is a new notification",
-        category=0
-    )
-    return render(request, 'incharge/schedule.html')
+    # m.Notification.create_notification(
+    #     to=lab_operator,
+    #     by=user_data,
+    #     description="This is a new notification",
+    #     category=0,
+    #     # data = 0
+    # )
+    return render(request, 'incharge/schedule.html', {"error":'' ,"success":""})
 
 
 def analysis(request):
     return render(request, "incharge/analysis.html")
+
+def success_submit(request):
+    startDate = request.POST["startDate"]
+    startTime = request.POST["startTime"]
+    endTime = request.POST["endTime"]
+    title = request.POST["title"]
+    description = request.POST["description"]
+    eventType = request.POST["eventType"]
+
+    if startDate == "" or startTime == '' or endTime == '' or  title == '' or description == '' or eventType == '':
+        return render (request, 'incharge/schedule.html',{"error":"Please fill in all the fields."})
+    else:
+        eventType = int(eventType.lstrip('test'))
+        data = m.Schedule(date = startDate, start_time = startTime, end_time = endTime, title = title, description = description, event_type = eventType)
+        lab = m.Lab.objects.get(id = request.session["lab_id"])
+        added_by = m.User.objects.get(email = request.session["email"])
+        data.lab = lab
+        data.added_by = added_by
+        data.save()
+        return render(request, 'incharge/schedule.html', {"success":"Event added successfully!"})
