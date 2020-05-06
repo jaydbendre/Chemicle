@@ -8,6 +8,8 @@ urlpatterns = [
     path("logout", views.log_out, name="logout"),
     path("analysis", views.analysis, name="analysis"),
     path("notifications", views.notifications, name="notifications"),
+    path("make_request", views.make_request_render, name="make_request"),
+    path("create_request", views.create_request, name="create_request"),
     path("view_schedule", views.schedule, name="view_schedule"),
     path("get_historic_data/<int:id>",
          views.get_historic_data, name="historic_data"),

@@ -149,17 +149,17 @@ def notifications(request):
             print("Hi")
             if n.data == None:
                 continue
-            date,start_time,end_time,uid = n.data.split(",")
-            user = m.User.objects.get(id = uid)
+            date, start_time, end_time, uid = n.data.split(",")
+            user = m.User.objects.get(id=uid)
             request_to = user.fname + " "+user.lname
             notif_data[n.category][n.id] = {
                 "content": n.description,
-                "at" : n.timestamp,
-                "session_at": "On " + date + " from "+ start_time + " - "+end_time,
+                "at": n.timestamp,
+                "session_at": "On " + date + " from " + start_time + " - "+end_time,
                 "date": date,
-                "start_time" : start_time,
+                "start_time": start_time,
                 "end_time": end_time,
-                "request_to" : request_to
+                "request_to": request_to
             }
             request_sent_count += 1
             pass
@@ -169,17 +169,17 @@ def notifications(request):
             """
             if n.data == None:
                 continue
-            date,start_time,end_time,uid = n.data.split(",")
-            user = m.User.objects.get(id = uid)
+            date, start_time, end_time, uid = n.data.split(",")
+            user = m.User.objects.get(id=uid)
             request_to = user.fname + " "+user.lname
             notif_data[n.category][n.id] = {
                 "content": n.description,
-                "at" : n.timestamp,
-                "session_at": "On " + date + " from "+ start_time + " - "+end_time,
+                "at": n.timestamp,
+                "session_at": "On " + date + " from " + start_time + " - "+end_time,
                 "date": date,
-                "start_time" : start_time,
+                "start_time": start_time,
                 "end_time": end_time,
-                "request_to" : request_to
+                "request_to": request_to
             }
             request_accepted_count += 1
             pass
@@ -189,17 +189,17 @@ def notifications(request):
             """
             if n.data == None:
                 continue
-            date,start_time,end_time,uid = n.data.split(",")
-            user = m.User.objects.get(id = uid)
+            date, start_time, end_time, uid = n.data.split(",")
+            user = m.User.objects.get(id=uid)
             request_to = user.fname + " "+user.lname
             notif_data[n.category][n.id] = {
                 "content": n.description,
-                "at" : n.timestamp,
-                "session_at": "On " + date + " from "+ start_time + " - "+end_time,
+                "at": n.timestamp,
+                "session_at": "On " + date + " from " + start_time + " - "+end_time,
                 "date": date,
-                "start_time" : start_time,
+                "start_time": start_time,
                 "end_time": end_time,
-                "request_to" : request_to
+                "request_to": request_to
             }
             request_rejected_count += 1
             pass
@@ -209,9 +209,44 @@ def notifications(request):
     notif_data["unread_r_sent"] = request_sent_count
     notif_data["unread_r_accept"] = request_accepted_count
     notif_data["unread_r_reject"] = request_rejected_count
-    
+
     # print(notif_data.items())
     return render(request, "lab_operator/notifications.html", {"notif_data": notif_data})
+
+
+def make_request_render(request):
+    role = m.Role.objects.get(id=1)
+    lab = m.Lab.objects.get(id=request.session["lab_id"])
+    lab_operators = m.User.objects.order_by("fname", "lname").filter(
+        role_id=role, lab_id=lab).values("id", "fname", "lname")
+
+    names = [{x["id"]: x["fname"]+" "+x["lname"]} for x in lab_operators]
+
+    return render(request, "lab_operator/make_request.html", {"error": "", "success": "", "lab_operators": names})
+
+
+def create_request(request):
+    date = request.POST["startDate"]
+    start_time = request.POST["startTime"]
+    end_time = request.POST["endTime"]
+    uid = request.POST["lab_operator"]
+    description = request.POST["description"]
+
+    data = date+","+start_time+","+end_time+","+uid
+
+    notification_to = m.User.objects.get(id=uid)
+    notification_by = m.User.objects.get(email=request.session["email"])
+    request = m.Notification(
+        description=description,
+        category=2,
+        Notification_to=notification_to,
+        Notification_by=notification_by,
+        data=data
+    )
+
+    request.save()
+
+    return redirect("/make_request")
 
 
 """

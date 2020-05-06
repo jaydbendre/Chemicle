@@ -40,7 +40,7 @@ class Notification(models.Model):
     Notification_by = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="Reciever")
     description = models.TextField(max_length=1000)
-    timestamp = models.DateField(auto_now_add=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
     category = models.CharField(max_length=100)
     delete_field = models.BooleanField(default=False)
     data = models.TextField(null=True)

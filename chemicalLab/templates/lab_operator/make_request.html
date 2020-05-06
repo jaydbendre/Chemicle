@@ -1,0 +1,88 @@
+{% extends "lab_operator/boilerplate.html" %}
+{% load static %}
+{% block LabOperator %}
+
+<div class="page-title-area">
+    <div class="row align-items-center">
+        <div class="col-sm-6">
+            <div class="breadcrumbs-area clearfix">
+                <h4 class="page-title pull-left">Make a request</h4>
+                <ul class="breadcrumbs pull-left">
+                    <li><a href="{% url 'login' %}">Home</a></li>
+                    <li><span>Make a request</span></li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-sm-6 clearfix">
+            <div class="user-profile pull-right">
+                <img class="avatar user-thumb" src="{% static 'images/author/avatar.png' %}" alt="avatar" />
+                <h4 class="user-name dropdown-toggle" data-toggle="dropdown">
+                    {{ request.session.username }} <i class="fa fa-angle-down"></i>
+                </h4>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="#">Message</a>
+                    <a class="dropdown-item" href="#">Settings</a>
+                    <a class="dropdown-item" href="{% url 'logout' %}">Log Out</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container container-fluid card col-5 mr-auto mt-4 text-center">
+    <h6 class="card-title mt-2"> Make a request <i class="ti-calendar"></i></h6>
+    <form action="{% url 'create_request' %}" method="POST" class="needs-validation" novalidate>
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="exampleFormControlSelect1">Select a lab operator</label>
+            <select class="form-control" id="exampleFormControlSelect1" name="lab_operator" required>
+                {% for operator in lab_operators %}
+                {% for k,v in operator.items %}
+                <option value="{{ k }}">{{ v }}</option>
+                {% endfor %}
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="start-date-input">Start Date</label>
+            <input class="form-control" type="date" id="start-date-input" name='startDate' required />
+        </div>
+        <div class="form-group">
+            <label for="start-time-input">Start Time</label>
+            <input class="form-control" type="time" id="start-time-input" name='startTime' required />
+        </div>
+        <div class="form-group">
+            <label for="end-time-input">End Time</label>
+            <input class="form-control" type="time" id="end-time-input" name='endTime' required />
+        </div>
+        <div class="form-group">
+            <label for="exampleFormControlTextarea1">Description</label>
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="description"
+                required></textarea>
+        </div>
+        <div class="form-group">
+            <button class="btn btn-primary" type="submit"
+                style="background: linear-gradient(to right, #8914fe 0%, #8063f5 100%);">Submit the request</button>
+        </div>
+    </form>
+</div>
+<script>
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+    (function () {
+        'use strict';
+        window.addEventListener('load', function () {
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+            // Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+</script>
+{% endblock %}
