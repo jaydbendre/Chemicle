@@ -232,6 +232,8 @@ def create_request(request):
     uid = request.POST["lab_operator"]
     description = request.POST["description"]
 
+    date = datetime.datetime.strptime(date, "%Y-%m-%d")
+    date = date.strftime("%d-%m-%Y")
     data = date+","+start_time+","+end_time+","+uid
 
     notification_to = m.User.objects.get(id=uid)
