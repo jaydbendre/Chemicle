@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from Lab import models as m
-import datetime
+import datetime, requests
+from django.views.decorators.csrf import csrf_exempt
 # Create your views here.
 
 """
@@ -58,6 +59,18 @@ def schedule(request):
     # )
     return render(request, 'incharge/schedule.html', {"error": '', "success": ""})
 
+@csrf_exempt
+def apicall(request):
+    sensor_data = requests.get('https://api.thingspeak.com/channels/1017900/feeds.json?api_key=CQ98H95JG2IBYHNH&results=20')
+    sensor_data = sensor_data.json()['feeds']
+    for s in sensor_data:
+        date = s["created_at"].split("T")[0]
+        time = s["created_at"].split("T")[1]
+        time = time[:-1]
+
+        timestamp = datetime.datetime.strptime(date + " "+time, "%Y-%m-%d %H:%M:%S")
+        s["created_at"] = timestamp
+    return JsonResponse(sensor_data, safe = False)
 
 def analysis(request):
     return render(request, "incharge/analysis.html")

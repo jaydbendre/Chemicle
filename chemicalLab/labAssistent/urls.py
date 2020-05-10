@@ -34,4 +34,5 @@ urlpatterns = [
     path("requests",views.render_request , name = "request"),
     path("accept_request/<int:request_id>",views.accept_request , name = "accept_request"),
     path("reject_request/<int:request_id>",views.reject_request , name = "accept_request"),
+    path("sensor_data_20", views.apicall, name = "sensor_data_20"),
 ]
