@@ -37,12 +37,9 @@
       // chart.data = generateChartData();
       console.log(chart.data);
       // Create axes
+      chart.dataDateFormat = "YYYY-MM-DD JJ:NN:SS"
       var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
-      dateAxis.renderer.minGridDistance = 50;
-      dateAxis.gridIntervals.setAll([
-        { timeUnit: 'second', count: 1 },
-        { timeUnit: 'second', count: 20 },
-      ]);
+
 
       // Create series
       function createAxisAndSeries(field, name, opposite, bullet) {
@@ -53,7 +50,7 @@
 
         var series = chart.series.push(new am4charts.LineSeries());
         series.dataFields.valueY = field;
-        series.dataFields.dateX = 'created_at';
+        series.dataFields.dateX = 'date';
         series.strokeWidth = 2;
         series.yAxis = valueAxis;
         series.name = name;
