@@ -111,7 +111,8 @@
             schedule_id: id,
           },
           function (data, status) {
-            if (data["Error"]!=="") {
+            console.log(data)
+            if (data["Error"]) {
               alert(data["Error"]);
           }
           else {

@@ -601,6 +601,7 @@ def get_sensor_data(request):
             sensor_info["aqi"].append(s["air_quality"])
             # print(sensor_data.items())
 
+    print(sensor_info.items())
     if len(sensor_info["temp"]) == 0:
         return JsonResponse({"Error": "No data found"}, safe=False)
     sensor_info["temp_avg"] = "{:.2f}".format(sum(sensor_info["temp"])/i)
