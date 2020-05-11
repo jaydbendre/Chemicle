@@ -1,220 +1,78 @@
-<!-- Styles -->
-<style>
-  #chartdiv {
-    width: 100%;
-    height: 500px;
-  }
-</style>
+{% include "lab_operator/charts/boilerplate.html" %}
+{% load static %}
+<link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 
-<!-- Resources -->
-<script src="https://www.amcharts.com/lib/4/core.js"></script>
-<script src="https://www.amcharts.com/lib/4/charts.js"></script>
-<script src="https://www.amcharts.com/lib/4/themes/material.js"></script>
-<script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
 
-<!-- Chart code -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+<script src="{% static 'js/chartist-plugin-legend.js' %}"></script>
+<script src="{% static 'js/chartist-hover.js' %}"></script>
+<link rel="stylesheet" href="{% static 'css/legend.css' %}">
+<div class="container">
+  <div class="card mb-5 text-center" style="height: 250px;">
+    <h6 class="card-title">Last 20 records for <div class="title-text1"></div>
+    </h6>
+    <div id="chart1"></div>
+  </div>
+</div>
+
 <script>
-  am4core.ready(function () {
-    // Themes begin
-    am4core.useTheme(am4themes_material);
-    am4core.useTheme(am4themes_animated);
-    // Themes end
+  jQuery(function ($) {
+    $.get(
+      "http://127.0.0.1:8000/incharge/sensor_data_20",
+      function (data) {
+        console.log(data)
+        var created_at = []
+        var temp = []
+        var hum = []
+        var aqi = []
+        var date = ""
 
-    // Create chart instance
-    var chart = am4core.create('chartdiv', am4charts.XYChart);
-
-    //
-
-    // Increase contrast by taking evey second color
-    chart.colors.step = 2;
-
-    var sensorData;
-    // Add data
-    $.get('http://127.0.0.1:8000/incharge/sensor_data_20', function (data) {
-      sensorData = data;
-      console.log(sensorData);
-      chart.data = sensorData;
-      // chart.data = generateChartData();
-      console.log(chart.data);
-      // Create axes
-      chart.dataDateFormat = "YYYY-MM-DD JJ:NN:SS"
-      var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
-
-
-      // Create series
-      function createAxisAndSeries(field, name, opposite, bullet) {
-        var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-        if (chart.yAxes.indexOf(valueAxis) != 0) {
-          valueAxis.syncWithAxis = chart.yAxes.getIndex(0);
-        }
-
-        var series = chart.series.push(new am4charts.LineSeries());
-        series.dataFields.valueY = field;
-        series.dataFields.dateX = 'date';
-        series.strokeWidth = 2;
-        series.yAxis = valueAxis;
-        series.name = name;
-        series.tooltipText = '{name}: [bold]{valueY}[/]';
-        series.tensionX = 0.8;
-        series.showOnInit = true;
-
-        var interfaceColors = new am4core.InterfaceColorSet();
-
-        switch (bullet) {
-          case 'triangle':
-            var bullet = series.bullets.push(new am4charts.Bullet());
-            bullet.width = 12;
-            bullet.height = 12;
-            bullet.horizontalCenter = 'middle';
-            bullet.verticalCenter = 'middle';
-
-            var triangle = bullet.createChild(am4core.Triangle);
-            triangle.stroke = interfaceColors.getFor('background');
-            triangle.strokeWidth = 2;
-            triangle.direction = 'top';
-            triangle.width = 12;
-            triangle.height = 12;
-            break;
-          case 'rectangle':
-            var bullet = series.bullets.push(new am4charts.Bullet());
-            bullet.width = 10;
-            bullet.height = 10;
-            bullet.horizontalCenter = 'middle';
-            bullet.verticalCenter = 'middle';
-
-            var rectangle = bullet.createChild(am4core.Rectangle);
-            rectangle.stroke = interfaceColors.getFor('background');
-            rectangle.strokeWidth = 2;
-            rectangle.width = 10;
-            rectangle.height = 10;
-            break;
-          default:
-            var bullet = series.bullets.push(new am4charts.CircleBullet());
-            bullet.circle.stroke = interfaceColors.getFor('background');
-            bullet.circle.strokeWidth = 2;
-            break;
-        }
-
-        valueAxis.renderer.line.strokeOpacity = 1;
-        valueAxis.renderer.line.strokeWidth = 2;
-        valueAxis.renderer.line.stroke = series.stroke;
-        valueAxis.renderer.labels.template.fill = series.stroke;
-        valueAxis.renderer.opposite = opposite;
+        $.each(data, function (i, item) {
+          date = new Date(item["date"])
+          label = date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds()
+          created_at.push(label)
+          temp.push(item["field1"])
+          hum.push(item["field2"])
+          aqi.push(item["field3"])
+          date = date.getDate() + "-" + date.getMonth() + "-" + date.getFullYear()
+        })
+        $(".title-text1").html(date)
+        new Chartist.Line('#chart1', {
+          labels: created_at,
+          series: [
+            temp,
+            hum,
+            aqi
+          ]
+        }, {
+          fullWidth: true,
+          chartPadding: {
+            right: 40
+          },
+          plugins: [
+            Chartist.plugins.legend({
+              legendNames: ["Temperature", "Humidity", "Pressure"]
+            })
+          ]
+        }).on("draw", function (data) {
+          if (data.type === "point") {
+            data.element._node.setAttribute("title", "Value: " + data.value.y);
+            data.element._node.setAttribute("data-chart-tooltip", "chart1");
+          }
+        }).on("created", function () {
+          // Initiate Tooltip
+          $("#chart1").tooltip({
+            selector: '[data-chart-tooltip="chart1"]',
+            container: "#chart1",
+            html: true
+          });
+        });
+        ;
       }
+    )
+  })
 
-      createAxisAndSeries('field1', 'Temperature', false, 'circle');
-      createAxisAndSeries('field2', 'Humidity', true, 'triangle');
-      createAxisAndSeries('field3', 'AQI', true, 'rectangle');
-
-      // Add legend
-      chart.legend = new am4charts.Legend();
-
-      // Add cursor
-      chart.cursor = new am4charts.XYCursor();
-    });
-
-    // chart.data = sensorData;
-    // // chart.data = generateChartData();
-    // console.log(chart.data);
-    // // Create axes
-    // var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
-    // dateAxis.renderer.minGridDistance = 50;
-
-    // // Create series
-    // function createAxisAndSeries(field, name, opposite, bullet) {
-    //   var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-    //   if (chart.yAxes.indexOf(valueAxis) != 0) {
-    //     valueAxis.syncWithAxis = chart.yAxes.getIndex(0);
-    //   }
-
-    //   var series = chart.series.push(new am4charts.LineSeries());
-    //   series.dataFields.valueY = field;
-    //   series.dataFields.dateX = 'date';
-    //   series.strokeWidth = 2;
-    //   series.yAxis = valueAxis;
-    //   series.name = name;
-    //   series.tooltipText = '{name}: [bold]{valueY}[/]';
-    //   series.tensionX = 0.8;
-    //   series.showOnInit = true;
-
-    //   var interfaceColors = new am4core.InterfaceColorSet();
-
-    //   switch (bullet) {
-    //     case 'triangle':
-    //       var bullet = series.bullets.push(new am4charts.Bullet());
-    //       bullet.width = 12;
-    //       bullet.height = 12;
-    //       bullet.horizontalCenter = 'middle';
-    //       bullet.verticalCenter = 'middle';
-
-    //       var triangle = bullet.createChild(am4core.Triangle);
-    //       triangle.stroke = interfaceColors.getFor('background');
-    //       triangle.strokeWidth = 2;
-    //       triangle.direction = 'top';
-    //       triangle.width = 12;
-    //       triangle.height = 12;
-    //       break;
-    //     case 'rectangle':
-    //       var bullet = series.bullets.push(new am4charts.Bullet());
-    //       bullet.width = 10;
-    //       bullet.height = 10;
-    //       bullet.horizontalCenter = 'middle';
-    //       bullet.verticalCenter = 'middle';
-
-    //       var rectangle = bullet.createChild(am4core.Rectangle);
-    //       rectangle.stroke = interfaceColors.getFor('background');
-    //       rectangle.strokeWidth = 2;
-    //       rectangle.width = 10;
-    //       rectangle.height = 10;
-    //       break;
-    //     default:
-    //       var bullet = series.bullets.push(new am4charts.CircleBullet());
-    //       bullet.circle.stroke = interfaceColors.getFor('background');
-    //       bullet.circle.strokeWidth = 2;
-    //       break;
-    //   }
-
-    //   valueAxis.renderer.line.strokeOpacity = 1;
-    //   valueAxis.renderer.line.strokeWidth = 2;
-    //   valueAxis.renderer.line.stroke = series.stroke;
-    //   valueAxis.renderer.labels.template.fill = series.stroke;
-    //   valueAxis.renderer.opposite = opposite;
-    // }
-
-    // createAxisAndSeries('field1', 'Temperature', false, 'circle');
-    // createAxisAndSeries('field2', 'Humidity', true, 'triangle');
-    // createAxisAndSeries('field3', 'AQI', true, 'rectangle');
-
-    // // Add legend
-    // chart.legend = new am4charts.Legend();
-
-    // // Add cursor
-    // chart.cursor = new am4charts.XYCursor();
-
-    // generate some random data, quite different range
-    function generateChartData() {
-      //   var chartData = [];
-      //   // we create date objects here. In your data, you can have date strings
-      //   // and then set format of your dates using chart.dataDateFormat property,
-      //   // however when possible, use date objects, as this will speed up chart rendering.
-      //   chartData.push({
-      //     date: newDate,
-      //     visits: visits,
-      //     hits: hits,
-      //     views: views,
-      //   });
-      //   return chartData;
-      //   chartData = $.get(
-      //     'http://127.0.0.1:8000/incharge/sensor_data_20',
-      //     function () {
-      //       return data;
-      //     }
-      //   );
-      //   console.log(chartData['responseJSON']);
-      //   return chartData;
-    }
-  }); // end am4core.ready()
 </script>
-
-<!-- HTML -->
-<div id="chartdiv"></div>
