@@ -39,6 +39,7 @@
           aqi.push(item["field3"])
           date = date.getDate() + "-" + date.getMonth() + "-" + date.getFullYear()
         })
+
         $(".title-text1").html(date)
         new Chartist.Line('#chart1', {
           labels: created_at,
