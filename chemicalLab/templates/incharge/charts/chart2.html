@@ -1,0 +1,64 @@
+{% load static %}
+<link
+  href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+  rel="stylesheet"
+  integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
+  crossorigin="anonymous"
+/>
+<script
+  src="https://kit.fontawesome.com/64b216acc9.js"
+  crossorigin="anonymous"
+></script>
+<div class="container container-fluid">
+  <div class="row">
+    <div class="col-md-6 mt-0 mb-3">
+      <div class="card">
+        <div class="seo-fact sbg1">
+          <div class="p-4 d-flex justify-content-between align-items-center">
+            <div class="seofct-icon">
+              <i class="fa fa-thermometer-half"></i>Average temperature
+            </div>
+            <h2>{{ temp_avg|floatformat:2 }} °C</h2>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 mt-md-0 mb-3">
+      <div class="card">
+        <div class="seo-fact sbg2">
+          <div class="p-4 d-flex justify-content-between align-items-center">
+            <div class="seofct-icon">
+              <i class="fa fa-tint"></i>
+              Average humidity
+            </div>
+            <h2>{{ hum_avg|floatformat:2 }} %</h2>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 mt-md-0 mb-3">
+      <div class="card">
+        <div class="seo-fact sbg3">
+          <div class="p-4 d-flex justify-content-between align-items-center">
+            <div class="seofct-icon">
+              <i class="far fa-snowflake"></i> Average AQI
+            </div>
+            <h2>{{ aqi_avg|floatformat:2 }}</h2>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card">
+        <div class="seo-fact sbg4">
+          <div class="p-4 d-flex justify-content-between align-items-center">
+            <div class="seofct-icon">
+              <i class="fa fa-users"></i>Number of Lab operators
+            </div>
+            <h2>{{ user_number }}</h2>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

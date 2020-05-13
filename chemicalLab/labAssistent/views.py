@@ -79,7 +79,62 @@ def apicall(request):
 
 
 def analysis(request):
-    return render(request, "incharge/analysis.html")
+    sensor_data = m.Sensor_log.objects.order_by("-timestamp").all()
+    # sensor_data = sensor_data.__dict__
+    user_number = m.User.objects.filter(lab_id=request.session["lab_id"]).all()
+    user_number = len(user_number)
+    temperature = []
+    humidity = []
+    aqi = []
+    created_at = []
+    lab_count = dict()
+
+    for o in sensor_data:
+        # return HttpResponse(o)
+        if o.lab_id.id not in lab_count.keys():
+            lab_count[o.lab_id.id] = 1
+        else:
+            lab_count[o.lab_id.id] += 1
+        temperature.append(
+            o.temperature
+        )
+
+        created_at.append(datetime.datetime.strftime(
+            o.timestamp, "%d %B, %Y %I:%M %p"))
+        humidity.append(o.humidity)
+        aqi.append(o.air_quality)
+
+    temp_avg = sum(temperature)/len(temperature)
+    humidity_avg = sum(humidity)/len(humidity)
+    aqi_avg = sum(aqi)/len(aqi)
+
+    temperature = temperature[:20]
+    aqi = aqi[:20]
+    humidity = humidity[:20]
+
+    lab_labels = [v for v in lab_count.keys()]
+    lab_data = []
+
+    temp_table = zip(temperature, created_at)
+    hum_table = zip(humidity, created_at)
+    aqi_table = zip(aqi, created_at)
+
+    for k, v in lab_count.items():
+        lab_data.append(
+            {
+                "Lab": k,
+                "Count": v
+            }
+        )
+    return render(request, "incharge/analysis.html", {"temperature": temperature, "lab_labels": lab_labels, "lab_data": lab_data, "humidity": humidity, "aqi": aqi, "created_at": created_at,
+                                                          "temp_table": temp_table,
+                                                          "hum_table": hum_table,
+                                                          "aqi_table": aqi_table,
+                                                          "temp_avg": temp_avg,
+                                                          "hum_avg": humidity_avg,
+                                                          "aqi_avg": aqi_avg,
+                                                          "user_number": user_number
+                                                          })
 
 
 def success_submit(request):
