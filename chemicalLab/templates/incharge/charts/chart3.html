@@ -1,3 +1,5 @@
+{% load static %}
+<script src="{% static 'js/plotly.min.js' %}"></script>
 <style>
   .mycontent-left {
     border-left: 5px #333;
@@ -9,27 +11,13 @@
       <h4 class="card-title mb-4 text-center">
         Predictions using Regression
       </h4>
-      <form
-        enctype="multipart/form-data"
-        class="needs-validation"
-        method="POST"
-        action="{% url 'upload_file' %}"
-        id="1"
-        novalidate
-      >
+      <form enctype="multipart/form-data" class="needs-validation" method="POST" action="{% url 'upload_file' %}" id="1"
+        novalidate>
         {% csrf_token %}
         <div class="input-group mb-3">
           <div class="custom-file">
-            <input
-              type="file"
-              class="custom-file-input"
-              id="inputGroupFile02"
-              name="myfile"
-              required
-            />
-            <label class="custom-file-label" for="inputGroupFile02"
-              >Choose file</label
-            >
+            <input type="file" class="custom-file-input" id="inputGroupFile02" name="myfile" required />
+            <label class="custom-file-label" for="inputGroupFile02">Choose file</label>
           </div>
           <div class="input-group-append">
             <span class="input-group-text">Upload</span>
@@ -37,47 +25,23 @@
         </div>
         <div class="form-group">
           <label for="dependent_variable">Enter your dependent variable</label>
-          <input
-            type="text"
-            class="form-control"
-            id="dependent_variable"
-            placeholder="Dependent variable like humidity,aqi etc"
-            name="dependent_variable"
-            required
-          />
+          <input type="text" class="form-control" id="dependent_variable"
+            placeholder="Dependent variable like humidity,aqi etc" name="dependent_variable" required />
         </div>
         <div class="form-group">
-          <label for="independent_variable"
-            >Enter your independent variable/s</label
-          >
-          <input
-            type="text"
-            class="form-control"
-            id="dependent_variable"
-            placeholder="Enter multiple variables comma separated or single variable"
-            name="independent_variable"
-          />
+          <label for="independent_variable">Enter your independent variable/s</label>
+          <input type="text" class="form-control" id="independent_variable"
+            placeholder="Enter multiple variables comma separated or single variable" name="independent_variable" />
         </div>
         <div class="form-group">
           <label for="ratio">Enter the train split</label>
-          <input
-            class="form-control"
-            type="number"
-            name="ratio"
-            placeholder="Enter value between 0 and 1"
-            min="0"
-            max="1"
-            step="0.1"
-          />
+          <input class="form-control" type="number" id="ratio" name="ratio" placeholder="Enter value between 0 and 1"
+            min="0" max="1" step="0.1" />
         </div>
-        <button
-          class="btn btn-primary mb-5"
-          type="submit"
-          style="
+        <button class="btn btn-primary mb-5" type="submit" style="
             background: linear-gradient(to right, #8914fe 0%, #8063f5 100%);
             width: 100%;
-          "
-        >
+          ">
           Submit form
         </button>
       </form>
@@ -88,6 +52,8 @@
     <h4 class="text-center">
       Output
     </h4>
+    <div id="graph_here" style="width: 100%;">
+    </div>
   </div>
 </div>
 
@@ -129,19 +95,37 @@
     $(this).next('.custom-file-label').html(cleanFileName);
   });
 
-  $('#1').submit(function (e) {
-    e.preventDefault(); // avoid to execute the actual submit of the form.
-
-    var form = $(this);
-    var url = form.attr('action');
+  $("form#1").submit(function (e) {
+    e.preventDefault();
+    var formData = new FormData(this);
 
     $.ajax({
+      url: "http://127.0.0.1:8000/incharge/upload_file",
       type: 'POST',
-      url: url,
-      data: form.serialize(), // serializes the form's elements.
+      data: formData,
       success: function (data) {
-        alert(data); // show response from the php script.
+        console.log(data)
+
+        var trace1 = {
+          x: data["x"],
+          y: data["pred"],
+          mode: "lines",
+          type: "scatter",
+        }
+
+        var trace2 = {
+          x: data["x"],
+          y: data["y"],
+          mode: "markers",
+          type: "scatter",
+        }
+
+        var data = [trace1, trace2]
+        Plotly.newPlot('graph_here', data);
       },
+      cache: false,
+      contentType: false,
+      processData: false
     });
   });
 </script>

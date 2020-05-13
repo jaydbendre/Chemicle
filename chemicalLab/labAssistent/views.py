@@ -80,7 +80,6 @@ def apicall(request):
 
         timestamp = datetime.datetime.strptime(
             date + " "+time, "%Y-%m-%d %H:%M:%S")
-        print(timestamp, type(timestamp))
         s["date"] = str(timestamp)
     return JsonResponse(sensor_data, safe=False)
 
@@ -229,10 +228,9 @@ def reject_request(request, request_id):
 
 
 def upload_file(request):
-    return JsonResponse({"Hi" : "Hi"})
+
     uid = m.User.objects.get(email=request.session["email"])
     folder = '../uploads/{}/'.format(uid.id)
-
     if request.method == 'POST' and request.FILES['myfile']:
         myfile = request.FILES['myfile']
         fs = FileSystemStorage(location=folder)
@@ -241,5 +239,54 @@ def upload_file(request):
 
         df = pd.DataFrame(pd.read_csv("{}/{}".format(folder, filename)))
 
+        independent_var = ""
+        dependent_var = request.POST["dependent_variable"]
+        if request.POST["independent_variable"] != "":
+            if "," not in request.POST["independent_variable"]:
+                independent_var = [request.POST["independent_variable"]]
+            else:
+                independent_var = request.POST["independent_variable"].split(
+                    ",")
+        else:
+            independent_var = list(df.drop(dependent_var).columns)
+
+        X = np.array(df[independent_var]).reshape(-1, 1)
+        y = np.array(df[dependent_var]).reshape(-1, 1)
+
+        scaler = MinMaxScaler()
+
+        scaler.fit(X)
+
+        X = scaler.transform(X)
+        y = scaler.transform(y)
+
+        split = float(request.POST["ratio"])
+        X_train, X_test, y_train, y_test = train_test_split(
+            X, y, test_size=1-split, random_state=42)
+        lm = LinearRegression()
+        model = lm.fit(X_train, y_train)
+        predictions = list(lm.predict(X_test))
+        score = float(lm.score(X_test, y_test))
+        coef = float(lm.coef_)
+        x = list()
+        y = list()
+        pred = list()
+
+        for var in X_test:
+            x.append(float(var[0]))
+        for var in y_test:
+            y.append(float(var[0]))
+        for var in predictions:
+            pred.append(float(var[0]))
+        data = {
+            "x": list(x),
+            "y": list(y),
+            "pred": list(pred),
+            "score": score,
+            "coef": coef
+        }
+        return JsonResponse(
+            data, safe=False
+        )
     else:
         return HttpResponse("No File")
