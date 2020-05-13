@@ -6,3 +6,4 @@ from Lab.models import User
 class FileLog(models.Model):
     file_name = models.TextField()
     uploaded_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    uploaded_at = models.DateTimeField(auto_now_add=True)
