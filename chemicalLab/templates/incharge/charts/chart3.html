@@ -1,16 +1,52 @@
 <div class="container container-fluid col-5 mr-auto">
-  <h6 class="card-title text-center">
-    Kindly choose file to be analyzed.
+  <h6 class="card-title mb-4 text-center ">
+    Predictions using Regression
   </h6>
-  <div class="input-group mb-3">
-    <div class="custom-file">
-      <input type="file" class="custom-file-input" id="inputGroupFile02" />
-      <label class="custom-file-label" for="inputGroupFile02"
-        >Choose file</label
-      >
+  <form enctype="multipart/form-data" class="needs-validation" novalidate>
+    <div class="input-group mb-3">
+      <div class="custom-file">
+        <input type="file" class="custom-file-input" id="inputGroupFile02" name="myFile" required />
+        <label class="custom-file-label" for="inputGroupFile02">Choose file</label>
+      </div>
+      <div class="input-group-append">
+        <span class="input-group-text">Upload</span>
+      </div>
     </div>
-    <div class="input-group-append">
-      <span class="input-group-text">Upload</span>
+    <div class="form-group">
+      <label for="dependent_variable">Enter your dependent variable</label>
+      <input type="text" class="form-control" id="dependent_variable"
+        placeholder="Dependent variable like humidity,aqi etc" name="dependent_variable" required>
     </div>
-  </div>
+    <div class="form-group">
+      <label for="independent_variable">Enter your independent variable/s</label>
+      <input type="text" class="form-control" id="dependent_variable"
+        placeholder="Enter multiple variables comma separated or single variable" name="independent_variable">
+    </div>
+    <button class="btn btn-primary mb-5" type="submit"
+      style="background: linear-gradient(to right, #8914fe 0%, #8063f5 100%); width: 100%">Submit
+      form</button>
+  </form>
 </div>
+<div class="container container-fluid">
+
+</div>
+<script>
+  // Example starter JavaScript for disabling form submissions if there are invalid fields
+  (function () {
+    'use strict';
+    window.addEventListener('load', function () {
+      // Fetch all the forms we want to apply custom Bootstrap validation styles to
+      var forms = document.getElementsByClassName('needs-validation');
+      // Loop over them and prevent submission
+      var validation = Array.prototype.filter.call(forms, function (form) {
+        form.addEventListener('submit', function (event) {
+          if (form.checkValidity() === false) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+          form.classList.add('was-validated');
+        }, false);
+      });
+    }, false);
+  })();
+</script>
