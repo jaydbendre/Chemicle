@@ -229,6 +229,7 @@ def reject_request(request, request_id):
 
 
 def upload_file(request):
+    return JsonResponse({"Hi" : "Hi"})
     uid = m.User.objects.get(email=request.session["email"])
     folder = '../uploads/{}/'.format(uid.id)
 

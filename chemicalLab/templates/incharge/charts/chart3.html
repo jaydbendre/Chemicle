@@ -1,58 +1,147 @@
-<div class="container container-fluid col-5 mr-auto">
-  <h6 class="card-title mb-4 text-center ">
-    Predictions using Regression
-  </h6>
-  <form enctype="multipart/form-data" class="needs-validation" action="{% url 'upload_file' %}" method="POST"
-    novalidate>
-    {% csrf_token %}
-    <div class="input-group mb-3">
-      <div class="custom-file">
-        <input type="file" class="custom-file-input" id="inputGroupFile02" name="myfile" required />
-        <label class="custom-file-label" for="inputGroupFile02">Choose file</label>
-      </div>
-      <div class="input-group-append">
-        <span class="input-group-text">Upload</span>
-      </div>
+<style>
+  .mycontent-left {
+    border-left: 5px #333;
+  }
+</style>
+<div class="row">
+  <div class="column col-6">
+    <div class="container container-fluid">
+      <h4 class="card-title mb-4 text-center">
+        Predictions using Regression
+      </h4>
+      <form
+        enctype="multipart/form-data"
+        class="needs-validation"
+        method="POST"
+        action="{% url 'upload_file' %}"
+        id="1"
+        novalidate
+      >
+        {% csrf_token %}
+        <div class="input-group mb-3">
+          <div class="custom-file">
+            <input
+              type="file"
+              class="custom-file-input"
+              id="inputGroupFile02"
+              name="myfile"
+              required
+            />
+            <label class="custom-file-label" for="inputGroupFile02"
+              >Choose file</label
+            >
+          </div>
+          <div class="input-group-append">
+            <span class="input-group-text">Upload</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="dependent_variable">Enter your dependent variable</label>
+          <input
+            type="text"
+            class="form-control"
+            id="dependent_variable"
+            placeholder="Dependent variable like humidity,aqi etc"
+            name="dependent_variable"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="independent_variable"
+            >Enter your independent variable/s</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            id="dependent_variable"
+            placeholder="Enter multiple variables comma separated or single variable"
+            name="independent_variable"
+          />
+        </div>
+        <div class="form-group">
+          <label for="ratio">Enter the train split</label>
+          <input
+            class="form-control"
+            type="number"
+            name="ratio"
+            placeholder="Enter value between 0 and 1"
+            min="0"
+            max="1"
+            step="0.1"
+          />
+        </div>
+        <button
+          class="btn btn-primary mb-5"
+          type="submit"
+          style="
+            background: linear-gradient(to right, #8914fe 0%, #8063f5 100%);
+            width: 100%;
+          "
+        >
+          Submit form
+        </button>
+      </form>
     </div>
-    <div class="form-group">
-      <label for="dependent_variable">Enter your dependent variable</label>
-      <input type="text" class="form-control" id="dependent_variable"
-        placeholder="Dependent variable like humidity,aqi etc" name="dependent_variable" required>
-    </div>
-    <div class="form-group">
-      <label for="independent_variable">Enter your independent variable/s</label>
-      <input type="text" class="form-control" id="dependent_variable"
-        placeholder="Enter multiple variables comma separated or single variable" name="independent_variable">
-    </div>
-    <div class="form-group">
-      <label for="ratio">Enter the train test split</label>
-      <input type="number" name="ratio" placeholder="Enter value between 0 and 1" />
-    </div>
-    <button class="btn btn-primary mb-5" type="submit"
-      style="background: linear-gradient(to right, #8914fe 0%, #8063f5 100%); width: 100%">Submit
-      form</button>
-  </form>
+    <div class="mycontent-left"></div>
+  </div>
+  <div class="column col-6 mycontent-left">
+    <h4 class="text-center">
+      Output
+    </h4>
+  </div>
 </div>
-<div class="container container-fluid">
 
-</div>
+<div class="container container-fluid"></div>
 <script>
   // Example starter JavaScript for disabling form submissions if there are invalid fields
   (function () {
     'use strict';
-    window.addEventListener('load', function () {
-      // Fetch all the forms we want to apply custom Bootstrap validation styles to
-      var forms = document.getElementsByClassName('needs-validation');
-      // Loop over them and prevent submission
-      var validation = Array.prototype.filter.call(forms, function (form) {
-        form.addEventListener('submit', function (event) {
-          if (form.checkValidity() === false) {
-            event.preventDefault();
-            event.stopPropagation();
-          }
-          form.classList.add('was-validated');
-        }, false);
-      });
-    }, false);
+    window.addEventListener(
+      'load',
+      function () {
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.getElementsByClassName('needs-validation');
+        // Loop over them and prevent submission
+        var validation = Array.prototype.filter.call(forms, function (form) {
+          form.addEventListener(
+            'submit',
+            function (event) {
+              if (form.checkValidity() === false) {
+                event.preventDefault();
+                event.stopPropagation();
+              }
+              form.classList.add('was-validated');
+            },
+            false
+          );
+        });
+      },
+      false
+    );
   })();
+</script>
+<script>
+  $('#inputGroupFile02').on('change', function () {
+    //get the file name
+    var fileName = $(this).val();
+    var cleanFileName = fileName.replace('C:\\fakepath\\', ' ');
+    //replace the "Choose a file" label
+    $(this).next('.custom-file-label').html(cleanFileName);
+  });
+
+  $('#1').submit(function (e) {
+    e.preventDefault(); // avoid to execute the actual submit of the form.
+
+    var form = $(this);
+    var url = form.attr('action');
+
+    $.ajax({
+      type: 'POST',
+      url: url,
+      data: form.serialize(), // serializes the form's elements.
+      success: function (data) {
+        alert(data); // show response from the php script.
+      },
+    });
+  });
 </script>
