@@ -3,6 +3,7 @@ from django.http import HttpResponse, JsonResponse
 from Lab import models as m
 import datetime
 import requests
+from django.core.files.storage import FileSystemStorage
 from django.views.decorators.csrf import csrf_exempt
 # Create your views here.
 
@@ -127,14 +128,14 @@ def analysis(request):
             }
         )
     return render(request, "incharge/analysis.html", {"temperature": temperature, "lab_labels": lab_labels, "lab_data": lab_data, "humidity": humidity, "aqi": aqi, "created_at": created_at,
-                                                          "temp_table": temp_table,
-                                                          "hum_table": hum_table,
-                                                          "aqi_table": aqi_table,
-                                                          "temp_avg": temp_avg,
-                                                          "hum_avg": humidity_avg,
-                                                          "aqi_avg": aqi_avg,
-                                                          "user_number": user_number
-                                                          })
+                                                      "temp_table": temp_table,
+                                                      "hum_table": hum_table,
+                                                      "aqi_table": aqi_table,
+                                                      "temp_avg": temp_avg,
+                                                      "hum_avg": humidity_avg,
+                                                      "aqi_avg": aqi_avg,
+                                                      "user_number": user_number
+                                                      })
 
 
 def success_submit(request):
@@ -219,3 +220,19 @@ def reject_request(request, request_id):
     notif = m.Notification.objects.filter(id=request_id).update(category="4")
     return redirect("/incharge/requests")
     pass
+
+
+def upload_file(request):
+    uid = m.User.objects.get(email=request.session["email"])
+    folder = '../uploads/{}/'.format(uid.id)
+
+    if request.method == 'POST' and request.FILES['myfile']:
+        myfile = request.FILES['myfile']
+        fs = FileSystemStorage(location=folder)
+        filename = fs.save(myfile.name, myfile)
+        file_url = fs.url(filename)
+        return render(request, 'upload.html', {
+            'file_url': file_url
+        })
+    else:
+        return render(request, 'upload.html')
