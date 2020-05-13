@@ -1,6 +1,9 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from Lab import models as m
+from sklearn.linear_model import LinearRegression
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.model_selection import train_test_split
 from .models import FileLog
 import datetime
 import requests
@@ -234,6 +237,8 @@ def upload_file(request):
         fs = FileSystemStorage(location=folder)
         filename = fs.save(myfile.name, myfile)
         file_url = fs.url(filename)
-        return HttpResponse(file_url)
+
+        df = pd.DataFrame(pd.read_csv("{}/{}".format(folder, filename)))
+
     else:
         return HttpResponse("No File")
