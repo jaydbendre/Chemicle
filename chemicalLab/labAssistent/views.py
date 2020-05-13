@@ -1,8 +1,11 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from Lab import models as m
+from .models import FileLog
 import datetime
 import requests
+import pandas as pd
+import numpy as np
 from django.core.files.storage import FileSystemStorage
 from django.views.decorators.csrf import csrf_exempt
 # Create your views here.
@@ -231,8 +234,6 @@ def upload_file(request):
         fs = FileSystemStorage(location=folder)
         filename = fs.save(myfile.name, myfile)
         file_url = fs.url(filename)
-        return render(request, 'upload.html', {
-            'file_url': file_url
-        })
+        return HttpResponse(file_url)
     else:
-        return render(request, 'upload.html')
+        return HttpResponse("No File")

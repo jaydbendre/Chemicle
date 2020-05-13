@@ -2,10 +2,12 @@
   <h6 class="card-title mb-4 text-center ">
     Predictions using Regression
   </h6>
-  <form enctype="multipart/form-data" class="needs-validation" novalidate>
+  <form enctype="multipart/form-data" class="needs-validation" action="{% url 'upload_file' %}" method="POST"
+    novalidate>
+    {% csrf_token %}
     <div class="input-group mb-3">
       <div class="custom-file">
-        <input type="file" class="custom-file-input" id="inputGroupFile02" name="myFile" required />
+        <input type="file" class="custom-file-input" id="inputGroupFile02" name="myfile" required />
         <label class="custom-file-label" for="inputGroupFile02">Choose file</label>
       </div>
       <div class="input-group-append">
