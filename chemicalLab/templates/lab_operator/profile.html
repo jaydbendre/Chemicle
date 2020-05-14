@@ -1,0 +1,182 @@
+{% extends "lab_operator/boilerplate.html" %}{% load static %}
+{% block LabOperator %}
+
+<div class="page-title-area">
+    <div class="row align-items-center">
+      <div class="col-sm-6">
+        <div class="breadcrumbs-area clearfix">
+          <h4 class="page-title pull-left">Dashboard</h4>
+          <ul class="breadcrumbs pull-left">
+            <li><a href="{% url 'login' %}">Home</a></li>
+            <li><span>Dashboard</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-sm-6 clearfix">
+        <div class="user-profile pull-right">
+          <img
+            class="avatar user-thumb"
+            src="{% static 'images/author/avatar.png' %}"
+            alt="avatar"
+          />
+          <h4 class="user-name dropdown-toggle" data-toggle="dropdown">
+            {{ request.session.username }} <i class="fa fa-angle-down"></i>
+          </h4>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="#">Message</a>
+            <a class="dropdown-item" href="#">Settings</a>
+            <a class="dropdown-item" href="{% url 'logout' %}">Log Out</a>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="container container-fluid text-center mt-2">
+      Welcome back , {{ request.session.username }}
+      <br />
+      You are  : {{ request.session.role }} 
+    </div>
+
+    <div class="container-fluid pt--20">
+        <div class="custbg container-fluid">
+            <div class="text-center">
+            <h3 class="pt--20 text_center">Profile Page</h3>
+          </div>
+              <form action="{% url 'profile' %}" method="POST">
+                {% csrf_token %}
+                <div class="form-group row pt--30">
+                  <div class="col-sm-2">
+                      <!-- <div class="form-group"> -->
+                      <label for="id" class="col-form-label" style="color: black;">
+                          <h5>User Id :</h5>
+                      </label>
+                      <!-- </div> -->
+                  </div>
+                  <div class="col-sm-8">
+                      <!-- <label for="name" class="control-label"><p class="text-info">Jatin</p><i class="icon-star"></i></label> -->
+                      <input type="number" class="form-control" name="id" id="input1" placeholder="User Id" value="{{ user_data.id }}" disabled>
+                  </div>
+                  <!-- <div class="col-sm-2">
+                      <div class="controls">
+                          <button type="button" class="btn btn-dark" style="width: 8rem;" id="edit" onclick="enable1()"><i
+                                  class="fa fa-edit"></i> Edit</button>
+                      </div>
+                  </div> -->
+                </div>
+                <div class="form-group row pt--20">
+                  <div class="col-sm-2">
+                      <!-- <div class="form-group"> -->
+                      <label for="firstName" class="col-form-label" style="color: black;">
+                          <h5>First Name :</h5>
+                      </label>
+                      <!-- </div> -->
+                  </div>
+                  <div class="col-sm-8">
+                      <!-- <label for="name" class="control-label"><p class="text-info">Jatin</p><i class="icon-star"></i></label> -->
+                      <input type="text" class="form-control" name="firstName" id="input2" placeholder="First Name" value="{{ user_data.fname }}" disabled>
+                  </div>
+                  <div class="col-sm-2">
+                      <div class="controls">
+                          <button type="button" class="btn btn-dark" style="width: 8rem;" id="edit" onclick="enable2()"><i
+                                  class="fa fa-edit"></i> Edit</button>
+                      </div>
+                  </div>
+                </div>
+                <div class="form-group row pt--20">
+                  <div class="col-sm-2">
+                      <!-- <div class="form-group"> -->
+                      <label for="LastName" class="col-form-label" style="color: black;">
+                          <h5>Last Name :</h5>
+                      </label>
+                      <!-- </div> -->
+                  </div>
+                  <div class="col-sm-8">
+                      <!-- <label for="name" class="control-label"><p class="text-info">Jatin</p><i class="icon-star"></i></label> -->
+                      <input type="text" class="form-control" name="lastName" id="input3" placeholder="Last Name" value="{{ user_data.lname }}" disabled>
+                  </div>
+                  <div class="col-sm-2">
+                      <div class="controls">
+                          <button type="button" class="btn btn-dark" style="width: 8rem;"  id="edit" onclick="enable3()"><i
+                                  class="fa fa-edit"></i> Edit</button>
+                      </div>
+                  </div>
+                </div>
+                <div class="form-group row pt--20">
+                  <div class="col-sm-2">
+                      <!-- <div class="form-group"> -->
+                      <label for="email" class="col-form-label" style="color: black;">
+                          <h5>Email :</h5>
+                      </label>
+                      <!-- </div> -->
+                  </div>
+                  <div class="col-sm-8">
+                      <!-- <label for="name" class="control-label"><p class="text-info">Jatin</p><i class="icon-star"></i></label> -->
+                      <input type="email" class="form-control" name="email" id="input4" placeholder="Email" value="{{ user_data.email }}" disabled>
+                  </div>
+                  <div class="col-sm-2">
+                      <div class="controls">
+                          <button type="button" class="btn btn-dark" style="width: 8rem;"  id="edit" onclick="enable4()"><i
+                                  class="fa fa-edit"></i> Edit</button>
+                      </div>
+                  </div>
+                </div>
+                <div class="form-group row pt--20">
+                  <div class="col-sm-2">
+                      <!-- <div class="form-group"> -->
+                      <label for="address" class="col-form-label" style="color: black;">
+                          <h5>Address :</h5>
+                      </label>
+                      <!-- </div> -->
+                  </div>
+                  <div class="col-sm-8">
+                      <!-- <label for="name" class="control-label"><p class="text-info">Jatin</p><i class="icon-star"></i></label> -->
+                      <input type="text" class="form-control" name="address" id="input5" placeholder="Address" value="{{ user_data.address }}" disabled>
+                  </div>
+                  <div class="col-sm-2">
+                      <div class="controls">
+                          <button type="button" class="btn btn-dark" style="width: 8rem;"  id="edit" onclick="enable5()"><i
+                                  class="fa fa-edit"></i> Edit</button>
+                      </div>
+                  </div>
+                </div>
+                <div class="text-center pt--30">
+                  <a href="{% url 'profile' %}"><button type="submit" class="btn custom-btn" onclick="save()" style="width: 15%;margin-bottom:10% ;">Save Changes</button></a>
+                </div>  
+              </form>
+          </div>
+        </div>
+    </div>
+</div>
+
+<script>
+  function enable1() {
+        document.getElementById("input1").disabled = false;
+    }
+    function enable2() {
+        document.getElementById("input2").disabled = false;
+    }
+    function enable3() {
+        document.getElementById("input3").disabled = false;
+    }
+    function enable4() {
+        document.getElementById("input4").disabled = false;
+    }
+    function enable5() {
+        document.getElementById("input5").disabled = false;
+    }
+    function enable6() {
+        document.getElementById("input6").disabled = false;
+    }
+    function save() {
+        document.getElementById("input1").disabled = false;
+        document.getElementById("input2").disabled = false;
+        document.getElementById("input3").disabled = false;
+        document.getElementById("input4").disabled = false;
+        document.getElementById("input5").disabled = false;
+        document.getElementById("input6").disabled = false;
+    }
+</script>
+
+{% endblock %}

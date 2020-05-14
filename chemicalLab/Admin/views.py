@@ -462,6 +462,25 @@ def compare(request):
 def livedata(request):
     return render(request, "admin/livedatapage.html")
 
+def profile(request):
+    if request.method == "POST":
+        u_id = request.POST.get("id")
+        fname = request.POST.get("firstName")
+        lname = request.POST.get("lastName")
+        email = request.POST.get("email")
+        address = request.POST.get("address")
+        print(u_id,fname,lname,email,address)
+        update_user = m.User.objects.get(id = u_id)
+        update_user.fname = fname
+        update_user.lname = lname
+        update_user.email = email
+        update_user.address = address
+        update_user.save(update_fields=['fname','lname','email','address'])
+    admin_data = m.User.objects.get(email = request.session["email"])
+    admin_data = admin_data.__dict__
+
+    return render(request, "admin/profile.html",{"admin_data":admin_data})
+
 @csrf_exempt
 def get_schedule_details_1001(request):
     date = request.POST["date"]

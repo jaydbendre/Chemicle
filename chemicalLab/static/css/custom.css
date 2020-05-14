@@ -31,6 +31,10 @@
     padding: 0px !important;
 }
 
+.custbg{
+    background-color: white !important;
+}
+
 #custom-td:hover{
     background-color: white;
 }

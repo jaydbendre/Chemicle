@@ -68,6 +68,24 @@ def schedule(request):
     # )
     return render(request, 'incharge/schedule.html', {"error": '', "success": ""})
 
+def profile(request):
+    if request.method == "POST":
+        u_id = request.POST.get("id")
+        fname = request.POST.get("firstName")
+        lname = request.POST.get("lastName")
+        email = request.POST.get("email")
+        address = request.POST.get("address")
+        print(u_id,fname,lname,email,address)
+        update_user = m.User.objects.get(id = u_id)
+        update_user.fname = fname
+        update_user.lname = lname
+        update_user.email = email
+        update_user.address = address
+        update_user.save(update_fields=['fname','lname','email','address'])
+    user_data = m.User.objects.get(email = request.session["email"])
+    user_data = user_data.__dict__
+
+    return render(request, "lab_operator/profile.html",{"user_data":user_data})
 
 @csrf_exempt
 def apicall(request):

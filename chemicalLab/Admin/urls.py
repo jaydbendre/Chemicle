@@ -19,5 +19,6 @@ urlpatterns = [
     path('livedata', views.livedata, name = 'livedata'),
     path('get_schedule_details_1001', views.get_schedule_details_1001, name = 'get_schedule_details_1001'),
     path('get_schedule_details_1004', views.get_schedule_details_1004, name = 'get_schedule_details_1004'),
+    path('profile', views.profile, name = 'profile'),
     
 ]
