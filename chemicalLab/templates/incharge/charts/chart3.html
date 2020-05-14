@@ -1,10 +1,5 @@
 {% load static %}
 <script src="{% static 'js/plotly.min.js' %}"></script>
-<style>
-  .mycontent-left {
-    border-left: 5px #333;
-  }
-</style>
 <div class="row">
   <div class="column col-6">
     <div class="container container-fluid">
@@ -34,9 +29,9 @@
             placeholder="Enter multiple variables comma separated or single variable" name="independent_variable" />
         </div>
         <div class="form-group">
-          <label for="ratio">Enter the train split</label>
-          <input class="form-control" type="number" id="ratio" name="ratio" placeholder="Enter value between 0 and 1"
-            min="0" max="1" step="0.1" />
+          <label for="ratio">Enter the test data split (0-1)</label>
+          <input class="form-control" type="number" id="ratio" name="ratio" placeholder="Eg: 0.4 for 40%" min="0"
+            max="1" step="0.1" required />
         </div>
         <button class="btn btn-primary mb-5" type="submit" style="
             background: linear-gradient(to right, #8914fe 0%, #8063f5 100%);
@@ -48,11 +43,13 @@
     </div>
     <div class="mycontent-left"></div>
   </div>
-  <div class="column col-6 mycontent-left">
+  <div class="column col-6 mycontent-left mt-0 text-center">
     <h4 class="text-center">
       Output
     </h4>
-    <div id="graph_here" style="width: 100%;">
+    <div class="container container-fluid " id="graph_here" style="width: 100%;">
+    </div>
+    <div class="container container-fluid" id="graph_metrics_here">
     </div>
   </div>
 </div>
@@ -109,6 +106,7 @@
         var trace1 = {
           x: data["x"],
           y: data["pred"],
+          name: "Prediction",
           mode: "lines",
           type: "scatter",
         }
@@ -116,12 +114,36 @@
         var trace2 = {
           x: data["x"],
           y: data["y"],
+          name: "True Value",
           mode: "markers",
           type: "scatter",
         }
 
-        var data = [trace1, trace2]
-        Plotly.newPlot('graph_here', data);
+        var layout = {
+          title: {
+            text: "Plot of " + data["dependent_var"] + "vs" + data["independent_var"]
+          },
+          xaxis: {
+            title: {
+              text: data["independent_var"]
+            }
+          },
+          yaxis: {
+            title: {
+              text: data["dependent_var"]
+            }
+          }
+        }
+
+        var graph_data = [trace1, trace2]
+        Plotly.newPlot('graph_here', graph_data, layout);
+
+        $("#graph_metrics_here").html(
+          "<h6>Score: &nbsp;<span class = 'badge badge-success'>" + data["score"] + "</span></h6>\
+            <h6>Coefficient of correlation R<sup>2</sup>:&nbsp;<span class = 'badge badge-info'>"+ data["coef"] + "</span></h6>\
+            <h6>Root Mean Squared Error: &nbsp;<span class = 'badge badge-danger'>"+ data["mean_squared_error"] + "</span></h6>"
+        )
+
       },
       cache: false,
       contentType: false,

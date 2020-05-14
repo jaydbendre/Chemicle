@@ -4,6 +4,7 @@ from Lab import models as m
 from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error
 from .models import FileLog
 import datetime
 import requests
@@ -262,12 +263,17 @@ def upload_file(request):
 
         split = float(request.POST["ratio"])
         X_train, X_test, y_train, y_test = train_test_split(
-            X, y, test_size=1-split, random_state=42)
+            X, y, test_size=split, random_state=42)
         lm = LinearRegression()
+
         model = lm.fit(X_train, y_train)
-        predictions = list(lm.predict(X_test))
+        pred = lm.predict(X_test)
+        predictions = list(pred)
         score = float(lm.score(X_test, y_test))
         coef = float(lm.coef_)
+
+        mean_error = float(mean_squared_error(y_test, pred))
+
         x = list()
         y = list()
         pred = list()
@@ -278,12 +284,17 @@ def upload_file(request):
             y.append(float(var[0]))
         for var in predictions:
             pred.append(float(var[0]))
+
+        print(independent_var[0])
         data = {
             "x": list(x),
             "y": list(y),
             "pred": list(pred),
-            "score": score,
-            "coef": coef
+            "score": "{:.4f}".format(score),
+            "coef": "{:.4f}".format(coef),
+            "dependent_var": dependent_var.capitalize(),
+            "independent_var": independent_var[0].capitalize(),
+            "mean_squared_error": "{:.4f}".format(mean_error)
         }
         return JsonResponse(
             data, safe=False
