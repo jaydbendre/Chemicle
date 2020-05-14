@@ -40,6 +40,8 @@
           Submit form
         </button>
       </form>
+      <div id="predictions">
+      </div>
     </div>
     <div class="mycontent-left"></div>
   </div>
@@ -121,7 +123,7 @@
 
         var layout = {
           title: {
-            text: "Plot of " + data["dependent_var"] + "vs" + data["independent_var"]
+            text: "Plot of " + data["dependent_var"] + " v/s " + data["independent_var"]
           },
           xaxis: {
             title: {
@@ -134,7 +136,6 @@
             }
           }
         }
-
         var graph_data = [trace1, trace2]
         Plotly.newPlot('graph_here', graph_data, layout);
 
@@ -144,6 +145,36 @@
             <h6>Root Mean Squared Error: &nbsp;<span class = 'badge badge-danger'>"+ data["mean_squared_error"] + "</span></h6>"
         )
 
+        $("#predictions").html(
+          "<div class = 'form-group'>\
+            <label for 'prediction'>Enter value of "+ data["independent_var"] + "</label>\
+            <input name = 'prediction' type = 'number' class = 'form-control' id = 'dependent' required/>\
+          </div>\
+          <button class='btn btn-primary mb-5' type='submit' style='\
+            background: linear-gradient(to right, #8914fe 0%, #8063f5 100%);\
+            width: 100%;' id = 'predict_btn'>\
+          Find Predicted Value\
+        </button>\
+        <div class = 'form-group'>\
+          <label for='predicted'>Predicted value of "+ data["dependent_var"] + "</label>\
+          <input name = 'predicted' type = 'number' class = 'form-control' id = 'predicted' readonly/>\
+        </div>"
+        )
+
+        $("#predict_btn").click(function () {
+          data = $("#dependent").val()
+
+          $.post(
+            "http://127.0.0.1:8000/incharge/predict",
+            {
+              "dependent_value": data
+            },
+            function (data) {
+              console.log(data)
+              $("#predicted").val(data["Prediction"])
+            }
+          )
+        })
       },
       cache: false,
       contentType: false,
