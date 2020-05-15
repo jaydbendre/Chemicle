@@ -388,7 +388,7 @@ def get_historic_data(request, id):
 
     return JsonResponse(data, safe=False)
 
-def profile(request):
+def edit_profile(request):
     if request.method == "POST":
         u_id = request.POST.get("id")
         fname = request.POST.get("firstName")

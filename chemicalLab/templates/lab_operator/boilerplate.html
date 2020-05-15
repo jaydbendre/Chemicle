@@ -21,6 +21,7 @@
   <link rel="stylesheet" href="{% static 'css/default-css.css' %}" />
   <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
   <link rel="stylesheet" href="{% static 'css/responsive.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/custom.css' %}" />
   <!-- modernizr css -->
   <script src="{% static 'js/vendor/modernizr-2.8.3.min.js' %}"></script>
 </head>
@@ -63,7 +64,7 @@
                     request</span></a>
               </li>
               <li>
-                <a href="{% url 'profile' %}" aria-expanded="true"><i class="ti-user"></i><span>Profile</span></a>
+                <a href="{% url 'edit_profile' %}" aria-expanded="true"><i class="ti-user"></i><span>Profile</span></a>
               </li>
             </ul>
           </nav>

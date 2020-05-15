@@ -1,4 +1,30 @@
 {% extends "admin/statistics.html" %}{% load static %}{% block analysis %}
+<style>
+  .nav-item a{
+    color : #4336FB;
+  }
+   .nav-item a:hover{
+    color : rgb(18, 9, 145);
+  }
+</style>
+<link id="themecss" rel="stylesheet" type="text/css" href="//www.shieldui.com/shared/components/latest/css/light/all.min.css" />
+    <script type="text/javascript" src="//www.shieldui.com/shared/components/latest/js/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="//www.shieldui.com/shared/components/latest/js/shieldui-all.min.js"></script>
+<!-- start chart js -->
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+start highcharts js
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script> -->
+<script src="https://www.amcharts.com/lib/3/amcharts.js"></script>
+<script src="https://www.amcharts.com/lib/3/ammap.js"></script>
+<script src="https://www.amcharts.com/lib/3/maps/js/worldLow.js"></script>
+<script src="https://www.amcharts.com/lib/3/serial.js"></script>
+<script src="https://www.amcharts.com/lib/4/core.js"></script>
+<script src="https://www.amcharts.com/lib/4/charts.js"></script>
+<script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
+<script src="https://www.amcharts.com/lib/3/plugins/export/export.min.js"></script>
+<script src="https://www.amcharts.com/lib/3/themes/light.js"></script>
 
 <div class=" pt--30" style="color:#8914fe">
   <h1>Lab 1001</h1>
@@ -14,7 +40,7 @@
         aria-selected="false">Lab Data</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" id="profile-tab-just" data-toggle="tab" href="#schedule-just" role="tab" aria-controls="profile-just"
+      <a class="nav-link" id="contact-tab-just" data-toggle="tab" href="#test-just" role="tab" aria-controls="contact-just"
         aria-selected="false">View Schedule</a>
     </li>
     <li class="nav-item">
@@ -29,7 +55,7 @@
     <div class="tab-pane fade" id="profile-just" role="tabpanel" aria-labelledby="profile-tab-just">
       {% include "admin/statistics/charts/1001/lab_data.html" %}
     </div>
-    <div class="tab-pane fade" id="schedule-just" role="tabpanel" aria-labelledby="profile-tab-just">
+    <div class="tab-pane fade" id="test-just" role="tabpanel" aria-labelledby="test-tab-just">
       {% include "admin/statistics/charts/1001/schedule.html" %}
     </div>
     <div class="tab-pane fade" id="contact-just" role="tabpanel" aria-labelledby="contact-tab-just">

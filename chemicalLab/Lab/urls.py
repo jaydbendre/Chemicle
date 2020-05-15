@@ -20,6 +20,6 @@ urlpatterns = [
     path("email", views.email, name='email'),
     path("create_notif/<int:id>", views.create_notif_anamoly, name="create_notif"),
     path("get_user_notifs", views.get_all_notifs, name="get_user_notifs"),
-    path("profile", views.profile, name="profile")
+    path("edit_profile", views.edit_profile, name="edit_profile")
     #path("notifications", views.check_notifications_working, name="notifications")
 ]

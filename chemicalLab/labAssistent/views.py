@@ -68,7 +68,7 @@ def schedule(request):
     # )
     return render(request, 'incharge/schedule.html', {"error": '', "success": ""})
 
-def profile(request):
+def incharge_profile(request):
     if request.method == "POST":
         u_id = request.POST.get("id")
         fname = request.POST.get("firstName")
@@ -85,7 +85,7 @@ def profile(request):
     user_data = m.User.objects.get(email = request.session["email"])
     user_data = user_data.__dict__
 
-    return render(request, "lab_operator/profile.html",{"user_data":user_data})
+    return render(request, "incharge/profile.html",{"user_data":user_data})
 
 @csrf_exempt
 def apicall(request):
