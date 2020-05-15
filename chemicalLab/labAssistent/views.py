@@ -331,3 +331,50 @@ def predict_single_val(request):
     predicted_val = lm.predict(data)
     predicted_val = float(scaler.inverse_transform(predicted_val))
     return JsonResponse({"Prediction": "{:.4f}".format(predicted_val)})
+
+@csrf_exempt
+def gen_schedule(request):
+    start_date = request.POST['date_input']+ ' 00:00:00'
+    start_date = datetime.datetime.strptime(start_date, "%Y-%m-%d %H:%M:%S") 
+    end_date = start_date + datetime.timedelta(days = 6)
+    
+    data = dict()
+    
+    for i in range(0,7):
+        data[str( (start_date + datetime.timedelta(days = i)).date() )] = list()
+    
+    lab = m.Lab.objects.get(id = request.session["lab_id"])
+    
+    start_time = list()
+    end_time = list()
+    new_date = datetime.datetime.strptime(str(start_date.date())+" 08:00:00","%Y-%m-%d %H:%M:%S")
+    for i in range(5):
+        start_time.append(new_date)
+        new_date = new_date + datetime.timedelta(hours = 2)
+        end_time.append(new_date)
+
+    print(start_time, end_time)
+    for i in data.keys():
+        schedule_data = m.Schedule.objects.order_by('start_time').filter(date = i, lab= lab).all()
+        for s in schedule_data:
+
+            start_timestamp = datetime.datetime.strptime(str(s.date) + " "+ str(s.start_time) ,"%Y-%m-%d %H:%M:%S" )
+            end_timestamp = datetime.datetime.strptime(str(s.date) + " "+ str(s.end_time) ,"%Y-%m-%d %H:%M:%S" )
+            
+            j=0
+            flag = 9999
+            for start,end in zip(start_time,end_time):
+                if start_timestamp.time() >= start.time() and end_timestamp.time() <=end.time():
+                    flag= j
+                    break
+                j+=1
+            data[i].append({
+                'start_time' : s.start_time,
+                'end_time' : s.end_time,
+                'lab' : s.lab.id,
+                'title' : s.title,
+                'event_type' : s.event_type,
+                "row_id": flag
+            })
+    
+    return JsonResponse(data, safe = False)

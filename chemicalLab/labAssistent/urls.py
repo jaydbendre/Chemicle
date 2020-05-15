@@ -39,5 +39,6 @@ urlpatterns = [
     path("sensor_data_20", views.apicall, name="sensor_data_20"),
     path("upload_file", views.upload_file, name="upload_file"),
     path("predict", views.predict_single_val, name="predict"),
-    path("incharge_profile", views.incharge_profile, name="incharge_profile")
+    path("incharge_profile", views.incharge_profile, name="incharge_profile"),
+    path("gen_schedule", views.gen_schedule, name = "gen_schedule"),
 ]
