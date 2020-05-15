@@ -1,0 +1,136 @@
+<div class="container container-fluid">
+  <h4 class="header-title text-center">Timetable Generation</h4>
+  <div class="form-group">
+    <label for="example-date-input" class="col-form-label">Enter Date</label>
+    <input class="form-control" type="date" id="date-input" />
+  </div>
+  <div style="text-align: center;">
+    <button
+      class="btn btn-primary mb-5"
+      id="date_generate"
+      style="
+        background: linear-gradient(to right, #8914fe 0%, #8063f5 100%);
+        display: inline-block;
+      "
+    >
+      <i class="fa fa-calendar-check-o"></i> Generate Timetable
+    </button>
+  </div>
+  <div class="text-center" id="timetable"></div>
+</div>
+<script>
+  $('#date_generate').click(function () {
+    data = $('#date-input').val();
+
+    $.post(
+      'http://127.0.0.1:8000/incharge/gen_schedule',
+      {
+        date_input: data,
+      },
+      function (data) {
+        console.log(data);
+        // $('#predicted').val(data['Prediction']);
+        table_html =
+          "<table class = 'table table-bordered'>\
+              <thead><th scope='col'></th>";
+
+        $.each(data, function (i, item) {
+          table_html += '<th scope = "col">' + i + '</th>';
+        });
+
+        table_html += '</thead>\
+          <tbody>';
+
+        labels = [
+          '08:00-10:00',
+          '10:00-12:00',
+          '12:00-14:00',
+          '14:00-16:00',
+          '16:00-18:00',
+        ];
+        blank_card_html =
+          "<div class='card bg-light mb-3' style='max-width: 18rem;'>\
+  <div class='card-header'>Nothing scheduled</div>\
+  </div>";
+        for (j = 0; j < 5; j++) {
+          table_html += '<tr>\
+                  <td>' + labels[j] + '</td>';
+          $.each(data, function (i, item) {
+            console.log(i, item);
+            if (item.length == 0) {
+              table_html += '<td>' + blank_card_html + '</td>';
+            } else {
+              console.log('Inside' + i);
+              $.each(item, function (index, d) {
+                if (d['row_id'] === j) {
+                  if (d['event_type'] === 1) {
+                    card_html =
+                      "<div class='card text-white bg-success mb-3' style='max-width: 10rem;'>\
+    <div class='card-header'>" +
+                      d['title'] +
+                      "</div>\
+    <div class='card-body'>\
+      <h6 class='card-title'>" +
+                      d['start_time'] +
+                      ' - ' +
+                      d['end_time'] +
+                      '</h6>\
+    </div>\
+  </div>';
+                  } else if (d['event_type'] === 2) {
+                    card_html =
+                      "<div class='card text-white bg-danger mb-3' style='max-width: 10rem;'>\
+    <div class='card-header'>" +
+                      d['title'] +
+                      "</div>\
+    <div class='card-body'>\
+      <h6 class='card-title'>" +
+                      d['start_time'] +
+                      ' - ' +
+                      d['end_time'] +
+                      '</h6>\
+    </div>\
+  </div>';
+                  } else if (d['event_type'] === 3) {
+                    card_html =
+                      "<div class='card text-white bg-warning mb-3' style='max-width: 10rem;'>\
+    <div class='card-header'>" +
+                      d['title'] +
+                      "</div>\
+    <div class='card-body'>\
+      <h6 class='card-title'>" +
+                      d['start_time'] +
+                      ' - ' +
+                      d['end_time'] +
+                      '</h6>\
+    </div>\
+  </div>';
+                  }
+                  table_html += '<td>' + card_html + '</td>';
+                } else {
+                  table_html += '<td>' + blank_card_html + '</td>';
+                }
+                console.log(index, d);
+              });
+            }
+          });
+          table_html += '</tr>';
+        }
+
+        $('#timetable').html(table_html);
+
+        $.each(data, function (i, item) {
+          console.log(i, item);
+          if (item.length == 0) {
+            console.log('Empty');
+          } else {
+            console.log('Inside' + i);
+            $.each(item, function (index, d) {
+              console.log(index, d);
+            });
+          }
+        });
+      }
+    );
+  });
+</script>
